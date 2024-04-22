@@ -1,5 +1,5 @@
 # LeetCode
-List a portion of LeetCode problems I have finished.
+List a portion of LeetCode problems I have solved.
 # Discription
 * Code1/ 2/ 3: 《代码随想录》
 * Code4: 《力扣热题100》
