@@ -12,6 +12,8 @@
 #include <unordered_set>
 #include <vector>
 
+constexpr int null = -1;
+
 using namespace std;
 
 struct ListNode {
@@ -44,7 +46,7 @@ class Node {  // complex linklist
   }
 };
 
-class Node1 {  // 二叉搜索树和双向循环链表
+class Node1 {  // binary search tree / double linked circular list
  public:
   int val;
   Node1* left;
@@ -54,27 +56,34 @@ class Node1 {  // 二叉搜索树和双向循环链表
   Node1(int value, Node1* l, Node1* r) : val(value), left(l), right(r) {}
 };
 
-void printVector(vector<int> vec);
-void printVector(vector<string> vec);
+template <typename T>
+void printVector(const vector<T>& vec) {
+  for_each(vec.begin(), vec.end(), [](const auto& val) { cout << val << ","; });
+  cout << endl;
+}
 
-void printVector2(vector<int> vec);
+template <typename T>
+void printDeque(const deque<int>& deq) {
+  for_each(deq.begin(), deq.end(), [](const auto& val) { cout << val << " "; });
+  cout << endl;
+}
 
-void printDeque(deque<int> deq);
-
-void printDeque2(deque<int> deq);
+template <typename T>
+void printMat(const vector<vector<T>>& nums) {
+  for (const auto& row : nums) {
+    for (const auto& elem : row)
+      cout << elem << ",";
+    cout << "\t";
+  }
+  cout << endl;
+}
 
 ListNode* createList(vector<int> vec);
 
 void printList(ListNode* list);
-
-void inorder(TreeNode* root, vector<int>& res);
 
 TreeNode* sortedArray2BST(vector<int> num);
 
 TreeNode* construct_binary_tree(const vector<int>& vec);
 
 void print_binary_tree(TreeNode* root);
-
-void printMat(vector<vector<int>> nums);
-void printMat(vector<vector<char>> nums);
-void printMat(vector<vector<string>> nums);

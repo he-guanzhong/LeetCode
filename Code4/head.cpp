@@ -1,41 +1,14 @@
 #include "head.h"
-void printVector(vector<int> vec) {
-  for (int val : vec)
-    cout << val << ",";
-  cout << endl;
-}
-void printVector(vector<string> vec) {
-  for (string val : vec)
-    cout << val << ",";
-  cout << endl;
-}
 
-void printVector2(vector<int> vec) {
-  for_each(vec.begin(), vec.end(), [](const auto& val) { cout << val << ","; });
-  cout << endl;
-}
-
-void printDeque(deque<int> deq) {
-  for (auto i : deq)
-    cout << i << ' ';
-  cout << endl;
-}
-
-void printDeque2(deque<int> deq) {
-  for_each(deq.begin(), deq.end(), [](const auto& val) { cout << val << " "; });
-  cout << endl;
-}
-
-ListNode* createList(vector<int> vec) {
-  ListNode* head = new ListNode();
-  ListNode* p = head;
-
-  for (int i = 0; i < vec.size(); i++) {
-    ListNode* n = new ListNode(vec[i]);
+ListNode* createList(const vector<int>& vec) {
+  ListNode* dummy = new ListNode();
+  ListNode* p = dummy;
+  for (const auto& i : vec) {
+    ListNode* n = new ListNode(i);
     p->next = n;
     p = n;
   }
-  return head->next;  // here why ?
+  return dummy->next;
 }
 
 void printList(ListNode* list) {
@@ -49,14 +22,6 @@ void printList(ListNode* list) {
     p = p->next;
   }
   cout << "NULLPTR" << endl;
-}
-
-void inorder(TreeNode* root, vector<int>& res) {
-  if (!root)
-    return;
-  inorder(root->left, res);
-  res.push_back(root->val);
-  inorder(root->right, res);
 }
 
 TreeNode* helper(vector<int> nums, int left, int right) {
@@ -128,31 +93,6 @@ void print_binary_tree(TreeNode* root) {
     for (int j = 0; j < result[i].size(); j++)
       cout << result[i][j] << " ";
     cout << endl;
-  }
-  cout << endl;
-}
-
-void printMat(vector<vector<int>> nums) {
-  for (auto row : nums) {
-    for (auto i : row)
-      cout << i << ",";
-    cout << "\t";
-  }
-  cout << endl;
-}
-void printMat(vector<vector<string>> nums) {
-  for (auto row : nums) {
-    for (auto i : row)
-      cout << i << " , ";
-    cout << "\t";
-  }
-  cout << endl;
-}
-void printMat(vector<vector<char>> nums) {
-  for (auto row : nums) {
-    for (auto i : row)
-      cout << i << " ";
-    cout << "\n";
   }
   cout << endl;
 }

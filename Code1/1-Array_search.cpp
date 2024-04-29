@@ -1,6 +1,5 @@
 #include "head.h"
-/*
-704. 二分查找
+/* 704. 二分查找
 给定一个 n 个元素有序的（升序）整型数组 nums 和一个目标值 target
 ，写一个函数搜索 nums 中的 target，如果目标值存在返回下标，否则返回 -1。
 
@@ -22,15 +21,15 @@
 // 优选左闭有闭区间。允许左右边界相等，如果目标小于中间值，right=mid-1，目标大于中间值，更新左值+1。
 // 注意一，mid计算防止越界。二、可以使用位操作>>1实现/2。三、左闭右开区间，right=mid，不能减一，因为mid肯定不等，mid-1的区间是要搜索的
 int search(vector<int>& nums, int target) {
-  int left = 0, right = nums.size();
-  while (left < right) {
-    int mid = left + ((right - left) >> 1);
-    if (target > nums[mid])
-      left = mid + 1;
-    else if (target < nums[mid])
-      right = mid;
+  int l = 0, r = nums.size() - 1;
+  while (l <= r) {
+    int m = l + ((r - l) >> 1);
+    if (nums[m] > target)
+      r = m - 1;
+    else if (nums[m] < target)
+      l = m + 1;
     else
-      return mid;
+      return m;
   }
   return -1;
 }
@@ -65,9 +64,11 @@ int search2(vector<int>& nums, int target) {
 }
 
 int main() {
-  vector<int> nums = {-1, 0, 3, 5, 9, 12};
+  vector<int> nums1 = {-1, 0, 3, 5, 9, 12}, nums2 = {2, 5}, nums3 = {-1};
   int target1 = 9, target2 = 2;
-  cout << search(nums, target1) << " " << search(nums, target2) << endl;
-  cout << search1(nums, target1) << " " << search2(nums, target2) << endl;
+  cout << search(nums1, target1) << " " << search(nums1, target2) << " "
+       << search(nums2, 5) << " " << search(nums3, 2) << endl;
+  cout << search1(nums1, target1) << " " << search2(nums1, target2) << " "
+       << search1(nums2, 5) << " " << search1(nums3, 2) << endl;
   return 0;
 }

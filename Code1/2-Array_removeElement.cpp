@@ -13,13 +13,12 @@ nums 中的前五个元素为 0, 1, 3, 0, 4。
 
 // 优选快慢指针法，快指针定义在循环内。慢指针代表了要更改的下一位置，和新数组长度
 int removeElement(vector<int>& nums, int val) {
-  int low = 0;
+  int j = 0;
   for (int i = 0; i < nums.size(); i++) {
-    if (nums[i] != val) {
-      nums[low++] = nums[i];
-    }
+    if (nums[i] != val)
+      nums[j++] = nums[i];
   }
-  return low;
+  return j;
 }
 
 // 暴力解法，发现相同，就从此往后向前移动一位，同时下标和总长度减一

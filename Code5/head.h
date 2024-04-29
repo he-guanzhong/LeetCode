@@ -12,6 +12,8 @@
 #include <unordered_set>
 #include <vector>
 
+constexpr int null = -1;
+
 using namespace std;
 
 struct ListNode {
@@ -44,7 +46,7 @@ class Node {  // complex linklist
   }
 };
 
-class Node1 {  // 二叉搜索树和双向循环链表
+class Node1 {  // binary search tree / double linked circular list
  public:
   int val;
   Node1* left;
@@ -56,8 +58,13 @@ class Node1 {  // 二叉搜索树和双向循环链表
 
 template <typename T>
 void printVector(const vector<T>& vec) {
-  for (const auto& elem : vec)
-    cout << elem << ",";
+  for_each(vec.begin(), vec.end(), [](const auto& val) { cout << val << ","; });
+  cout << endl;
+}
+
+template <typename T>
+void printDeque(const deque<int>& deq) {
+  for_each(deq.begin(), deq.end(), [](const auto& val) { cout << val << " "; });
   cout << endl;
 }
 
@@ -71,17 +78,9 @@ void printMat(const vector<vector<T>>& nums) {
   cout << endl;
 }
 
-void printVector2(vector<int> vec);
-
-void printDeque(deque<int> deq);
-
-void printDeque2(deque<int> deq);
-
 ListNode* createList(vector<int> vec);
 
 void printList(ListNode* list);
-
-void inorder(TreeNode* root, vector<int>& res);
 
 TreeNode* sortedArray2BST(vector<int> num);
 
