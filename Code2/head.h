@@ -63,7 +63,7 @@ void printVector(const vector<T>& vec) {
 }
 
 template <typename T>
-void printDeque(const deque<int>& deq) {
+void printDeque(const deque<T>& deq) {
   for_each(deq.begin(), deq.end(), [](const auto& val) { cout << val << " "; });
   cout << endl;
 }
@@ -78,7 +78,7 @@ void printMat(const vector<vector<T>>& nums) {
   cout << endl;
 }
 
-ListNode* createList(vector<int> vec);
+ListNode* createList(const vector<int>& vec);
 
 void printList(ListNode* list);
 

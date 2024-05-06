@@ -8,15 +8,15 @@
 
 // 删除链表元素。优选虚拟头结点dummy，省去一系列头结点等于目标值的麻烦
 ListNode* removeElements(ListNode* head, int val) {
-  ListNode* tmp = new ListNode(0, head);
-  ListNode* p = tmp;
-  while (p && p->next) {
+  ListNode* dummy = new ListNode(0, head);
+  ListNode* p = dummy;
+  while (p->next) {
     if (p->next->val == val)
       p->next = p->next->next;
     else
       p = p->next;
   }
-  return tmp->next;
+  return dummy->next;
 }
 
 // 生成虚拟头节点

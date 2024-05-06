@@ -20,50 +20,54 @@ deleteAtIndex(index)：如果索引 index 有效，则删除链表中的第 inde
 class MyLinkedList {
  public:
   MyLinkedList() {
+    dummy_ = new ListNode(-1);
     size_ = 0;
-    dummy_ = new ListNode(0);
   }
+
   int get(int index) {
-    if (index >= size_)
+    if (index >= size_ || index < 0)
       return -1;
     ListNode* p = dummy_->next;
     while (index--)
       p = p->next;
     return p->val;
   }
+
   void addAtHead(int val) {
     ListNode* tmp = new ListNode(val);
     tmp->next = dummy_->next;
     dummy_->next = tmp;
     size_++;
   }
+
   void addAtTail(int val) {
+    ListNode* tmp = new ListNode(val);
     ListNode* p = dummy_;
     while (p->next)
       p = p->next;
-    ListNode* tmp = new ListNode(val);
     p->next = tmp;
     size_++;
   }
+
   void addAtIndex(int index, int val) {
     if (index > size_)
       return;
-    else if (index == size_)
-      addAtTail(val);
     else if (index < 0)
       addAtHead(val);
+    else if (index == size_)
+      addAtTail(val);
     else {
       ListNode* p = dummy_;
       while (index--)
         p = p->next;
-      ListNode* tmp = new ListNode(val);
-      tmp->next = p->next;
+      ListNode* tmp = new ListNode(val, p->next);
       p->next = tmp;
       size_++;
     }
   }
+
   void deleteAtIndex(int index) {
-    if (index >= size_)
+    if (index < 0 || index >= size_)
       return;
     ListNode* p = dummy_;
     while (index--)
@@ -72,8 +76,9 @@ class MyLinkedList {
     size_--;
   }
 
-  int size_;
+ public:
   ListNode* dummy_;
+  int size_;
 };
 
 class MyLinkedList1 {
