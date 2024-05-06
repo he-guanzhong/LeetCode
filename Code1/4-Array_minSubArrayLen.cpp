@@ -9,22 +9,22 @@
 是该条件下的长度最小的子数组。 提示： 1 <= target <= 10^9 1 <= nums.length <=
 10^5 1 <= nums[i] <= 10^5 */
 
+int minSubArrayLen(int target, vector<int>& nums) {
+  int j = 0;
+  int ans = INT_MAX, sum = 0;
+  for (int i = 0; i < nums.size(); i++) {
+    sum += nums[i];
+    while (j <= i && sum >= target) {
+      ans = min(ans, i - j + 1);
+      sum -= nums[j++];
+    }
+  }
+  return ans == INT_MAX ? 0 : ans;
+}
+
 // 求的是子数组长度，故不贪心，不动态规划。滑动窗口（双指针）即可。保证窗口内总和小于target。
 // 同一窗口右界，允许多次挪动窗口左界，while。结果result初始化为INT_MAX。返回值需判断result是否更新过。
 // 无更新则说明所有总和依然小于target，直接返回0
-int minSubArrayLen(int target, vector<int>& nums) {
-  int result = INT_MAX;
-  int left = 0;
-  int num = 0;
-  for (int i = 0; i < nums.size(); i++) {
-    num += nums[i];
-    while (num >= target) {
-      result = min(result, i - left + 1);
-      num -= nums[left++];
-    }
-  }
-  return result == INT_MAX ? 0 : result;
-}
 
 // 暴力求解, 双循环遍历，注意定义结果初始值位INT_MAX
 int minSubArrayLen1(int s, vector<int>& nums) {

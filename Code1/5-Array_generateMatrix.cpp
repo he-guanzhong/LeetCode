@@ -10,32 +10,24 @@
 // 循环条件为left<=right和up<=down，因为相等时也是可以赋值的。
 // 按照顺时针顺序依次遍历，更新完上边后，对于实时判断是否大于下边，可有可无。有了可少进一轮循环。没有则不影响最终结果
 vector<vector<int>> generateMatrix(int n) {
-  int left = 0, top = 0, right = n - 1, bottom = n - 1;
-  int i = 0;
-  vector<vector<int>> result(n, vector<int>(n, 0));
-  while (left <= right && top <= bottom) {
-    for (int j = left; j <= right; j++)
-      result[top][j] = ++i;
-    top++;
-    if (top > bottom)
-      break;
-    for (int j = top; j <= bottom; j++)
-      result[j][right] = ++i;
-    right--;
-    if (right < left)
-      break;
-    for (int j = right; j >= left; j--)
-      result[bottom][j] = ++i;
-    bottom--;
-    if (bottom < top)
-      break;
-    for (int j = bottom; j >= top; j--)
-      result[j][left] = ++i;
-    left++;
-    if (left > right)
-      break;
+  vector<vector<int>> ans(n, vector<int>(n, 0));
+  int l = 0, r = n - 1, u = 0, d = n - 1;
+  int i = 1;
+  while (l <= r && u <= d) {
+    for (int j = l; j <= r; j++)
+      ans[u][j] = i++;
+    u++;
+    for (int j = u; j <= d; j++)
+      ans[j][r] = i++;
+    r--;
+    for (int j = r; j >= l; j--)
+      ans[d][j] = i++;
+    d--;
+    for (int j = d; j >= u; j--)
+      ans[j][l] = i++;
+    l++;
   }
-  return result;
+  return ans;
 }
 
 // 推荐解法，左闭右开

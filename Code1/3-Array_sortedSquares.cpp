@@ -10,19 +10,18 @@
 */
 
 vector<int> sortedSquares(vector<int>& nums) {
-  vector<int> res;
-  int left = 0, right = nums.size() - 1;
-  while (left <= right) {
-    if (nums[left] * nums[left] < nums[right] * nums[right]) {
-      res.push_back(nums[right] * nums[right]);
-      right--;
+  vector<int> ans(nums.size(), 0);
+  int k = ans.size() - 1;
+  for (int i = 0, j = nums.size() - 1; i <= j;) {
+    if (abs(nums[i]) >= abs(nums[j])) {
+      ans[k--] = nums[i] * nums[i];
+      i++;
     } else {
-      res.push_back(nums[left] * nums[left]);
-      left++;
+      ans[k--] = nums[j] * nums[j];
+      j--;
     }
   }
-  reverse(res.begin(), res.end());
-  return res;
+  return ans;
 }
 
 // 暴力解法，O(n) = n + nlogn
