@@ -1,8 +1,19 @@
 #include "head.h"
-/*
-206. 反转链表
-题意：反转一个单链表。
-示例: 输入: 1->2->3->4->5->NULL 输出: 5->4->3->2->1->NULL*/
+/* 206. 反转链表
+给你单链表的头节点 head ，请你反转链表，并返回反转后的链表。
+示例 1：
+输入：head = [1,2,3,4,5]
+输出：[5,4,3,2,1]
+示例 2：
+输入：head = [1,2]
+输出：[2,1]
+示例 3：
+输入：head = []
+输出：[]
+提示：
+    链表中节点的数目范围是 [0, 5000]
+    -5000 <= Node.val <= 5000
+进阶：链表可以选用迭代或递归方式完成反转。你能否用两种方法解决这道题？ */
 
 // 优选双指针，全局保存过去、现在、未来三个结点。无需对head特殊情况进行处理。最终返回更新后的pre，即为新的头结点
 // 次选递归。退出条件为找到原尾节点，即返回。不断向下递归head->next，标记新的头结点last。此时该层head为倒数第二结点。
@@ -10,10 +21,10 @@
 ListNode* reverseList(ListNode* head) {
   if (!head || !head->next)
     return head;
-  ListNode* new_head = reverseList(head->next);
+  ListNode* newHead = reverseList(head->next);
   head->next->next = head;
   head->next = nullptr;
-  return new_head;
+  return newHead;
 }
 
 // 生成虚拟头节点
@@ -85,4 +96,5 @@ int main() {
   p2 = createList(vec2);
   printList(reverseList3(p1));
   printList(reverseList3(p2));
+  return 0;
 }
