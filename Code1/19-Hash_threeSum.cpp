@@ -1,12 +1,50 @@
-#include <unordered_set>
 #include "head.h"
 /* 15. 三数之和
-给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得
-a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。
-注意： 答案中不可以包含重复的三元组。
-示例：
-给定数组 nums = [-1, 0, 1, 2, -1, -4]，
-满足要求的三元组集合为： [ [-1, 0, 1], [-1, -1, 2] ] */
+给你一个整数数组 nums ，判断是否存在三元组 [nums[i], nums[j], nums[k]] 满足 i !=
+j、i != k 且 j != k ，同时还满足 nums[i] + nums[j] + nums[k] == 0 。请
+你返回所有和为 0 且不重复的三元组。
+注意：答案中不可以包含重复的三元组。
+示例 1：
+输入：nums = [-1,0,1,2,-1,-4]
+输出：[[-1,-1,2],[-1,0,1]]
+解释：
+nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0 。
+nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0 。
+nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0 。
+不同的三元组是 [-1,0,1] 和 [-1,-1,2] 。
+注意，输出的顺序和三元组的顺序并不重要。
+示例 2：
+输入：nums = [0,1,1]
+输出：[]
+解释：唯一可能的三元组和不为 0 。 */
+
+vector<vector<int>> threeSum(vector<int>& nums) {
+  vector<vector<int>> ans;
+  sort(nums.begin(), nums.end());
+  for (int i = 0; i < nums.size(); i++) {
+    if (nums[i] > 0)
+      break;
+    if (i > 0 && nums[i] == nums[i - 1])
+      continue;
+    for (int j = i + 1, k = nums.size() - 1; j < k;) {
+      int sum = nums[i] + nums[j] + nums[k];
+      if (sum > 0)
+        k--;
+      else if (sum < 0)
+        j++;
+      else {
+        ans.push_back({nums[i], nums[j], nums[k]});
+        j++;
+        k--;
+        while (j < k && nums[j] == nums[j - 1])
+          j++;
+        while (j < k && nums[k] == nums[k + 1])
+          k--;
+      }
+    }
+  }
+  return ans;
+}
 
 // 三数之和，一、不求下标，而求元素数值，故可以排序。二、要求不重复数组，故需要入result时去重。
 // 优选双指针方法，先从小到大排序。剪支，若首元素小于0，则必不可能后序总和为0
@@ -14,34 +52,6 @@ a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。
 // 步骤二、设定b=a+1,c=nums.size()-1。三者求和，根据和大小，分别挪动b\c，如=0，先压入结果，再在b<c空间内去重，共同向中间收敛。
 // 去重，核心在于先处理，再去重，因为组内允许相等元素出现。若先去重、在处理，相当于不允许组内相等元素
 // 排序、剪支、遍历起始点、起始点与上一元素比较去重、设定左右指针窗口、计算窗口和，分情况挪动左右步、如相等先压入再去重
-vector<vector<int>> threeSum(vector<int>& nums) {
-  vector<vector<int>> result;
-  sort(nums.begin(), nums.end());
-  for (int i = 0; i < nums.size(); i++) {
-    if (nums[i] > 0)
-      break;
-    if (i > 0 && nums[i] == nums[i - 1])
-      continue;
-    int left = i + 1, right = nums.size() - 1;
-    while (left < right) {
-      if (nums[i] + nums[left] + nums[right] > 0)
-        right--;
-      else if (nums[i] + nums[left] + nums[right] < 0)
-        left++;
-      else {
-        result.push_back({nums[i], nums[left], nums[right]});
-        while (left < right && nums[left] == nums[left + 1])
-          left++;
-        while (left < right && nums[right] == nums[right - 1])
-          right--;
-        left++;
-        right--;
-      }
-    }
-  }
-  return result;
-}
-
 vector<vector<int>> threeSum1(vector<int>& nums) {
   vector<vector<int>> result;
   sort(nums.begin(), nums.end());
@@ -73,8 +83,7 @@ vector<vector<int>> threeSum2(vector<int>& nums) {
   for (int i = 0; i < nums.size(); i++) {
     if (nums[i] > 0)
       break;
-    // 不能
-    // nums[i]==nums[i+1]否则会漏掉{-1，-1，2}，组内元素可以重复，故一定要先处理，如果遇到上一次相等的数再跳过
+    // 不能nums[i]==nums[i+1]否则会漏掉{-1，-1，2}，组内元素可以重复，故一定要先处理，如果遇到上一次相等的数再跳过
     if (i > 0 && nums[i] == nums[i - 1])
       continue;
     int left = i + 1;
@@ -101,9 +110,13 @@ vector<vector<int>> threeSum2(vector<int>& nums) {
 int main() {
   vector<int> nums1 = {-1, 0, 1, 2, -1, -4};
   vector<int> nums2 = {-4, -1, -1, 0, 1, 2};
+  vector<int> nums3 = {-2, 0, 0, 2, 2};
   printMat(threeSum(nums1));
   printMat(threeSum(nums2));
+  printMat(threeSum(nums3));
   printMat(threeSum2(nums1));
   printMat(threeSum2(nums2));
+  printMat(threeSum2(nums3));
+
   return 0;
 }

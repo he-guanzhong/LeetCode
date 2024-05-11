@@ -1,4 +1,3 @@
-#include <unordered_set>
 #include "head.h"
 /* 202. 快乐数
 编写一个算法来判断一个数 n 是不是快乐数。
@@ -12,28 +11,32 @@
 1^2 + 9^2 = 82
 8^2 + 2^2 = 68
 6^2 + 8^2 = 100
-1^2 + 0^2 + 0^2 = 1 */
-// 判断快乐数，核心在于两层循环+set集合判断计算结果曾经过，作为退出条件。一、外置计数sum,使用while(n)求每次位置数字平方和。
-// 二、无线循环while(1)中，如果出现n==1返回真。使用unordered_set记录每次的n，如果发现曾经出现过，就返回假，否则再插入
-// 注意：不得计算出新的n后，直接插入set。必须先判断set中有无现有值，再插入。
+1^2 + 0^2 + 0^2 = 1
+示例 2：
+输入：n = 2
+输出：false */
+
 bool isHappy(int n) {
   unordered_set<int> uset;
-  while (true) {
-    if (n == 1)
-      return true;
-    if (uset.find(n) != uset.end())
-      return false;
+  while (n != 1) {
     uset.insert(n);
-    int sum = 0;
-    while (n > 0) {
-      sum += (n % 10) * (n % 10);
+    int tmp = 0;
+    while (n) {
+      int digit = n % 10;
+      tmp += digit * digit;
       n /= 10;
     }
-    n = sum;
+    if (uset.find(tmp) != uset.end())
+      return false;
+    n = tmp;
   }
+  return true;
 }
 
 // 不快乐的数，总和必无限循环，则利用哈希表记录每次的总和，若出现过，则必为假
+// 判断快乐数，核心在于两层循环+set集合判断计算结果曾经过，作为退出条件。一、外置计数sum,使用while(n)求每次位置数字平方和。
+// 二、无线循环while(1)中，如果出现n==1返回真。使用unordered_set记录每次的n，如果发现曾经出现过，就返回假，否则再插入
+// 注意：不得计算出新的n后，直接插入set。必须先判断set中有无现有值，再插入。
 bool isHappy1(int num) {
   unordered_set<int> set;
   while (1) {

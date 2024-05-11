@@ -1,30 +1,37 @@
 #include "head.h"
 /* 19. 删除链表的倒数第 N 个结点
 给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
-进阶：你能尝试使用一趟扫描实现吗？
 示例 1：
-19.删除链表的倒数第N个节点
-输入：head = [1,2,3,4,5], n = 2 输出：[1,2,3,5] 示例 2：
-输入：head = [1], n = 1 输出：[] 示例 3：
-输入：head = [1,2], n = 1 输出：[1]。*/
+输入：head = [1,2,3,4,5], n = 2
+输出：[1,2,3,5]
+示例 2：
+输入：head = [1], n = 1
+输出：[]
+示例 3：
+输入：head = [1,2], n = 1
+输出：[1]
+提示：
+    链表中结点的数目为 sz
+    1 <= sz <= 30
+    0 <= Node.val <= 100
+    1 <= n <= sz */
 
-// 双指针，快指针先走n步，然后慢指针走快指针走到底的步数。对慢指针下一个结点进行删除操作。
-// 虚拟头结点，可删除走一步的头结点。while条件内，判断推荐p->next，确定p终止于最后一个结点，而非空。如果判断条件为p，则fast要多走一步
 ListNode* removeNthFromEnd(ListNode* head, int n) {
-  ListNode* dummy = new ListNode(0, head);
-  ListNode* fast = dummy;
-  ListNode* slow = fast;
-  while (fast->next && n--)
-    fast = fast->next;
-  while (fast->next) {
-    fast = fast->next;
-    slow = slow->next;
+  ListNode* dummy = new ListNode(-1, head);
+  ListNode *p = dummy, *q = dummy;
+  while (n--)
+    p = p->next;
+  p = p->next;
+  while (p) {
+    p = p->next;
+    q = q->next;
   }
-  slow->next = slow->next->next;
+  q->next = q->next->next;
   return dummy->next;
 }
 
-// 快慢指针法
+// 快慢指针法，快指针先走n步，然后慢指针走快指针走到底的步数。对慢指针下一个结点进行删除操作。
+// 虚拟头结点，可删除走一步的头结点。while条件内，判断推荐p->next，确定p终止于最后一个结点，而非空。如果判断条件为p，则fast要多走一步
 ListNode* removeNthFromEnd1(ListNode* head, int n) {
   ListNode* dummy = new ListNode(0);
   dummy->next = head;
@@ -62,4 +69,5 @@ int main() {
   printList(removeNthFromEnd1(p1, n1));
   printList(removeNthFromEnd1(p2, n2));
   printList(removeNthFromEnd1(p3, n2));
+  return 0;
 }
