@@ -12,28 +12,26 @@
 示例 3：
 输入：s = "(]"      输出：false */
 
-// 利用栈，对每一个左括号，压入其匹配的右括号。如此，当栈不空且栈顶元素与右括号相等时，弹出栈顶元素。
-// 返回false分三种情况，1、栈空（右括号多了）；2、栈顶元素与右括号不相等；3、最终栈是不为空（左括号多）
-// 可额外添加剪支，开头判断，字符串s长度如果是奇数，必为false
 bool isValid(string s) {
-  stack<char> stk;
+  stack<char> st;
   for (char c : s) {
     if (c == '(')
-      stk.push(')');
+      st.push(')');
     else if (c == '[')
-      stk.push(']');
+      st.push(']');
     else if (c == '{')
-      stk.push('}');
-    else if (!stk.empty() && c == stk.top())
-      stk.pop();
+      st.push('}');
+    else if (!st.empty() && c == st.top())
+      st.pop();
     else
       return false;
   }
-  return stk.empty();
+  return st.empty();
 }
 
-// 利用栈，三种返回假情况。左括号多（栈剩余）、左右括号不等、右括号多（栈提前为空）。
-// 两种方法，一是在遇到左括号时将右括号压入，然后比较右括号相等。二是非空栈，且遇到相等的右括号，再弹出
+// 利用栈，对每一个左括号，压入其匹配的右括号。如此，当栈不空且栈顶元素与右括号相等时，弹出栈顶元素。
+// 返回false分三种情况，1、栈空（右括号多了）；2、栈顶元素与右括号不相等；3、最终栈是不为空（左括号多）
+// 可额外添加剪支，开头判断，字符串s长度如果是奇数，必为false
 bool isValid1(string s) {
   if (s.size() % 2 == 1)
     return false;
@@ -53,6 +51,8 @@ bool isValid1(string s) {
   return st.empty();
 }
 
+// 利用栈，三种返回假情况。左括号多（栈剩余）、左右括号不等、右括号多（栈提前为空）。
+// 两种方法，一是在遇到左括号时将右括号压入，然后比较右括号相等。二是非空栈，且遇到相等的右括号，再弹出
 bool isValid2(string s) {
   if (s.size() % 2 == 1)
     return false;
@@ -69,6 +69,7 @@ bool isValid2(string s) {
   }
   return st.empty();
 }
+
 int main() {
   string s1 = "()", s2 = "()[]{}", s3 = "(]", s4 = "]]";
   cout << isValid(s1) << " " << isValid(s2) << " " << isValid(s3) << " "

@@ -12,15 +12,14 @@
 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。 提示：
     1 <= x <= 9
     最多调用 100 次 push、pop、peek 和 empty
-    假设所有操作都是有效的 （例如，一个空的队列不会调用 pop 或者 peek 操作）
-*/
+    假设所有操作都是有效的 （例如，一个空的队列不会调用 pop 或者 peek 操作） */
 
-// 无构造，push直接压入进栈，pop要先判断出栈是否为空，空则将进栈所有元素转移。出栈顶元素临时保存作为返回值，再出栈。注意题目要求，不必考虑进栈也为空的情况
-// peek同样要判断出栈是否为空，可以借用this指针pop函数,，将弹出的元素压回出栈。empty判断进栈、出栈二者皆空
 class MyQueue {
  public:
   MyQueue() {}
+
   void push(int x) { st1.push(x); }
+
   int pop() {
     if (st2.empty()) {
       while (!st1.empty()) {
@@ -28,22 +27,24 @@ class MyQueue {
         st1.pop();
       }
     }
-    int tmp = st2.top();
+    int ans = st2.top();
     st2.pop();
-    return tmp;
+    return ans;
   }
-  int peek() {
-    int tmp = this->pop();
-    st2.push(tmp);
-    return st2.top();
-  }
-  bool empty() { return st1.empty() && st2.empty(); }
 
- private:
+  int peek() {
+    int ans = pop();
+    st2.push(ans);
+    return ans;
+  }
+
+  bool empty() { return st1.empty() && st2.empty(); }
   stack<int> st1;
   stack<int> st2;
 };
 
+// 无构造，push直接压入进栈，pop要先判断出栈是否为空，空则将进栈所有元素转移。出栈顶元素临时保存作为返回值，再出栈。注意题目要求，不必考虑进栈也为空的情况
+// peek同样要判断出栈是否为空，可以借用this指针pop函数,，将弹出的元素压回出栈。empty判断进栈、出栈二者皆空
 // 进、出双栈。只有pop时才会将进栈所有元素转移。注意peek函数对于pop函数判空的复用
 class MyQueue1 {
  public:

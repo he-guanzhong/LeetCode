@@ -1,5 +1,5 @@
 #include "head.h"
-/* 逆波兰表达式求值
+/* 150. 逆波兰表达式求值
 给你一个字符串数组 tokens ，表示一个根据 逆波兰表示法 表示的算术表达式。
 请你计算该表达式。返回一个表示表达式值的整数。
 注意：
@@ -13,12 +13,10 @@
 输入：tokens = ["2","1","+","3","*"]
 输出：9
 解释：该算式转化为常见的中缀算术表达式为：((2 + 1) * 3) = 9
-
 示例 2：
 输入：tokens = ["4","13","5","/","+"]
 输出：6
 解释：该算式转化为常见的中缀算术表达式为：(4 + (13 / 5)) = 6
-
 示例 3：
 输入：tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]
 输出：22
@@ -29,35 +27,42 @@
 = ((10 * 0) + 17) + 5
 = (0 + 17) + 5
 = 17 + 5
-= 22*/
+= 22 */
+
+int evalRPN(vector<string>& tokens) {
+  stack<int> st;
+  int num1 = 0, num2 = 0;
+  for (string str : tokens) {
+    int ans = 0;
+    if (str == "+" || str == "-" || str == "*" || str == "/") {
+      num2 = st.top();
+      st.pop();
+      num1 = st.top();
+      st.pop();
+      if (str == "+")
+        ans = num1 + num2;
+      else if (str == "-")
+        ans = num1 - num2;
+      else if (str == "*")
+        ans = num1 * num2;
+      else if (str == "/")
+        ans = num1 / num2;
+    } else {
+      ans = stoi(str);
+    }
+    st.push(ans);
+  }
+  return st.top();
+}
 
 // 逆波兰表达式，利用栈，变量类型longlong，而非int因为题目限定了整型大小。
 // 碰到运算符，由于四种符号均需处理前两位数字，故双层if，并将结果压回栈内。碰到数字，就stoll转化为longlong，压入栈。
 // 最终的结果必是栈内唯一元素，由于返回值已经限定了int，故可以使用int
-int evalRPN(vector<string>& tokens) {
-  stack<int> stk;
-  for (string str : tokens) {
-    if (str == "+" || str == "-" || str == "*" || str == "/") {
-      int num2 = stk.top();
-      stk.pop();
-      int num1 = stk.top();
-      stk.pop();
-      if (str == "+")
-        stk.push(num1 + num2);
-      if (str == "-")
-        stk.push(num1 - num2);
-      if (str == "*")
-        stk.push(num1 * num2);
-      if (str == "/")
-        stk.push(num1 / num2);
-    } else
-      stk.push(stoi(str));
-  }
-  return stk.top();
-}
-
 // Reverse Polish Notation 逆波兰（后缀）表达式。利用栈，注意整形为long long,
-// 转换要用stoll
+// 字符串转整形，C语言头文件stdlib.h后，可使用atoi,atol,atoll，仅接收一个参数char*。若为string类，则需转化为str.c_str()输入
+// 若使用strtoi,strtol,strtoll，包含三个参数char*,char* endptr, int base
+// endptr为第一个不能转化的位置endptr(不需要可以输入NULL)，base为允许指定的基数，如10、16等
+// C++语言包含头文件string.h后，使用stoi,stol,stoll，仅接收一个参数string，如果
 int evalRPN1(vector<string>& tokens) {
   stack<long long> st;
   for (string s : tokens) {
@@ -82,6 +87,7 @@ int evalRPN1(vector<string>& tokens) {
   st.pop();
   return result;
 }
+
 int main() {
   vector<string> tokens1 = {"2", "1", "+", "3", "*"};
   vector<string> tokens2 = {"4", "13", "5", "/", "+"};

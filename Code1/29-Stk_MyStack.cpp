@@ -14,32 +14,36 @@
 提示：
     1 <= x <= 9
     最多调用100 次 push、pop、top 和 empty
-    每次调用 pop 和 top 都保证栈不为空
-*/
-// 一个队列就够了，push正常压入，pop要求整体队列大小，依次弹出n-1个首元素，分别将其加入队尾，取出front()作为弹出的量
-// top由于队列的特殊性质，可以同时访问队头队尾两个元素，故直接返回back()
+    每次调用 pop 和 top 都保证栈不为空 */
+
 class MyStack {
  public:
+  queue<int> que;
   MyStack() {}
-  void push(int x) { que1.push(x); }
-  int pop() {
-    int n = que1.size();
-    while (--n) {
-      que1.push(que1.front());
-      que1.pop();
-    }
-    int result = que1.front();
-    que1.pop();
-    return result;
-  }
-  int top() { return que1.back(); }
-  bool empty() { return que1.empty(); }
 
- private:
-  queue<int> que1;
-  queue<int> que2;
+  void push(int x) {
+    int n = que.size();
+    que.push(x);
+    while (n--) {
+      que.push(que.front());
+      que.pop();
+    }
+  }
+
+  int pop() {
+    int ans = que.front();
+    que.pop();
+    return ans;
+  }
+
+  int top() { return que.front(); }
+
+  bool empty() { return que.empty(); }
 };
-// 一个队列为主，第二个队列仅在pop时作为临时容纳前n-1的容器使用
+
+// 一个队列就够了，push正常压入，pop要求整体队列大小，依次弹出n-1个首元素，分别将其加入队尾，取出front()作为弹出的量
+// top由于队列的特殊性质，可以同时访问队头队尾两个元素，故直接返回back()
+// 如果使用两个队列，则一个队列为主，第二个队列仅在pop时作为临时容纳前n-1的容器使用
 class MyStack1 {
  public:
   queue<int> que1;

@@ -10,19 +10,26 @@
 由于两字母相邻且相同，这是此时唯一可以执行删除操作的重复项。之后我们得到字符串
 "aaca"，其中又只有 "aa" 可以执行重复项删除操作，所以最后的字符串为 "ca"。 */
 
-// 核心思路是利用栈，如果碰到栈不空，且栈顶元素等于下一压入元素时，弹出栈顶元素。若栈为空、或栈顶元素不等，则压入新元素。
-// 结果字符串的back\pop_back可以替代栈的操作，如此不必使用额外的栈，和额外的反转操作。
 string removeDuplicates(string s) {
-  string result;
+  stack<int> st;
+  string ans;
   for (char c : s) {
-    if (!result.empty() && c == result.back())
-      result.pop_back();
+    if (!st.empty() && c == st.top())
+      st.pop();
     else
-      result.push_back(c);
+      st.push(c);
   }
-  return result;
+  ans.resize(st.size());
+  int i = ans.size() - 1;
+  while (!st.empty()) {
+    ans[i--] = st.top();
+    st.pop();
+  }
+  return ans;
 }
 
+// 核心思路是利用栈，如果碰到栈不空，且栈顶元素等于下一压入元素时，弹出栈顶元素。若栈为空、或栈顶元素不等，则压入新元素。
+// 结果字符串的back\pop_back可以替代栈的操作，如此不必使用额外的栈，和额外的反转操作。
 // 直接把字符串当栈，节省资源。其具有front back push_back pop_back功能
 string removeDuplicates1(string S) {
   string result = "";

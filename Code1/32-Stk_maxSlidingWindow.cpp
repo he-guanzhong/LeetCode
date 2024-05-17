@@ -20,38 +20,30 @@
 输入：nums = [1], k = 1
 输出：[1] */
 
+vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+  deque<int> que;
+  vector<int> ans;
+  for (int i = 0; i < k; i++) {
+    while (!que.empty() && nums[i] > que.back())
+      que.pop_back();
+    que.push_back(nums[i]);
+  }
+  ans.push_back(que.front());
+  for (int i = k; i < nums.size(); i++) {
+    if (nums[i - k] == que.front())
+      que.pop_front();
+    while (!que.empty() && nums[i] > que.back())
+      que.pop_back();
+    que.push_back(nums[i]);
+    ans.push_back(que.front());
+  }
+  return ans;
+}
+
 // 单调队列，底层可选deque。保持滑动窗口内，队列元素递减。但不必维护所有元素，只保存以最大元素起始的元素即可。
 // push函数，若元素比队尾元素大，不断弹出队尾，直至队列内保持递减。pop函数，有传入参数，只有要弹出的元素等于队首元素，才弹出
 // front函数，取值直接取队首元素。对主函数，先对前k个元素压入单调队列，然后result压入第一个最大值，之后遍历处理
 // 单调栈，从栈底到栈头递减，求的是第一个比该元素大的位置。单调队列，从队头到队尾递减，求的是滑动窗口内最大元素
-class MyQueue {
- public:
-  deque<int> que;
-  void push(int x) {
-    while (!que.empty() && x > que.back())
-      que.pop_back();
-    que.push_back(x);
-  }
-  void pop(int x) {
-    if (x == que.front())
-      que.pop_front();
-  }
-  int front() { return que.front(); }
-};
-vector<int> maxSlidingWindow(vector<int>& nums, int k) {
-  MyQueue que;
-  vector<int> result;
-  for (int i = 0; i < k; i++)
-    que.push(nums[i]);
-  result.push_back(que.front());
-  for (int i = k; i < nums.size(); i++) {
-    que.pop(nums[i - k]);
-    que.push(nums[i]);
-    result.push_back(que.front());
-  }
-  return result;
-}
-
 // 自设递减单调栈，使用deque封装，弹出pop时，判断要弹出元素是否为队首最大值元素，如是则弹出，不是则不处理
 // 压入push时，若队尾元素比压入元素小，则将队尾元素弹出。再压入，如此保证整个栈单调递减
 // 实际运行时，先将k个元素全部压入，然后从k+1个元素开始，弹出队首，压入队尾，取最大值输出
@@ -91,4 +83,5 @@ int main() {
   printVector(maxSlidingWindow(nums2, k2));
   printVector(maxSlidingWindow1(nums1, k1));
   printVector(maxSlidingWindow1(nums2, k2));
+  return 0;
 }

@@ -9,11 +9,9 @@
 对于本题而言，当 needle 是空字符串时我们应当返回 0 。这与C语言的 strstr() 以及
 Java的 indexOf() 定义相符。*/
 
-// 前缀表记录了相等前后缀的长度。next数组可以记录的是前缀长度-1。i记录后缀，从1开始遍历。j+1记录前缀长度,j为
-// j初始化为-1.
-void getNext(string s, int* next) {
+void getNext(string s, int next[]) {
   int j = -1;
-  next[0] = j;
+  next[j + 1] = j;
   for (int i = 1; i < s.size(); i++) {
     while (j >= 0 && s[i] != s[j + 1])
       j = next[j];
@@ -23,7 +21,10 @@ void getNext(string s, int* next) {
   }
 }
 int strStr(string haystack, string needle) {
-  int next[needle.size()];
+  int n = needle.size();
+  if (n == 0)
+    return 0;
+  int next[n] = {0};
   getNext(needle, next);
   int j = -1;
   for (int i = 0; i < haystack.size(); i++) {
@@ -31,13 +32,14 @@ int strStr(string haystack, string needle) {
       j = next[j];
     if (haystack[i] == needle[j + 1])
       j++;
-    if (j == needle.size() - 1)
-      return i - j;
+    if (j == n - 1)
+      return i - n + 1;
   }
   return -1;
 }
 
-// 典型kmp算法
+// 典型kmp算法。前缀表记录了相等前后缀的长度。next数组可以记录的是前缀长度-1。i记录后缀，从1开始遍历。j+1记录前缀长度
+// j初始化为-1.
 void getNext1(int* next, const string& s) {  // 求前缀表
   int j = -1;                                // 前缀末尾下标-1
   next[0] = j;
