@@ -1,35 +1,22 @@
 #include "head.h"
-/* 翻转二叉树
+/* 226. 翻转二叉树
 给你一棵二叉树的根节点 root ，翻转这棵二叉树，并返回其根节点。 */
+
+TreeNode* invertTree(TreeNode* root) {
+  if (!root)
+    return root;
+  TreeNode* tmp = invertTree(root->left);
+  root->left = invertTree(root->right);
+  root->right = tmp;
+  return root;
+}
 
 // 前、后序遍历：迭代法和递归法均可。迭代法中一般法、统一法均可。
 // 中序遍历：递归法，注意反转右孩子时，原右孩子已经变成了左孩子，故再反转一次左孩子。但如果迭代法利用栈。则不受影响
 // 翻转左右孩子核心在于swap，交换了两个结点的地址，故原左指针指向了右孩子，右指针指向左孩子。
 // 不可以将右孩子的递归，直接用左孩子承接。因为这涉及两次反转
-TreeNode* invertTree(TreeNode* root) {  // 中序遍历统一写法
-  stack<TreeNode*> st;
-  if (root)
-    st.push(root);
-  while (!st.empty()) {
-    TreeNode* node = st.top();
-    st.pop();
-    if (node != nullptr) {
-      if (node->right)  // 右
-        st.push(node->right);
-      st.push(node);  // 中
-      st.push(nullptr);
-      if (node->left)  // 左
-        st.push(node->left);
-    } else {
-      node = st.top();
-      st.pop();
-      swap(node->left, node->right);
-    }
-  }
-  return root;
-}
-
-TreeNode* invertTree1(TreeNode* root) {  // 递归法，前序遍历
+// 递归法，前序遍历
+TreeNode* invertTree1(TreeNode* root) {
   if (root == nullptr)
     return nullptr;
   swap(root->left, root->right);

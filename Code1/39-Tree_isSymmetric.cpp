@@ -2,33 +2,21 @@
 /* 101. 对称二叉树
 给你一个二叉树的根节点 root ， 检查它是否轴对称。 */
 
-// 优选递归法，对比左、右两个结点，分三种情况讨论。次选迭代法，任意容器两两压入、取出容器比较。
+bool compare(TreeNode* a, TreeNode* b) {
+  if (!a && !b)
+    return true;
+  if (!a || !b || a->val != b->val)
+    return false;
+  return compare(a->left, b->right) && compare(a->right, b->left);
+}
 bool isSymmetric(TreeNode* root) {
-  queue<TreeNode*> que;
   if (!root)
     return true;
-  que.push(root->left);
-  que.push(root->right);
-  while (!que.empty()) {
-    TreeNode* node1 = que.front();
-    que.pop();
-    TreeNode* node2 = que.front();
-    que.pop();
-    if (!node1 && !node2)
-      continue;
-    else if (!node1 || !node2 || node1->val != node2->val)
-      return false;
-    else {
-      que.push(node1->left);
-      que.push(node2->right);
-      que.push(node1->right);
-      que.push(node2->left);
-    }
-  }
-  return true;
+  return compare(root->left, root->right);
 }
 
-// 优选递归法，双空为真，一空为假，不等为假，其余递归比较左左右右，左右右左
+// 优选递归法，对比左、右两个结点，分三种情况讨论。次选迭代法，任意容器两两压入、取出容器比较。
+// 递归法，双空为真，一空为假，不等为假，其余递归比较左左右右，左右右左
 bool compare1(TreeNode* left, TreeNode* right) {
   if (!left && !right)
     return true;

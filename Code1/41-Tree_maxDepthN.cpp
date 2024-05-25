@@ -7,8 +7,8 @@ N 叉树输入按层序遍历序列化表示，每组子节点由空值分隔（
 输出：3
 输入：root =
 [1,null,2,3,4,5,null,null,6,7,null,8,null,9,10,null,null,11,null,12,null,13,null,null,14]
-输出：5
- */
+输出：5 */
+
 // N叉树，关键在于原来左右分别处理，转换为一个for循环，不断比较每个孩子的最大高度。返回值+1为本层高度
 // 可以使用后序遍历递归，或者层序遍历的方法。
 class Node {
@@ -49,6 +49,7 @@ int maxDepth1(Node* root) {
     depth = max(depth, maxDepth(root->children[i]));
   return depth + 1;  // 注意，加一是在回溯的时候，而不是计算的时候
 }
+
 int maxDepth2(Node* root) {
   if (!root)
     return 0;

@@ -20,6 +20,7 @@ vector<int> preorderTraversal(TreeNode* root) {
   }
   return result;
 }
+
 vector<int> inorderTraversal(TreeNode* root) {
   vector<int> result;
   stack<TreeNode*> stk;
@@ -37,6 +38,7 @@ vector<int> inorderTraversal(TreeNode* root) {
   }
   return result;
 }
+
 vector<int> postorderTraversal(TreeNode* root) {
   vector<int> result;
   stack<TreeNode*> stk;
@@ -119,4 +121,5 @@ int main() {
   printVector(preorderTraversal1(t1));
   printVector(inorderTraversal1(t1));
   printVector(postorderTraversal1(t1));
+  return 0;
 }

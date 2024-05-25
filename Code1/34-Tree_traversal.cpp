@@ -1,13 +1,12 @@
 #include "head.h"
 /* 144. 二叉树的前序遍历
-145. 二叉树的后序遍历
-94. 二叉树的中序遍历
+   145. 二叉树的后序遍历
+   94. 二叉树的中序遍历
 二叉树的前序、中序、后续遍历。关键在于中间节点是什么时候处理。
   前序遍历：中左右
   中序遍历：左中右
   后序遍历：左右中
-使用递归的方式。
-*/
+使用递归的方式。 */
 
 void traversal_pre(TreeNode* root, vector<int>& result) {
   if (!root)
@@ -21,6 +20,7 @@ vector<int> preorderTraversal(TreeNode* root) {
   traversal_pre(root, result);
   return result;
 }
+
 void traversal_in(TreeNode* root, vector<int>& result) {
   if (!root)
     return;
@@ -33,6 +33,7 @@ vector<int> inorderTraversal(TreeNode* root) {
   traversal_in(root, result);
   return result;
 }
+
 void traversal_post(TreeNode* root, vector<int>& result) {
   if (!root)
     return;
@@ -95,4 +96,5 @@ int main() {
   printVector(preorderTraversal1(t1));
   printVector(inorderTraversal1(t1));
   printVector(postorderTraversal1(t1));
+  return 0;
 }

@@ -1,23 +1,20 @@
 #include "head.h"
 /* 102. 二叉树的层序遍历
-给你二叉树的根节点root，返回其节点值的层序遍历。（即逐层地，从左到右访问所有节点）。
-*/
+给你二叉树的根节点root，返回其节点值的层序遍历。（即逐层地，从左到右访问所有节点）。*/
 
-// 除了普通的队列辅助法，递归法也可处理层序遍历，
-void traversal(TreeNode* root, int depth, vector<vector<int>>& result) {
+void traversal(TreeNode* root, vector<vector<int>>& ans, int depth) {
   if (!root)
     return;
-  if (depth == result.size())
-    result.push_back(vector<int>());
-  result[depth].push_back(root->val);
-  traversal(root->left, depth + 1, result);
-  traversal(root->right, depth + 1, result);
+  if (depth == ans.size())
+    ans.push_back(vector<int>());
+  ans[depth].push_back(root->val);
+  traversal(root->left, ans, depth + 1);
+  traversal(root->right, ans, depth + 1);
 }
-
 vector<vector<int>> levelOrder(TreeNode* root) {
-  vector<vector<int>> result;
-  traversal(root, 0, result);
-  return result;
+  vector<vector<int>> ans;
+  traversal(root, ans, 0);
+  return ans;
 }
 
 // 队列辅助，判空可以后续统一处理。双层循环：外层循环为队列不为空，内含该层大小和该层结果。
@@ -44,6 +41,7 @@ vector<vector<int>> levelOrder1(TreeNode* root) {
   return result;
 }
 
+// 除了普通的队列辅助法，递归法也可处理层序遍历，
 // 递归法，传入参数为矩阵结果，额外的深度信息，作为拓展result层数的条件。不必传入一层结果，因为有深度值，可以直接操作一层结果。
 // 然后前序遍历，对该层的结果末尾，push该结点值。之后分别访问左、右孩子，并传入深度+1
 void order2(TreeNode* cur, vector<vector<int>>& result, int depth) {
@@ -75,4 +73,5 @@ int main() {
   printMat(levelOrder1(t1));
   printMat(levelOrder1(t2));
   printMat(levelOrder1(t3));
+  return 0;
 }

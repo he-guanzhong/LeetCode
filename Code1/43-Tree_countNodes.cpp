@@ -13,11 +13,31 @@ h 层，则该层包含 1~ 2h 个节点。
 示例 3：
 输入：root = [1]
 输出：1 */
+
+int countNodes(TreeNode* root) {
+  if (!root)
+    return 0;
+  int l = 0, r = 0;
+  TreeNode* cur = root;
+  while (cur) {
+    cur = cur->left;
+    l++;
+  }
+  cur = root;
+  while (cur) {
+    r++;
+    cur = cur->right;
+  }
+  if (l == r)
+    return pow(2, l) - 1;
+  return countNodes(root->left) + countNodes(root->right) + 1;
+}
+
 // 考虑完全二叉树特殊性质，不是通过层数求满二叉树结点数量，再减去缺失结点数。而是完全二叉树可以分为若干个满二叉树，只有一个叶子节点也算满二叉树。
 // 满二叉树判断条件是，左、右边深度相等。先创立临时左、右结点，求左右边长，深度可以作为层数-1
 // 满二叉树层数n，总结点数为2^n-1。乘方可以位运算代替，x<<y意为x*(2^y)。注意加减法优先级为6，左右移优先级为7，故想先左右移，一定要加括号
 // 若为普通二叉树，可以后序遍历递归，或层序遍历，时间复杂度和空间复杂度均为n。
-int countNodes(TreeNode* root) {
+int countNodes5(TreeNode* root) {
   if (!root)
     return 0;
   int leftDepth = 0, rightDepth = 0;

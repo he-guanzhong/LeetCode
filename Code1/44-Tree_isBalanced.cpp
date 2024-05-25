@@ -1,9 +1,23 @@
 #include "head.h"
-#define null -1
 /* 110. 平衡二叉树
 给定一个二叉树，判断它是否是高度平衡的二叉树。
 本题中，一棵高度平衡二叉树定义为：
     一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1.*/
+
+int getHeight(TreeNode* root) {
+  if (!root)
+    return 0;
+  int l = getHeight(root->left);
+  int r = getHeight(root->right);
+  if (l == -1 || r == -1 || abs(l - r) > 1)
+    return -1;
+  return max(l, r) + 1;
+}
+bool isBalanced(TreeNode* root) {
+  if (!root)
+    return true;
+  return getHeight(root) > 0;
+}
 
 // 高度：本结点到叶子结点最短距离，后序遍历。深度：本结点到根节点最短距离，前序遍历
 // 平衡二叉树，要看左右子树高度差是否小于等于1，否则即为否
@@ -11,51 +25,6 @@
 // 则不平衡右两个条件，左右子树已不平衡（其返回值是-1），左右子树高度差大于1。否则，求正常树的高度。
 // 最终，看根节点是否为-1，若有正常高度，则为真
 // 迭代法，后序遍历。还是要借助getHeight函数求高度
-
-int getHeight(TreeNode* root) {  // 后序遍历求深度
-  stack<TreeNode*> stk;
-  if (root)
-    stk.push(root);
-  int depth = 0;
-  int result = 0;
-  while (!stk.empty()) {
-    TreeNode* cur = stk.top();
-    stk.pop();
-    if (cur) {
-      stk.push(cur);
-      stk.push(nullptr);
-      depth++;
-      if (cur->right)
-        stk.push(cur->right);
-      if (cur->left)
-        stk.push(cur->left);
-    } else {
-      cur = stk.top();
-      stk.pop();
-      depth--;
-    }
-    result = max(result, depth);
-  }
-  return result;
-}
-bool isBalanced(TreeNode* root) {
-  stack<TreeNode*> stk;
-  if (root)
-    stk.push(root);
-  while (!stk.empty()) {
-    TreeNode* cur = stk.top();
-    stk.pop();
-    int leftHeight = getHeight(cur->left);
-    int rightHeight = getHeight(cur->right);
-    if (abs(leftHeight - rightHeight) > 1)
-      return false;
-    if (cur->right)
-      stk.push(cur->right);
-    if (cur->left)
-      stk.push(cur->left);
-  }
-  return true;
-}
 
 // 递归法，传入结点指针，返回量是该节点最大高度，若已经发现不平衡，返回-1
 // 求高度方法是后序遍历，左右中，判断条件为左右子树差是否小于等于1，否则返回-1
@@ -105,6 +74,7 @@ int getHeight2(TreeNode* root) {
   }
   return result;
 }
+
 bool isBalanced2(TreeNode* root) {  // 后序遍历
   if (!root)
     return true;
@@ -122,6 +92,7 @@ bool isBalanced2(TreeNode* root) {  // 后序遍历
   }
   return true;
 }
+
 int main() {
   vector<int> vec1 = {3, 9, 20, null, null, 15, 7};
   TreeNode* root1 = construct_binary_tree(vec1);
