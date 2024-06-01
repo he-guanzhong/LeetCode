@@ -1,31 +1,46 @@
 #include "head.h"
-#define null -1
 /* 112. 路径总和
 给你二叉树的根节点 root 和一个表示目标和的整数 targetSum 。判断该树中是否存在
 根节点到叶子节点 的路径，这条路径上所有节点值相加等于目标和 targetSum
-。如果存在，返回 true ；否则，返回 false 。 叶子节点 是指没有子节点的节点。 */
+。如果存在，返回 true ；否则，返回 false 。
+叶子节点 是指没有子节点的节点。
+示例 1：
+输入：root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22
+输出：true
+解释：等于目标和的根节点到叶节点路径如上图所示。
+示例 2：
+输入：root = [1,2,3], targetSum = 5
+输出：false
+解释：树中存在两条根节点到叶子节点的路径：
+(1 --> 2): 和为 3
+(1 --> 3): 和为 4
+不存在 sum = 5 的根节点到叶子节点的路径。
+示例 3：
+输入：root = [], targetSum = 0
+输出：false
+解释：由于树是空的，所以不存在根节点到叶子节点的路径。*/
 
-// 递归法，判断叶子结点处总和是否为targetSum
-// 常规思路外置sum，递归前后加减root->val，事实可以简化，直接在targetSum加减，递归形参处减去本值，则自动回溯
-// 迭代法。回溯需再栈中，额外记录直至该结点的总和sum。如此可以不必对targetSum进行加减
 bool hasPathSum(TreeNode* root, int targetSum) {
-  stack<pair<TreeNode*, int>> stk;
+  stack<pair<TreeNode*, int>> st;
   if (root)
-    stk.push({root, root->val});
-  while (!stk.empty()) {
-    TreeNode* cur = stk.top().first;
-    int cnt = stk.top().second;
-    stk.pop();
-    if (!cur->left && !cur->right && cnt == targetSum)
+    st.push({root, root->val});
+  while (!st.empty()) {
+    TreeNode* cur = st.top().first;
+    int value = st.top().second;
+    st.pop();
+    if (targetSum == value)
       return true;
     if (cur->right)
-      stk.push({cur->right, cnt + cur->right->val});
+      st.push({cur->right, value + cur->right->val});
     if (cur->left)
-      stk.push({cur->left, cnt + cur->left->val});
+      st.push({cur->left, value + cur->left->val});
   }
   return false;
 }
 
+// 递归法，判断叶子结点处总和是否为targetSum
+// 常规思路外置sum，递归前后加减root->val，事实可以简化，直接在targetSum加减，递归形参处减去本值，则自动回溯
+// 迭代法。回溯需再栈中，额外记录直至该结点的总和sum。如此可以不必对targetSum进行加减
 // 传统递归法，使用count计数，到减去该节点值后，还剩余的值
 bool traversal_std(TreeNode* root, int count) {
   if (!root->left && !root->right && count == 0)
@@ -92,4 +107,5 @@ int main() {
   cout << hasPathSum1(node1, targetSum1) << " "
        << hasPathSum1(node2, targetSum2) << " "
        << hasPathSum1(node3, targetSum3) << endl;
+  return 0;
 }

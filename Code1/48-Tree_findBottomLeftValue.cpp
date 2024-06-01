@@ -9,25 +9,28 @@
 输入: [1,2,3,4,null,5,6,null,null,7]
 输出: 7  */
 
-// 递归法，任何遍历均可，但要先做后右，核心是求深度，一旦突破最大深度，即更新result保存的该结点值
-// 迭代法，层序遍历，保存每一层第一个结点的值，作为result
-int max_depth = 0;
-void traversal(TreeNode* root, int depth, int& result) {
+void dfs(TreeNode* root, int depth, int& ans, int& maxDepth) {
   if (!root)
     return;
-  if (depth == max_depth) {
-    result = root->val;
-    max_depth++;
+  depth++;
+  dfs(root->left, depth, ans, maxDepth);
+  if (depth > maxDepth) {
+    maxDepth = depth;
+    ans = root->val;
   }
-  traversal(root->left, depth + 1, result);
-  traversal(root->right, depth + 1, result);
-}
-int findBottomLeftValue(TreeNode* root) {
-  int result = 0;
-  traversal(root, 0, result);
-  return result;
+  dfs(root->right, depth, ans, maxDepth);
+  return;
 }
 
+int findBottomLeftValue(TreeNode* root) {
+  int ans = 0;
+  int maxDepth = 0;
+  dfs(root, 0, ans, maxDepth);
+  return ans;
+}
+
+// 递归法，任何遍历均可，但要先做后右，核心是求深度，一旦突破最大深度，即更新result保存的该结点值
+// 迭代法，层序遍历，保存每一层第一个结点的值，作为result
 // 递归法，前、中、后序遍历均可，因为没有中间节点处理逻辑，一定保证先左后右。参数为根节点、当前层深度，无返回值。
 // 额外设定最大深度maxDepth、result值两个变量。一旦发现深度超过了最大深度，更新深度和result保存的该结点值。
 int result = 0;
@@ -85,4 +88,5 @@ int main() {
        << endl;
   cout << findBottomLeftValue1(node1) << " " << findBottomLeftValue1(node2)
        << endl;
+  return 0;
 }

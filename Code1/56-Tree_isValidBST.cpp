@@ -1,30 +1,32 @@
 #include "head.h"
-#define null -1
 /* 98. 验证二叉搜索树
 给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树。
 有效 二叉搜索树定义如下：
     节点的左子树只包含 小于 当前节点的数。
     节点的右子树只包含 大于 当前节点的数。
     所有左子树和右子树自身必须也是二叉搜索树。
-*/
-
-// 二叉搜索树核心性质：中序遍历后，相邻两个结点严格递增的，不得相等。递归法一、可以使用vector作为中序遍历结果。
-// 递归法二、中序遍历时就比较该结点值与上一结点值。注意上一结点值要保存为8字节的longlong，因为测试用例中有4字节的最小值
-// 迭代法，简化的中序遍历。设置当前、上一双指针，不必提前压入栈。循环中，cur存在就压入，并左移。cur不存在就去栈首，处理后，cur右移
+示例 1：
+输入：root = [2,1,3]
+输出：true
+示例 2：
+输入：root = [5,1,4,null,null,3,6]
+输出：false
+解释：根节点的值是 5 ，但是右子节点的值是 4 。*/
 
 bool isValidBST(TreeNode* root) {
-  stack<TreeNode*> stk;
-  TreeNode* cur = root;
   TreeNode* pre = nullptr;
-  while (!stk.empty() || cur) {
+  stack<TreeNode*> st;
+  TreeNode* cur = root;
+  while (cur || !st.empty()) {
     if (cur) {
-      stk.push(cur);
+      st.push(cur);
       cur = cur->left;
     } else {
-      cur = stk.top();
-      stk.pop();
-      if (pre && cur->val <= pre->val)
+      cur = st.top();
+      st.pop();
+      if (pre && cur->val <= pre->val) {
         return false;
+      }
       pre = cur;
       cur = cur->right;
     }
@@ -32,6 +34,9 @@ bool isValidBST(TreeNode* root) {
   return true;
 }
 
+// 二叉搜索树核心性质：中序遍历后，相邻两个结点严格递增的，不得相等。递归法一、可以使用vector作为中序遍历结果。
+// 递归法二、中序遍历时就比较该结点值与上一结点值。注意上一结点值要保存为8字节的longlong，因为测试用例中有4字节的最小值
+// 迭代法，简化的中序遍历。设置当前、上一双指针，不必提前压入栈。循环中，cur存在就压入，并左移。cur不存在就去栈首，处理后，cur右移
 // 注意两个陷阱，一，不能单纯判断左节点小于本结点、右节点大于本结点，因为不能比较孙结点和本结点的大小问题
 // 二、结点的值为MIN_INT，注意如何比较。可以使用LONG_MIN，或者记录前一结点的值
 // 二叉搜索树中序遍历后，为递增数列，且相邻两数不能相等

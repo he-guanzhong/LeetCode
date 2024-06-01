@@ -1,11 +1,14 @@
 #include "head.h"
-#define null -1
 /* 530. 二叉搜索树的最小绝对差
 给你一个二叉搜索树的根节点 root ，返回 树中任意两不同节点值之间的最小差值 。
 差值是一个正数，其数值等于两值之差的绝对值。
-*/
+示例 1：
+输入：root = [4,2,6,1,3]
+输出：1
+示例 2：
+输入：root = [1,0,48,null,null,12,49]
+输出：1 */
 
-// 中序遍历，求相邻值差的最小值。递归法，可用vec存储，可以保存上一结点。迭代法，中序遍历，cur作为压入的前导指针
 int getMinimumDifference(TreeNode* root) {
   stack<TreeNode*> stk;
   TreeNode* cur = root;
@@ -27,6 +30,7 @@ int getMinimumDifference(TreeNode* root) {
   return minValue;
 }
 
+// 中序遍历，求相邻值差的最小值。递归法，可用vec存储，可以保存上一结点。迭代法，中序遍历，cur作为压入的前导指针
 void traversal1(TreeNode* root, vector<int>& vec) {
   if (!root)
     return;

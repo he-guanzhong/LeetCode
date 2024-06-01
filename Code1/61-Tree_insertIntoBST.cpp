@@ -1,6 +1,4 @@
 #include "head.h"
-#define null -1
-
 /* 701. 二叉搜索树中的插入操作
 给定二叉搜索树（BST）的根节点 root 和要插入树中的值 value ，将值插入二叉搜索树。
 返回插入后二叉搜索树的根节点。 输入数据 保证
@@ -8,10 +6,27 @@
 注意，可能存在多种有效的插入方式，只要树在插入后仍保持为二叉搜索树即可。
 你可以返回 任意有效的结果 。 */
 
+TreeNode* insertIntoBST(TreeNode* root, int val) {
+  if (!root)
+    return new TreeNode(val);
+  TreeNode* cur = root;
+  TreeNode* pre = cur;
+  while (cur) {
+    pre = cur;
+    if (val > cur->val)
+      cur = cur->right;
+    else if (val < cur->val)
+      cur = cur->left;
+  }
+  if (val > pre->val)
+    pre->right = new TreeNode(val);
+  else
+    pre->left = new TreeNode(val);
+  return root;
+}
+
 // 迭代法。先判空，新添结点。否则记录cur和pre两个结点，因为cur最终向左、右搜索停止于nullptr，需pre记录上一不为空结点，注意一定是进入while后先赋值
 // 递归法。若为空结点，已找到新增位置，添加并返回。若不为空，则需返回当前结点，但前提是其左、右指针，指向新增后返回的树
-TreeNode* insertIntoBST(TreeNode* root, int val) {}
-
 TreeNode* insertIntoBST1(TreeNode* root, int val) {
   if (!root) {
     TreeNode* node = new TreeNode(val);
@@ -70,6 +85,7 @@ TreeNode* insertIntoBST3(TreeNode* root, int val) {
     parent->right = node;
   return root;
 }
+
 int main() {
   vector<int> vec1 = {4, 2, 7, 1, 3};
   vector<int> vec2 = {40, 20, 60, 10, 30, 50, 70};

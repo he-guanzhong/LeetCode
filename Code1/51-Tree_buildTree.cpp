@@ -1,5 +1,4 @@
 #include "head.h"
-#define null -1
 /* 106. 从中序与后序遍历序列构造二叉树
 给定两个整数数组 inorder 和 postorder ，其中 inorder 是二叉树的中序遍历，
 postorder 是同一棵树的后序遍历，请你构造并返回这颗 二叉树 。
@@ -7,28 +6,38 @@ postorder 是同一棵树的后序遍历，请你构造并返回这颗 二叉树
 输入：inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]
 输出：[3,9,20,null,null,15,7]*/
 
+TreeNode* traversal(vector<int>& inorder,
+                    vector<int>& postorder,
+                    int in_l,
+                    int in_r,
+                    int post_l,
+                    int post_r) {
+  if (in_l > in_r)
+    return nullptr;
+  int value = postorder[post_r];
+  TreeNode* root = new TreeNode(value);
+  int index = 0;
+  for (int i = in_l; i <= in_r; i++) {
+    if (inorder[i] == value) {
+      index = i;
+      break;
+    }
+  }
+  int leftLen = index - in_l;
+  root->left = traversal(inorder, postorder, in_l, index - 1, post_l,
+                         post_l + leftLen - 1);
+  root->right = traversal(inorder, postorder, index + 1, in_r, post_l + leftLen,
+                          post_r - 1);
+  return root;
+}
+TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+  return traversal(inorder, postorder, 0, inorder.size() - 1, 0,
+                   postorder.size() - 1);
+}
+
 // 后序最后一位作为根节点，find找到中序遍历根节点坐标，切中、后序遍历，左右分而治之递归。中序遍历直接切，可选左闭右闭、或左闭右开区间
 // 切后序遍历时，不可以直接使用中序遍历的根节点下标，因为后序、中序遍历首位不一定对齐，一定要先求中序遍历左分支长度。
 // find函数求迭代器位置，减初始迭代器位置，即为下标
-TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
-  if (inorder.empty())
-    return nullptr;
-  int postorder_root = postorder.size() - 1;
-  int inorder_root =
-      find(inorder.begin(), inorder.end(), postorder[postorder_root]) -
-      inorder.begin();
-  TreeNode* root = new TreeNode(postorder[postorder_root]);
-  vector<int> inorder_left(inorder.begin(), inorder.begin() + inorder_root);
-  vector<int> inorder_right(inorder.begin() + inorder_root + 1, inorder.end());
-  vector<int> postorder_left(postorder.begin(),
-                             postorder.begin() + inorder_root);
-  vector<int> postorder_right(postorder.begin() + inorder_root,
-                              postorder.end() - 1);
-  root->left = buildTree(inorder_left, postorder_left);
-  root->right = buildTree(inorder_right, postorder_right);
-  return root;
-}
-
 TreeNode* buildTree_std(vector<int>& inorder, vector<int>& postorder) {
   if (inorder.size() == 0)  // 无论那个数组，为空返回空指针
     return nullptr;
@@ -88,4 +97,5 @@ int main() {
   print_binary_tree(buildTree(inorder2, postorder2));
   print_binary_tree(buildTree1(inorder1, postorder1));
   print_binary_tree(buildTree1(inorder2, postorder2));
+  return 0;
 }

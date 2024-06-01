@@ -1,5 +1,4 @@
 #include "head.h"
-#define null -1
 /* 113. 路径总和 II
 给你二叉树的根节点 root 和一个整数目标和 targetSum ，找出所有 从根节点到叶子节点
 路径总和等于给定目标和的路径。
@@ -97,4 +96,5 @@ int main() {
   printMat(pathSum1(node1, targetSum1));
   printMat(pathSum1(node2, targetSum2));
   printMat(pathSum1(node3, targetSum3));
+  return 0;
 }

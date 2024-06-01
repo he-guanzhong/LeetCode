@@ -1,5 +1,4 @@
 #include "head.h"
-#define null -1
 /* 501. 二叉搜索树中的众数
 给你一个含重复值的二叉搜索树（BST）的根节点 root ，找出并返回 BST 中的所有
 众数（即，出现频率最高的元素）。
@@ -7,43 +6,47 @@
 假定 BST 满足如下定义：
     结点左子树中所含节点的值 小于等于 当前节点的值
     结点右子树中所含节点的值 大于等于 当前节点的值
-    左子树和右子树都是二叉搜索树 */
-
-// 递归法，记录前一结点数据、计数、最大计数三个量。设置统计计数，如果与前一相等就加1，不等就为1。
-// 对计数，如果等于最大计数。则压入，大于最大计数。清除vec，并压入。迭代法，模拟中序遍历
+    左子树和右子树都是二叉搜索树
+示例 1：
+输入：root = [1,null,2,2]
+输出：[2]
+示例 2：
+输入：root = [0]
+输出：[0]
+进阶：你可以不使用额外的空间吗？（假设由递归产生的隐式调用栈的开销不被计算在内）*/
 
 vector<int> findMode(TreeNode* root) {
-  vector<int> result;
-  int cnt = 0;
-  int maxCnt = 0;
-  stack<TreeNode*> stk;
+  vector<int> ans;
+  int maxFrq = 0, frq = 0;
   TreeNode* cur = root;
-  int preValue = root->val;
-  while (!stk.empty() || cur) {
+  TreeNode* pre = nullptr;
+  stack<TreeNode*> st;
+  while (cur || !st.empty()) {
     if (cur) {
-      stk.push(cur);
+      st.push(cur);
       cur = cur->left;
     } else {
-      cur = stk.top();
-      stk.pop();
-      if (cur->val == preValue)
-        cnt++;
+      cur = st.top();
+      st.pop();
+      if (pre && pre->val == cur->val)
+        frq++;
       else
-        cnt = 1;
-      preValue = cur->val;
-      if (cnt == maxCnt)
-        result.push_back(cur->val);
-      else if (cnt > maxCnt) {
-        result.clear();
-        result.push_back(cur->val);
-        maxCnt = cnt;
-      }
+        frq = 1;
+      if (frq > maxFrq) {
+        ans.clear();
+        ans.push_back(cur->val);
+        maxFrq = frq;
+      } else if (frq == maxFrq)
+        ans.push_back(cur->val);
+      pre = cur;
       cur = cur->right;
     }
   }
-  return result;
+  return ans;
 }
 
+// 递归法，记录前一结点数据、计数、最大计数三个量。设置统计计数，如果与前一相等就加1，不等就为1。
+// 对计数，如果等于最大计数。则压入，大于最大计数。清除vec，并压入。迭代法，模拟中序遍历
 // 任意方法遍历都可以，不考虑二叉搜索树的特殊性质
 void traversal1(TreeNode* root, unordered_map<int, int>& map) {
   if (!root)
@@ -145,16 +148,20 @@ int main() {
   vector<int> vec1 = {1, null, 2, null, null, 2};
   vector<int> vec2 = {0};
   vector<int> vec3 = {5, 4, 7};
-
+  vector<int> vec4 = {1, 0, 1, 0, 0, 1, 1, 0};
   TreeNode* node1 = construct_binary_tree(vec1);
   TreeNode* node2 = construct_binary_tree(vec2);
   TreeNode* node3 = construct_binary_tree(vec3);
+  TreeNode* node4 = construct_binary_tree(vec4);
+
   printVector(findMode(node1));
   printVector(findMode(node2));
   printVector(findMode(node3));
+  printVector(findMode(node4));
+
   printVector(findMode1(node1));
   printVector(findMode1(node2));
   printVector(findMode1(node3));
-
+  printVector(findMode1(node4));
   return 0;
 }

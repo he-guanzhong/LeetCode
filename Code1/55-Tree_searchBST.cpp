@@ -1,13 +1,8 @@
 #include "head.h"
-#define null -1
 /* 700. 二叉搜索树中的搜索
 给定二叉搜索树（BST）的根节点 root 和一个整数值 val。
 你需要在 BST 中找到节点值等于 val 的节点。 返回以该节点为根的子树。
 如果节点不存在，则返回 null 。*/
-
-// 二叉搜索树的性质：左节点不为空，则所有左节点值小于根节点。右节点不为空，则所有右节点值大于根节点
-// 二叉搜索树的左右子树也为二叉搜素树。
-// 递归法，判断当前节点值大小，传入当前结点的左右孩子。迭代法，while循环内，直接移动root，直至找到val或者为空
 
 TreeNode* searchBST(TreeNode* root, int val) {
   TreeNode* cur = root;
@@ -22,6 +17,9 @@ TreeNode* searchBST(TreeNode* root, int val) {
   return cur;
 }
 
+// 二叉搜索树的性质：左节点不为空，则所有左节点值小于根节点。右节点不为空，则所有右节点值大于根节点
+// 二叉搜索树的左右子树也为二叉搜素树。
+// 递归法，判断当前节点值大小，传入当前结点的左右孩子。迭代法，while循环内，直接移动root，直至找到val或者为空
 // 递归法，因此可以利用其特殊性质，缩小递归范围
 TreeNode* searchBST1(TreeNode* root, int val) {
   if (!root || root->val == val)  // 判空和值相等，统一处理

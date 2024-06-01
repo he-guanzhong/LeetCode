@@ -1,5 +1,4 @@
 #include "head.h"
-#define null -1
 /* 450. 删除二叉搜索树中的节点
 给定一个二叉搜索树的根节点 root 和一个值 key，删除二叉搜索树中的 key
 对应的节点，并保证二叉搜索树的性质不变。返回二叉搜索树（有可能被更新）的根节点的引用。
@@ -7,42 +6,34 @@
     首先找到需要删除的节点；
     如果找到了，删除它。 */
 
-// 叶子结点，直接删除。传统做法，分情况讨论
 TreeNode* deleteNode(TreeNode* root, int key) {
-  if (!root || root->val == key)
-    return nullptr;
-  TreeNode* cur = root;
-  TreeNode* pre = nullptr;
+  TreeNode *pre = nullptr, *cur = root;
   while (cur) {
-    if (cur->val > key)
-      cur = cur->left;
-    else if (cur->val < key)
+    if (cur->val < key)
       cur = cur->right;
-    else {
-      if (cur->left && !cur->right)
-        cur = cur->left;
-      else if (cur->right && !cur->left) {
-        root->right->left = root->left;
-      }
-    }
+    else if (cur->val > key)
+      cur = cur->left;
+    else
+      break;
     pre = cur;
   }
-  if (root->val == key) {
-    if (!root->left && !root->right)
-      return nullptr;
-    else if (!root->right)
-      pre->left = root->left;
-    else if (!root->left)
-      pre->right = root->right;
-    else {
-      pre->
-    }
-  } else {
+  if (!cur)
+    return root;
+  TreeNode* newNode = cur->right;
+  TreeNode* right = newNode;
+  if (!right) {
+    pre->left = cur->left;
+    return root;
   }
-  pre = root;
+  while (right->left) {
+    right = right->left;
+  }
+  right->left = cur->left;
+  pre->left = newNode;
   return root;
 }
 
+// 叶子结点，直接删除。传统做法，分情况讨论
 // 返回值可以设为新树的根节点。需要左右承接
 // 分五种情况分别讨论。1，找不到；2.叶子节点直接删，3.其左有右无，4.左无右右。
 // 5.所有都有子树，则把左子树，转移至右子树的左节点最下一层，然后删除该结点
@@ -131,6 +122,7 @@ TreeNode* deleteNode3(TreeNode* root, int key) {
     pre->right = deleteOneNode3(cur);
   return root;
 }
+
 int main() {
   vector<int> vec1 = {5, 3, 6, 2, 4, null, 7};
   vector<int> vec2 = {5, 3, 6, 2, 4, null, 7};
