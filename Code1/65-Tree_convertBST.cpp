@@ -1,6 +1,4 @@
 #include "head.h"
-#define null -1
-
 /* 538. 把二叉搜索树转换为累加树
 给出二叉 搜索 树的根节点，该树的节点值各不相同，请你将其转换为累加树（Greater
 Sum Tree），使每个节点 node 的新值等于原树中大于或等于 node.val 的值之和。
@@ -13,33 +11,29 @@ Sum Tree），使每个节点 node 的新值等于原树中大于或等于 node.
 输出：[1,null,1]
 示例 3：
 输入：root = [1,0,2]
-输出：[3,3,2]
-
-注意：本题和 1038:
-https://leetcode-cn.com/problems/binary-search-tree-to-greater-sum-tree/ 相同 */
-
-// 递归法。累加树意为从最右侧开始，按右中左的顺序，每个结点val，叠加上一个结点累加后的值。故设定上一结点累加值，并实时更新
-// 迭代法。反中序遍历，右中做。记录pre上一结点值
+输出：[3,3,2] */
 
 TreeNode* convertBST(TreeNode* root) {
+  int pre = 0;
   TreeNode* cur = root;
-  TreeNode* pre = new TreeNode(0);
-  stack<TreeNode*> stk;
-  while (!stk.empty() || cur) {
+  stack<TreeNode*> st;
+  while (cur || !st.empty()) {
     if (cur) {
-      stk.push(cur);
+      st.push(cur);
       cur = cur->right;
     } else {
-      cur = stk.top();
-      stk.pop();
-      cur->val += pre->val;
-      pre = cur;
+      cur = st.top();
+      st.pop();
+      cur->val += pre;
+      pre = cur->val;
       cur = cur->left;
     }
   }
   return root;
 }
 
+// 递归法。累加树意为从最右侧开始，按右中左的顺序，每个结点val，叠加上一个结点累加后的值。故设定上一结点累加值，并实时更新
+// 迭代法。反中序遍历，右中做。记录pre上一结点值
 // 右中左，反中序遍历，利用pre来记录前值
 int pre = 0;
 void traversal1(TreeNode* root) {

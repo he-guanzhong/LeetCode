@@ -1,31 +1,36 @@
 #include "head.h"
 /* 78. 子集
-给你一个整数数组 nums ，数组中的元素 互不相同
-。返回该数组所有可能的子集（幂集）。
+给你一个整数数组 nums ，数组中的元素互不相同。返回该数组所有可能的子集（幂集）。
 示例 1：
 输入：nums = [1,2,3]
 输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。
+示例 2：
+输入：nums = [0]
+输出：[[],[0]] */
 
-解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。 */
-
-// 子集问题为求树全部结点，并非叶子结点。可以没有退出条件，因为每次传入的start为i+1，遍历到nums.size即终止
-vector<vector<int>> result;
-vector<int> path;
-void backtracking(vector<int>& nums, int start) {
-  result.push_back(path);
-  for (int i = start; i < nums.size(); i++) {
+void backtracking(vector<int>& nums,
+                  int index,
+                  vector<int>& path,
+                  vector<vector<int>>& ans) {
+  ans.push_back(path);
+  for (int i = index; i < nums.size(); i++) {
+    if (i > index && nums[i] == nums[i - 1])
+      continue;
     path.push_back(nums[i]);
-    backtracking(nums, i + 1);
+    backtracking(nums, i + 1, path, ans);
     path.pop_back();
   }
 }
 vector<vector<int>> subsets(vector<int>& nums) {
-  result.clear();
-  path.clear();
-  backtracking(nums, 0);
-  return result;
+  vector<vector<int>> ans;
+  vector<int> path;
+  sort(nums.begin(), nums.end());
+  backtracking(nums, 0, path, ans);
+  return ans;
 }
 
+// 子集问题为求树全部结点，并非叶子结点。可以没有退出条件，因为每次传入的start为i+1，遍历到nums.size即终止
 // 子集问题，要记录所有结点，而非叶子结点。组合、分割问题为仅处理叶子结点。所以压入结果要在返回之前。
 // 返回的条件为集合为空时，即startIndex要大于nums.size()，此处可写可不写，因为不在横向遍历范围之内
 // 传入参数为startIndex，因为已经选取过的元素不能重复选取，下递归时传入i+1。时间复杂度n*2^n

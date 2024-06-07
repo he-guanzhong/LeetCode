@@ -1,41 +1,40 @@
-#include <unordered_set>
 #include "head.h"
 /* 90. 子集 II
 给你一个整数数组
 nums，其中可能包含重复元素，请你返回该数组所有可能的子集（幂集）。 解集 不能
 包含重复的子集。返回的解集中，子集可以按 任意顺序 排列。
-示例 1： 输入：nums =[1,2,2] 输出：[[],[1],[1,2],[1,2,2],[2],[2,2]] */
+示例 1：
+输入：nums =[1,2,2]
+输出：[[],[1],[1,2],[1,2,2],[2],[2,2]]
+示例 2：
+输入：nums = [0]
+输出：[[],[0]]*/
 
-// 重复元素子集，先排序，然后求树上所有结点。深度遍历允许重复，传入下一层为i+1。广度方向不允许重复，如果与前一元素相等，直接跳过
-// 或使用vector<bool>记录重复元素。i有效，i-1==i，used[i-1]==false同层没用过为假
-vector<vector<int>> result;
-vector<int> path;
-void backtracking(vector<int>& nums, int start, vector<bool>& used) {
-  result.push_back(path);
-  for (int i = start; i < nums.size(); i++) {
-    if (i > 0 && used[i - 1] == false && nums[i] == nums[i - 1])
+void backtracking(vector<int>& nums,
+                  int index,
+                  vector<int>& path,
+                  vector<vector<int>>& ans) {
+  ans.push_back(path);
+  for (int i = index; i < nums.size(); i++) {
+    if (i > index && nums[i] == nums[i - 1])
       continue;
     path.push_back(nums[i]);
-    used[i] = true;
-    backtracking(nums, i + 1, used);
+    backtracking(nums, i + 1, path, ans);
     path.pop_back();
-    used[i] = false;
   }
 }
 vector<vector<int>> subsetsWithDup(vector<int>& nums) {
-  result.clear();
-  path.clear();
+  vector<vector<int>> ans;
+  vector<int> path;
   sort(nums.begin(), nums.end());
-  vector<bool> used(nums.size(), false);
-  backtracking(nums, 0, used);
-  return result;
+  backtracking(nums, 0, path, ans);
+  return ans;
 }
 
 // 子集问题，求所有结点。去重的关键在于树层去重，而非树枝去重。必须先排序
-// 可以使用used数组，当其false意为树层，相等则去重
-// 或者使用startIndex直接去重，i>startIndex时的问题直接横向去重
-
-// 使用vector<bool> used去重，或者unordered_set同层去重
+// 可以使用三种方法去重：一、 used数组，当其false意为树层，相等则去重
+// 二、使用startIndex直接去重，i>startIndex时的问题直接横向去重
+// 三、使用vector<bool> used去重，或者unordered_set同层去重
 vector<vector<int>> result1;
 vector<int> path1;
 void backtracking1(vector<int>& nums, int startIndex, vector<bool> used) {
@@ -60,6 +59,8 @@ vector<vector<int>> subsetsWithDup1(vector<int>& nums) {
   return result1;
 }
 
+// 重复元素子集，先排序，然后求树上所有结点。深度遍历允许重复，传入下一层为i+1。广度方向不允许重复，如果与前一元素相等，直接跳过
+// 或使用vector<bool>记录重复元素。i有效，i-1==i，used[i-1]==false同层没用过为假
 void backtracking2(vector<int>& nums, int startIndex) {
   result1.push_back(path1);
   for (int i = startIndex; i < nums.size(); i++) {
@@ -97,6 +98,7 @@ vector<vector<int>> subsetsWithDup3(vector<int>& nums) {
   backtracking3(nums, 0);
   return result1;
 }
+
 int main() {
   vector<int> vec1 = {1, 2, 2};
   vector<int> vec2 = {0};

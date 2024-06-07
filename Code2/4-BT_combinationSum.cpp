@@ -14,34 +14,36 @@ candidates 中可以使数字和为目标数 target 的 所有
 仅有这两种组合。
 对于给定的输入，保证和为 target 的不同组合数少于 150 个。 */
 
-// 深度无用，退出条件为总和大于等于target。广度为candidates数组元素个数。
-// 深度方向允许重复，故传入start参数不+1，广度方向不允许重复，故传入start为当前一层的i
-// 剪支思路是总和过大时，不进入递归。但需要前提是数组有序，从小到大排列。否则若首元素即大于target，不会执行程序
-vector<vector<int>> result;
-vector<int> path;
-void backtracking(vector<int>& candidates, int target, int start) {
-  if (target == 0) {
-    result.push_back(path);
+void backtracking(vector<int>& candidates,
+                  int target,
+                  int index,
+                  int sum,
+                  vector<int>& path,
+                  vector<vector<int>>& ans) {
+  if (sum == target) {
+    ans.push_back(path);
     return;
   }
-  for (int i = start; i < candidates.size() && target - candidates[i] >= 0;
+  for (int i = index; i < candidates.size() && sum + candidates[i] <= target;
        i++) {
     path.push_back(candidates[i]);
-    backtracking(candidates, target - candidates[i], i);
+    backtracking(candidates, target, i, sum + candidates[i], path, ans);
     path.pop_back();
   }
 }
 vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-  result.clear();
-  path.clear();
+  vector<vector<int>> ans;
+  vector<int> path;
   sort(candidates.begin(), candidates.end());
-  backtracking(candidates, target, 0);
-  return result;
+  backtracking(candidates, target, 0, 0, path, ans);
+  return ans;
 }
 
+// 深度无用，退出条件为总和大于等于target。广度为candidates数组元素个数。
+// 深度方向允许重复，故传入start参数不+1，广度方向不允许重复，故传入start为当前一层的i
+// 剪支思路是总和过大时，不进入递归。但需要前提是数组有序，从小到大排列。否则若首元素即大于target，不会执行程序
 // 组合元素可重复，退出条件不再是递归轮数，而是总和sum>target直接退出，sum==target保存退出
 // 传入参数有当前分支总和，其实点坐标（只在一个集合内选择适配），startIndex不代表深度，由于可重复，则不必+1递归
-// 剪支思路
 vector<vector<int>> result1;
 vector<int> path1;
 void backtracking1(vector<int>& candidates,

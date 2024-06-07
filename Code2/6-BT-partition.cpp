@@ -5,48 +5,50 @@
 示例 1：
 输入：s = "aab"
 输出：[["a","a","b"],["aa","b"]]
-
 回文串 是正着读和反着读都一样的字符串。 */
 
-// 额外函数双指针判断是否回文。横向遍历start为起点，i为终点。不是回文，直接跳过后序纵向遍历流程。终止条件为start已到末端
-// 但是判断字符串是否回文，可以提前计算出表格查询。
-vector<vector<string>> result;
-vector<string> path;
-void calcPalindrome(string s, vector<vector<bool>>& Palindrome) {
-  for (int i = s.size() - 1; i >= 0; i--) {
-    for (int j = i; j < s.size(); j++) {
-      if (i == j)
-        Palindrome[i][j] = true;
-      else if (j - i == 1)
-        Palindrome[i][j] = s[i] == s[j];
-      else
-        Palindrome[i][j] = Palindrome[i + 1][j - 1] && s[i] == s[j];
+bool isStr(string s) {
+  int i = 0, j = s.size() - 1;
+  if (i > j)
+    return false;
+  while (i < j) {
+    if (s[i] != s[j])
+      return false;
+    i++;
+    j--;
+  }
+  return true;
+}
+void backtracking(string s,
+                  int index,
+                  vector<string>& path,
+                  vector<vector<string>>& ans) {
+  if (isStr(s.substr(index, s.size() - index))) {
+    path.push_back(s.substr(index, s.size() - index));
+    ans.push_back(path);
+    path.pop_back();
+  }
+  if (index == s.size()) {
+    return;
+  }
+  for (int i = index; i < s.size(); i++) {
+    string tmp = s.substr(index, i - index + 1);
+    if (isStr(tmp)) {
+      path.push_back(tmp);
+      backtracking(s, i + 1, path, ans);
+      path.pop_back();
     }
   }
 }
-void backtracking(string s, int start, vector<vector<bool>>& Palindrome) {
-  if (start == s.size()) {
-    result.push_back(path);
-    return;
-  }
-  for (int i = start; i < s.size(); i++) {
-    if (Palindrome[start][i])
-      path.push_back(s.substr(start, i - start + 1));
-    else
-      continue;
-    backtracking(s, i + 1, Palindrome);
-    path.pop_back();
-  }
-}
 vector<vector<string>> partition(string s) {
-  result.clear();
-  path.clear();
-  vector<vector<bool>> Palindrome(s.size(), vector<bool>(s.size(), false));
-  calcPalindrome(s, Palindrome);
-  backtracking(s, 0, Palindrome);
-  return result;
+  vector<vector<string>> ans;
+  vector<string> path;
+  backtracking(s, 0, path, ans);
+  return ans;
 }
 
+// 额外函数双指针判断是否回文。横向遍历start为起点，i为终点。不是回文，直接跳过后序纵向遍历流程。终止条件为start已到末端
+// 但是判断字符串是否回文，可以提前计算出表格查询。
 // 关键在于切割的坐标，可以转化为组合问题。设置判断回文函数，startIndex是切割起点，i是切割终点。
 // 如果子串回文，才压入，否则跳过。
 vector<vector<string>> result1;
@@ -118,22 +120,18 @@ vector<vector<string>> partition2(string s) {
   return result1;
 }
 
-void printMat(vector<vector<string>>& res) {
-  for (auto i : res) {
-    for_each(i.begin(), i.end(), [](const auto& val) { cout << val << " , "; });
-    cout << "\t";
-  }
-  cout << endl;
-}
 int main() {
   string s1 = "aab";
   string s2 = "a";
   string s3 = "";
+  string s4 = "bb";
   printMat(partition(s1));
   printMat(partition(s2));
   printMat(partition(s3));
+  printMat(partition(s4));
   printMat(partition1(s1));
   printMat(partition1(s2));
   printMat(partition1(s3));
+  printMat(partition1(s4));
   return 0;
 }

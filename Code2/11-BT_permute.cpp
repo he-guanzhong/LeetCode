@@ -12,33 +12,33 @@
 输入：nums = [1]
 输出：[[1]] */
 
-// 排列问题，每一轮都要从头搜索，无需startIndex，但需used数组记录树枝结点上是否访问过。访问过就跳过。
-// 退出条件，为used数组全为真不可表述，由于path压入弹出，与数组赋值真假同步，故path.size相等可作为退出条件
 void backtracking(vector<int>& nums,
                   vector<int>& path,
-                  vector<vector<int>>& result,
-                  vector<bool>& used) {
+                  vector<vector<int>>& ans,
+                  vector<bool>& visited) {
   if (path.size() == nums.size()) {
-    result.push_back(path);
-    return;
+    ans.push_back(path);
   }
   for (int i = 0; i < nums.size(); i++) {
-    if (used[i] == true)
-      continue;
-    path.push_back(nums[i]);
-    used[i] = true;
-    backtracking(nums, path, result, used);
-    path.pop_back();
-    used[i] = false;
+    if (visited[i] == false) {
+      visited[i] = true;
+      path.push_back(nums[i]);
+      backtracking(nums, path, ans, visited);
+      path.pop_back();
+      visited[i] = false;
+    }
   }
 }
 vector<vector<int>> permute(vector<int>& nums) {
-  vector<vector<int>> result;
+  vector<vector<int>> ans;
   vector<int> path;
-  vector<bool> used(nums.size(), false);
-  backtracking(nums, path, result, used);
-  return result;
+  vector<bool> visited(nums.size());
+  backtracking(nums, path, ans, visited);
+  return ans;
 }
+
+// 排列问题，每一轮都要从头搜索，无需startIndex，但需used数组记录树枝结点上是否访问过。访问过就跳过。
+// 退出条件，为used数组全为真不可表述，由于path压入弹出，与数组赋值真假同步，故path.size相等可作为退出条件
 
 // 排列问题需要重复选取，没有startIndex，但used数组记录元素是否曾经用过。
 // 全排列退出条件,为path的大小已经达到nums大小
@@ -67,6 +67,7 @@ vector<vector<int>> permute1(vector<int> nums) {
   backtracking1(nums, used);
   return result1;
 }
+
 int main() {
   vector<int> vec1 = {1, 2, 3};
   vector<int> vec2 = {0, 1};

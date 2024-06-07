@@ -2,29 +2,36 @@
 /* 17. 电话号码的字母组合
 给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序
 返回。
-给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。 */
+给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
+示例 1：
+  输入：digits = "23"
+  输出：["ad","ae","af","bd","be","bf","cd","ce","cf"]
+示例 2：
+  输入：digits = ""
+  输出：[]
+示例 3：
+  输入：digits = "2"
+  输出：["a","b","c"] */
 
-// 先创立常量的映射字符串数组，也可以为动态数组，注意下标对应，空开0和1。深度为数字字符串位数index，其到达最后一位即退出
-// 广度为每一个数字对应的字母字符串长度。故要先对数字字符串的指定index位字符转化为int整型，再引用映射字符串
-// 临时字符串可以外置，也可以作为传参，但必须conststring&或string。如此回溯可以在参数中做
-// 注意额外判断传入digit是否为空
 vector<string> letterMap = {"",    "",    "abc",  "def", "ghi",
                             "jkl", "mno", "pqrs", "tuv", "wxyz"};
-vector<string> result;
-void backtracking(string digits, int index, string s) {
+void backtracking(string digits, int index, string path, vector<string>& ans) {
   if (index == digits.size()) {
-    result.push_back(s);
+    ans.push_back(path);
     return;
   }
-  int num = digits[index] - '0';
-  for (int i = 0; i < letterMap[num].size(); i++)
-    backtracking(digits, index + 1, s + letterMap[num][i]);
+  string letter = letterMap[digits[index] - '0'];
+  for (int i = 0; i < letter.size(); i++) {
+    backtracking(digits, index + 1, path + letter[i], ans);
+  }
 }
 vector<string> letterCombinations(string digits) {
-  result.clear();
-  if (!digits.empty())
-    backtracking(digits, 0, "");
-  return result;
+  vector<string> ans;
+  if (digits.empty())
+    return ans;
+  string path;
+  backtracking(digits, 0, path, ans);
+  return ans;
 }
 
 // 二维数组，记录数字和字符的映射关系，注意0，1空着，大小为10，则下标可于数字直接对应
@@ -58,6 +65,10 @@ vector<string> letterCombinations1(string digits) {
   return result1;
 }
 
+// 先创立常量的映射字符串数组，也可以为动态数组，注意下标对应，空开0和1。深度为数字字符串位数index，其到达最后一位即退出
+// 广度为每一个数字对应的字母字符串长度。故要先对数字字符串的指定index位字符转化为int整型，再引用映射字符串
+// 临时字符串可以外置，也可以作为传参，但必须conststring&或string。如此回溯可以在参数中做
+// 注意额外判断传入digit是否为空
 // 递归也可以藏在回溯中，此时临时路径s必须作为参数，但传入格式必须为const否则报错
 void getCombinations2(const string& digits, int index, const string& s1) {
   if (index == digits.size()) {
@@ -77,20 +88,13 @@ vector<string> letterCombinations2(string digits) {
   return result1;
 }
 
-void printMat(vector<string> nums) {
-  for (auto s1 : nums) {
-    cout << s1 << ",";
-    cout << "\t";
-  }
-  cout << endl;
-}
 int main() {
   string s1 = "23", s2 = "", s3 = "2";
-  printMat(letterCombinations(s1));
-  printMat(letterCombinations(s2));
-  printMat(letterCombinations(s3));
-  printMat(letterCombinations1(s1));
-  printMat(letterCombinations1(s2));
-  printMat(letterCombinations1(s3));
+  printVector(letterCombinations(s1));
+  printVector(letterCombinations(s2));
+  printVector(letterCombinations(s3));
+  printVector(letterCombinations1(s1));
+  printVector(letterCombinations1(s2));
+  printVector(letterCombinations1(s3));
   return 0;
 }

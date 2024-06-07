@@ -1,48 +1,46 @@
-#include <unordered_set>
 #include "head.h"
-/* 491. 递增子序列
+/* 491. 非递减子序列
 给你一个整数数组 nums ，找出并返回所有该数组中不同的递增子序列，递增子序列中
 至少有两个元素 。你可以按 任意顺序 返回答案。
 数组中可能含有重复元素，如出现两个整数相等，也可以视作递增序列的一种特殊情况。
-
 示例 1：
 输入：nums = [4,6,7,7]
 输出：[[4,6],[4,6,7],[4,6,7,7],[4,7],[4,7,7],[6,7],[6,7,7],[7,7]]
-
 示例 2：
 输入：nums = [4,4,3,2,1]
 输出：[[4,4]]
--100 <= nums[i] <= 100
- */
+-100 <= nums[i] <= 100 */
+
+void backtracking(vector<int>& nums,
+                  int index,
+                  vector<int>& path,
+                  vector<vector<int>>& ans) {
+  if (path.size() >= 2)
+    ans.push_back(path);
+  if (index == nums.size())
+    return;
+  unordered_set<int> uset;
+  for (int i = index; i < nums.size(); i++) {
+    if (uset.find(nums[i]) != uset.end())
+      continue;
+    if (path.empty() || nums[i] >= path.back()) {
+      path.push_back(nums[i]);
+      uset.insert(nums[i]);
+      backtracking(nums, i + 1, path, ans);
+      path.pop_back();
+    }
+  }
+}
+vector<vector<int>> findSubsequences(vector<int>& nums) {
+  vector<vector<int>> ans;
+  vector<int> path;
+  backtracking(nums, 0, path, ans);
+  return ans;
+}
 
 // 求子序列，为搜索全部结点，但只有path.size>=2才入结果。不能排序，因为破坏原有顺序
 // 两种跳过：同层重复跳过和不递增跳过。同层之间不得相同，使用unordered_set记录。只有下一个元素值大于path末尾元素，才深度进入下一层
 // 数字范围有限，使用数组比集合效率更高
-vector<vector<int>> result;
-vector<int> path;
-void backtracking(vector<int>& nums, int start) {
-  if (path.size() >= 2) {
-    result.push_back(path);
-  }
-  int uset[201] = {0};
-  for (int i = start; i < nums.size(); i++) {
-    if (uset[100 + nums[i]] == 1)
-      continue;
-    uset[100 + nums[i]] = 1;
-    if (path.empty() || nums[i] >= path.back())
-      path.push_back(nums[i]);
-    else
-      continue;
-    backtracking(nums, i + 1);
-    path.pop_back();
-  }
-}
-vector<vector<int>> findSubsequences(vector<int>& nums) {
-  result.clear();
-  path.clear();
-  backtracking(nums, 0);
-  return result;
-}
 
 // unordered_set和set 不是一个头文件，map同理
 // 全结点搜索，但是必须path内含两个元素以上，才压入结果。求递增序列，故不可以排序，因为破坏了原有顺序

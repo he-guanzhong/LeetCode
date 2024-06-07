@@ -3,29 +3,31 @@
 给定两个整数 n 和 k，返回范围[1, n] 中所有可能的 k 个数的组合。
 你可以按 任何顺序 返回答案。 */
 
-// 横向遍历，需要传入起始坐标start，下一层纵向遍历时要输入i+1。退出条件不必记录深度，因为path.size可以表征
-// 剪支思路。剩余n的数量小于path内还需要的数量，故n要终止于
-// k-path.size()+1。例：总计4个元素，已有0，仍需3个元素为例。
-vector<vector<int>> res;
-vector<int> path;
-void backtracking(int n, int k, int start) {
+void backtracking(int n,
+                  int k,
+                  int index,
+                  vector<int>& path,
+                  vector<vector<int>>& ans) {
   if (path.size() == k) {
-    res.push_back(path);
+    ans.push_back(path);
     return;
   }
-  for (int i = start; i <= n - (k - path.size()) + 1; i++) {
+  for (int i = index; i <= n; i++) {
     path.push_back(i);
-    backtracking(n, k, i + 1);
+    backtracking(n, k, i + 1, path, ans);
     path.pop_back();
   }
 }
 vector<vector<int>> combine(int n, int k) {
-  res.clear();
-  path.clear();
-  backtracking(n, k, 1);
-  return res;
+  vector<vector<int>> ans;
+  vector<int> path;
+  backtracking(n, k, 1, path, ans);
+  return ans;
 }
 
+// 横向遍历，需要传入起始坐标start，下一层纵向遍历时要输入i+1。退出条件不必记录深度，因为path.size可以表征
+// 剪支思路。剩余n的数量小于path内还需要的数量，故n要终止于
+// k-path.size()+1。例：总计4个元素，已有0，仍需3个元素为例。
 // 外置结果和路径。递归结束条件为path深度等于k，广度for循环内使用startIndex记录开始点
 // 广度遍历，先压入，然后递归，最后弹出原值
 vector<vector<int>> res1;
