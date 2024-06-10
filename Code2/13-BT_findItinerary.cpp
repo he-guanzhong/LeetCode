@@ -1,5 +1,6 @@
 #include <map>
 #include "head.h"
+
 /* 332. 重新安排行程
 给你一份航线列表 tickets ，其中 tickets[i] = [fromi, toi]
 表示飞机出发和降落的机场地点。请你对该行程进行重新规划排序。
@@ -16,37 +17,38 @@
 解释：另一种有效的行程是 ["JFK","SFO","ATL","JFK","ATL","SFO"]
 ，但是它字典排序更大更靠后。*/
 
-// 考虑两点之间来回机票好几次的情况。故unordered_map记录起始地，由于按字母顺序去终止地，使用map记录终止地及其机票数。
-// 题目必存在结果，故返回值设为布尔，第一次寻到结果即可直接返回。传入参数为result和票总数int即可，因为票细节无用，已专用unordered_map
-// 广度边度，依据result队尾元素起始地，遍历umap记录的到达地。第一位到达地即压入，并票数减一。如果下一层结果为真，直接返回，无需遍历整个树
-// 遍历时由于要操作票数，for循环中一定要使用引用。由于遍历map，不能使用i，只能用it
 unordered_map<string, map<string, int>> umap;
-bool backtracking(int num, vector<string>& result) {
-  if (result.size() == num + 1)
+bool backtracking(vector<vector<string>>& tickets, vector<string>& ans) {
+  if (ans.size() == tickets.size() + 1)
     return true;
-  for (map<const string, int>::iterator it = umap[result.back()].begin();
-       it != umap[result.back()].end(); it++) {
-    if (it->second == 0)
-      continue;
-    result.push_back(it->first);
-    it->second--;
-    if (backtracking(num, result))
-      return true;
-    result.pop_back();
-    it->second++;
+  string pos = ans.back();
+  for (pair<string, int> target : umap[pos]) {
+    ans.push_back(target.first);
+    umap[pos][target.first]--;
+    if (umap[pos][target.first] >= 0) {
+      if (backtracking(tickets, ans))
+        return true;
+    }
+    ans.pop_back();
+    umap[pos][target.first]++;
   }
   return false;
 }
 vector<string> findItinerary(vector<vector<string>>& tickets) {
-  vector<string> result;
-  result.push_back("JFK");
   umap.clear();
-  for (auto ticket : tickets) {
+  for (vector<string>& ticket : tickets) {
     umap[ticket[0]][ticket[1]]++;
   }
-  backtracking(tickets.size(), result);
-  return result;
+  vector<string> ans;
+  ans.push_back("JFK");
+  backtracking(tickets, ans);
+  return ans;
 }
+
+// 考虑两点之间来回机票好几次的情况。故unordered_map记录起始地，由于按字母顺序去终止地，使用map记录终止地及其机票数。
+// 题目必存在结果，故返回值设为布尔，第一次寻到结果即可直接返回。传入参数为result和票总数int即可，因为票细节无用，已专用unordered_map
+// 广度边度，依据result队尾元素起始地，遍历umap记录的到达地。第一位到达地即压入，并票数减一。如果下一层结果为真，直接返回，无需遍历整个树
+// 遍历时由于要操作票数，for循环中一定要使用引用。由于遍历map，不能使用i，只能用it
 
 // unordered_map记录出发点，到达点，和可执行次数。在main函数中遍历整个数据得到map，构造result先将第一个机场压入
 // 回溯返回值设计为bool因为只要搜索一条边，到底了即可，返回条件是票数+1=途径地数
@@ -77,6 +79,7 @@ vector<string> findItinerary1(vector<vector<string>>& tickets) {
   backtracking1(tickets.size(), result);
   return result;
 }
+
 int main() {
   vector<vector<string>> tickets1 = {
       {"MUC", "LHR"}, {"JFK", "MUC"}, {"SFO", "SJC"}, {"LHR", "SFO"}};
@@ -89,4 +92,5 @@ int main() {
   printVector(findItinerary(tickets2));
   printVector(findItinerary1(tickets1));
   printVector(findItinerary1(tickets2));
+  return 0;
 }

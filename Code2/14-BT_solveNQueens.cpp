@@ -11,53 +11,53 @@ n 皇后问题 研究的是如何将 n 个皇后放置在 n×n
 输出：[[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]
 解释：如上图所示，4 皇后问题存在两个不同的解法。 */
 
-// 棋盘必须全部初始化为'.'。回溯函数传入深度，即行数row。退出条件为行数等于n。横向遍历列数col。如果该位置valid有效才进入下一层循环
-// 有效valid函数，三个判断。1、固定列数，判断以上每一行是否有Q。2、从该起点同一层for，必须同步，沿左上方向寻找Q。3、右上方向寻找Q
-// 注意：不必判断固定行数，每一列的值，因为该行其余元素必为'.'。
-bool isValid(int n, int pos, int depth, vector<string>& path) {
-  for (int i = 0; i < depth; i++) {
-    if (path[i][pos] == 'Q')
+bool isValid(int n, int row, int col, vector<string>& grid) {
+  for (int i = 0; i < row; i++) {
+    if (grid[i][col] == 'Q')
       return false;
   }
-  for (int i = depth, j = pos; i >= 0 && j >= 0; i--, j--) {
-    if (path[i][j] == 'Q')
+  for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
+    if (grid[i][j] == 'Q')
       return false;
   }
-  for (int i = depth, j = pos; i >= 0 && j < n; i--, j++) {
-    if (path[i][j] == 'Q')
+  for (int i = row - 1, j = col + 1; i >= 0 && j < n; i--, j++) {
+    if (grid[i][j] == 'Q')
       return false;
   }
   return true;
 }
 void backtracking(int n,
-                  int depth,
-                  vector<string>& path,
-                  vector<vector<string>>& result) {
-  if (depth == n) {
-    result.push_back(path);
+                  int row,
+                  vector<string>& grid,
+                  vector<vector<string>>& ans) {
+  if (row == n) {
+    ans.push_back(grid);
     return;
   }
-  for (int i = 0; i < n; i++) {
-    if (isValid(n, i, depth, path)) {
-      path[depth][i] = 'Q';
-      backtracking(n, depth + 1, path, result);
-      path[depth][i] = '.';
+  for (int col = 0; col < n; col++) {
+    if (isValid(n, row, col, grid)) {
+      grid[row][col] = 'Q';
+      backtracking(n, row + 1, grid, ans);
+      grid[row][col] = '.';
     }
   }
 }
 vector<vector<string>> solveNQueens(int n) {
-  vector<vector<string>> result;
-  vector<string> path(n, string(n, '.'));
-  backtracking(n, 0, path, result);
-  return result;
+  vector<vector<string>> ans;
+  vector<string> grid(n, string(n, '.'));
+  backtracking(n, 0, grid, ans);
+  return ans;
 }
+
+// 棋盘必须全部初始化为'.'。回溯函数传入深度，即行数row。退出条件为行数等于n。横向遍历列数col。如果该位置valid有效才进入下一层循环
+// 有效valid函数，三个判断。1、固定列数，判断以上每一行是否有Q。2、从该起点同一层for，必须同步，沿左上方向寻找Q。3、右上方向寻找Q
+// 注意：不必判断固定行数，每一列的值，因为该行其余元素必为'.'。
 
 // 递归广度是棋盘宽度，递归深度是棋盘高度，故外置result，单个成功路径可初始化为n*n全为'.'的棋盘，作为参数传入
 // 由上至下深度搜索，退出条件为行深度row==n，故需额外记录并传入参数row。不能使用size，因为初始化时已经相等
 // 广度搜索方向为col，只要可以满足Q放置棋盘方案可行，即赋值。然后递归下一层row+1，回溯时该棋盘位置恢复'.'
 // 判断某位置是否可以放置Q：1.同列内不同行数位置未出现过Q；2.左上方45度所有位置未出现过Q；3.右上方135度位置未出现过Q
 // 同层不必判断是否存在Q，因为递归时每层只会赋值一个Q。时间复杂度n!，空间复杂度n
-
 vector<vector<string>> result1;
 bool isValid1(int row, int col, vector<string>& chessboard, int n) {
   for (int i = 0; i < row; i++) {
