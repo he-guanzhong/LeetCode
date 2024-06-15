@@ -25,27 +25,22 @@
 你无法返回 2 号加油站，因为返程需要消耗 4 升汽油，但是你的油箱只有 3 升汽油。
 因此，无论怎样，你都不可能绕环路行驶一周。 */
 
+int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+  int curSum = 0, start = 0, totalSum = 0;
+  for (int i = 0; i < gas.size(); i++) {
+    int gap = gas[i] - cost[i];
+    totalSum += gap;
+    curSum += gap;
+    if (curSum < 0) {
+      curSum = 0;
+      start = i + 1;
+    }
+  }
+  return totalSum < 0 ? -1 : start;
+}
+
 // 贪心，计算全局油量和当前油量。到达i时当前剩油小于0，说明[0,i]区间任意一结点出发，必到不了。当前剩油归零，并start设置为i+1。
 // 判断全局油量是否小于0，如小则不可行。如大于0，则返回start
-int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
-  int curSum = 0;
-  int low = INT_MAX;
-  for (int i = 0; i < gas.size(); i++) {
-    curSum += gas[i] - cost[i];
-    low = min(low, curSum);
-  }
-
-  if (curSum < 0)
-    return -1;
-  if (low >= 0)
-    return 0;
-  for (int i = gas.size() - 1; i >= 0; i--) {
-    low += gas[i] - cost[i];
-    if (low >= 0)
-      return i;
-  }
-  return -1;
-}
 
 // 全局思路，记录当前剩余油量总和，和历史出现最低油量。情况一、如果剩余油量总和小于0，不可行。
 // 情况二，历史最低油量大于0，说明首元素为出发点（题目规定只有唯一解）
@@ -85,6 +80,7 @@ int canCompleteCircuit2(vector<int>& gas, vector<int>& cost) {
     return -1;
   return start;
 }
+
 int main() {
   vector<int> gas1 = {1, 2, 3, 4, 5};
   vector<int> cost1 = {3, 4, 5, 1, 2};

@@ -16,29 +16,27 @@
     输出: 0
     解释: 你不需要移除任何区间，因为它们已经是无重叠的了。 */
 
-// 起点从小到大排序，相邻两两比较，若i起点在i-1范围内，重复区间加一，更新i终点为i和i-1最小值
-int eraseOverlapIntervals(vector<vector<int>> &intervals) {
+int eraseOverlapIntervals(vector<vector<int>>& intervals) {
   sort(intervals.begin(), intervals.end(),
-       [](vector<int> &a, vector<int> &b) { return a[0] < b[0]; });
-  int result = 0;
-  int end = intervals[0][1];
+       [](vector<int> a, vector<int> b) { return a[0] < b[0]; });
+  if (intervals.size() < 2)
+    return 0;
+  int ans = 0;
   for (int i = 1; i < intervals.size(); i++) {
-    if (end <= intervals[i][0]) {
-      end = intervals[i][1];
-    } else {
-      result++;
-      end = min(intervals[i][1], end);
+    if (intervals[i][0] < intervals[i - 1][1]) {
+      ans++;
+      intervals[i][1] = min(intervals[i][1], intervals[i - 1][1]);
     }
   }
-  return result;
+  return ans;
 }
 
 // 按最右边界，从小到大排序。然后从左向右遍历，记录每个右边界的最左停止线，一旦发现新区间左起点与之前停止线不相交，则非交叉区间数加一
 // 总数量减去非交叉区间数，得到交叉区间数
-int eraseOverlapIntervals1(vector<vector<int>> &intervals) {
+int eraseOverlapIntervals1(vector<vector<int>>& intervals) {
   sort(intervals.begin(), intervals.end(),
-       [](vector<int> &a, vector<int> &b) { return a[1] < b[1]; });
-  int count = 1; // 记录非交叉区间数
+       [](vector<int>& a, vector<int>& b) { return a[1] < b[1]; });
+  int count = 1;  // 记录非交叉区间数
   int end = intervals[0][1];
   for (int i = 1; i < intervals.size(); i++) {
     if (intervals[i][0] >= end) {
@@ -48,14 +46,16 @@ int eraseOverlapIntervals1(vector<vector<int>> &intervals) {
   }
   return intervals.size() - count;
 }
+
+// 起点从小到大排序，相邻两两比较，若i起点在i-1范围内，重复区间加一，更新i终点为i和i-1最小值
 // 若按左边界排序，从左向右遍历，记录的是重叠区间数
-int eraseOverlapIntervals2(vector<vector<int>> &intervals) {
+int eraseOverlapIntervals2(vector<vector<int>>& intervals) {
   sort(intervals.begin(), intervals.end(),
-       [](vector<int> &a, vector<int> &b) { return a[0] < b[0]; });
-  int count = 0; // 重叠区间从0开始
+       [](vector<int>& a, vector<int>& b) { return a[0] < b[0]; });
+  int count = 0;  // 重叠区间从0开始
   int end = intervals[0][1];
   for (int i = 1; i < intervals.size(); i++) {
-    if (intervals[i][0] < intervals[i - 1][1]) { // 有重叠
+    if (intervals[i][0] < intervals[i - 1][1]) {  // 有重叠
       count++;
       intervals[i][1] = min(intervals[i][1], intervals[i - 1][1]);
     }

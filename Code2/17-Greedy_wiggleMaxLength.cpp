@@ -21,27 +21,27 @@
 -8) 。
 示例 3：
 输入：nums = [1,2,3,4,5,6,7,8,9]
-输出：2
-*/
+输出：2 */
 
-// nums.size()是0和1单独特殊处理，起步就处理内含2个及其以上元素的情况，pre记录上一周期相差，与本周期相差比较，若符号相反则result++
-// 注意：1. 考虑平坡最后一个元素为准，故pre允许是0。2.
-// 首字母前假设为平坡，其pre为0，result要初始化为1。
-// 3. pre不能随时更新，而必须是发生摆动后更新，否则易出现[2,1,2,2,3]的误报
 int wiggleMaxLength(vector<int>& nums) {
-  if (nums.size() < 2)
+  if (nums.size() <= 1)
     return nums.size();
-  int result = 1;
-  int pre = 0;
+  int ans = 1;
+  int pre_diff = 0;
   for (int i = 1; i < nums.size(); i++) {
-    if (nums[i] - nums[i - 1] < 0 && pre >= 0 ||
-        nums[i] - nums[i - 1] > 0 && pre <= 0) {
-      result++;
-      pre = nums[i] - nums[i - 1];
+    int cur_diff = nums[i] - nums[i - 1];
+    if (pre_diff <= 0 && cur_diff > 0 || pre_diff >= 0 && cur_diff < 0) {
+      ans++;
+      pre_diff = cur_diff;
     }
   }
-  return result;
+  return ans;
 }
+
+// nums.size()是0和1单独特殊处理，起步就处理内含2个及其以上元素的情况，pre记录上一周期相差，与本周期相差比较，若符号相反则result++
+// 注意：1. 考虑平坡最后一个元素为准，故pre允许是0。
+// 2.首字母前假设为平坡，其pre为0，result要初始化为1。
+// 3. pre不能随时更新，而必须是发生摆动后更新，否则易出现[2,1,2,2,3]的误报
 
 // 首顶点设为1，设置前后差。从前向后遍历计算后差，出现波峰或者波谷，计数加一的同时更新前差。不得每步都更新前差
 int wiggleMaxLength1(vector<int>& nums) {
@@ -77,6 +77,7 @@ int wiggleMaxLength2(vector<int>& nums) {
   }
   return max(dp[nums.size() - 1][0], dp[nums.size() - 1][1]);
 }
+
 int main() {
   vector<int> g1 = {1, 7, 4, 9, 2, 5};
   vector<int> g2 = {1, 17, 5, 10, 13, 15, 10, 5, 16, 8};

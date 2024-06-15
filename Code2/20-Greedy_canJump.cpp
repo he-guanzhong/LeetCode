@@ -14,16 +14,18 @@
 解释：无论怎样，总会到达下标为 3 的位置。但该下标的最大跳跃长度是 0 ，
 所以永远不可能到达最后一个下标。 */
 
-// 覆盖范围cover代表最后一个可访问的下标，有前向后遍历，不断拓展cover范围，一旦发现cover大于nums.size-1即返回真。
-// 注意遍历时，若cover过大，则i不应超过自身nums.size
 bool canJump(vector<int>& nums) {
-  int cover = 0;
-  for (int i = 0; i <= cover && i < nums.size(); i++) {
-    cover = max(cover, i + nums[i]);
+  int right = 0;
+  for (int i = 0; i <= right; i++) {
+    if (right >= nums.size() - 1)
+      return true;
+    right = max(right, i + nums[i]);
   }
-  return cover >= nums.size() - 1;
+  return false;
 }
 
+// 覆盖范围cover代表最后一个可访问的下标，有前向后遍历，不断拓展cover范围，一旦发现cover大于nums.size-1即返回真。
+// 注意遍历时，若cover过大，则i不应超过自身nums.size
 // 计算每一步能cover到的最大范围，如果能覆盖最后一个结点，就返回真。
 bool canJump1(vector<int>& nums) {
   int cover = 0;

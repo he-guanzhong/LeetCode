@@ -1,4 +1,3 @@
-#include <numeric>  // accumulate函数需要
 #include "head.h"
 /* 1005. K 次取反后最大化的数组和
 给你一个整数数组 nums 和一个整数 k ，按以下方法修改该数组：
@@ -16,18 +15,14 @@
 示例 3：
 输入：nums = [2,-3,-1,5,-4], k = 2
 输出：13
-解释：选择下标 (1, 4) ，nums 变为 [2,3,-1,5,4] 。
-*/
+解释：选择下标 (1, 4) ，nums 变为 [2,3,-1,5,4] 。 */
 
-// 方法一：先排序，对小于0的负数取反，同时k--，情况一：如果k==0则直接返回结果。情况二：遍历后k仍不为0，再次排序，按照k为奇偶数，对首元素取反
-// 方法二：直接按照绝对值，从大到小排序，从前至后k次取反
 int largestSumAfterKNegations(vector<int>& nums, int k) {
-  sort(nums.begin(), nums.end(),
-       [](const int& a, const int& b) { return abs(a) > abs(b); });
-  for (int& num : nums) {
-    if (num < 0 && k > 0) {
-      num *= -1;
+  sort(nums.begin(), nums.end(), [](int a, int b) { return abs(a) > abs(b); });
+  for (int i = 0; i < nums.size(); i++) {
+    if (nums[i] < 0 && k > 0) {
       k--;
+      nums[i] *= -1;
     }
   }
   if (k % 2 == 1)
@@ -35,7 +30,9 @@ int largestSumAfterKNegations(vector<int>& nums, int k) {
   return accumulate(nums.begin(), nums.end(), 0);
 }
 
-// 先用绝对值从大到小排序，如此即可不用两次排序，然后从前到后如遇到负数则求反。
+// 方法一：先排序，对小于0的负数取反，同时k--，情况一：如果k==0则直接返回结果。情况二：遍历后k仍不为0，再次排序，按照k为奇偶数，对首元素取反
+// 方法二：直接按照绝对值，从大到小排序，从前至后k次取反
+// 如果先用绝对值从大到小排序，如此即可不用两次排序，然后从前到后如遇到负数则求反。
 // 如之后还k>0，则置多一次，反转最小的那个数。偶数次是不用一次一次处理的
 int largestSumAfterKNegations1(vector<int>& nums, int k) {
   sort(nums.begin(), nums.end(), [](int a, int b) { return abs(a) > abs(b); });
@@ -55,15 +52,19 @@ int main() {
   vector<int> nums1 = {4, 2, 3};
   vector<int> nums2 = {3, -1, 0, 2};
   vector<int> nums3 = {2, -3, -1, 5, -4};
-  int k1 = 1, k2 = 3, k3 = 2;
+  vector<int> nums4 = {-8, 3, -5, -3, -5, -2};
+  int k1 = 1, k2 = 3, k3 = 2, k4 = 6;
   cout << largestSumAfterKNegations(nums1, k1) << " "
        << largestSumAfterKNegations(nums2, k2) << " "
-       << largestSumAfterKNegations(nums3, k3) << " " << endl;
+       << largestSumAfterKNegations(nums3, k3) << " "
+       << largestSumAfterKNegations(nums4, k4) << endl;
   nums1 = {4, 2, 3};
   nums2 = {3, -1, 0, 2};
   nums3 = {2, -3, -1, 5, -4};
+  nums4 = {-8, 3, -5, -3, -5, -2};
   cout << largestSumAfterKNegations1(nums1, k1) << " "
        << largestSumAfterKNegations1(nums2, k2) << " "
-       << largestSumAfterKNegations1(nums3, k3) << " " << endl;
+       << largestSumAfterKNegations1(nums3, k3) << " "
+       << largestSumAfterKNegations1(nums4, k4) << endl;
   return 0;
 }

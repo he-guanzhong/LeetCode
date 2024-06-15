@@ -13,19 +13,18 @@
 输入：nums = [5,4,-1,7,8]
 输出：23 */
 
-// 先判空，pre记录此下标时，最长连续子数组和，如果此前pre有正增益，则pre+i，如果此前pre为负增益，则舍弃pre取i
-// 额外的result记录整个数组的最长连续子数组和，初始化不能为0，而为首元素，或者INT_MIN
 int maxSubArray(vector<int>& nums) {
-  int pre = 0;
-  int result = INT_MIN;
-  for (int i : nums) {
-    pre += i;
-    result = max(pre, result);
-    pre = max(pre, 0);
+  int ans = nums[0];
+  vector<int> dp(nums.size(), nums[0]);
+  for (int i = 1; i < nums.size(); i++) {
+    dp[i] = max(nums[i], nums[i] + dp[i - 1]);
+    ans = max(dp[i], ans);
   }
-  return result;
+  return ans;
 }
 
+// 先判空，pre记录此下标时，最长连续子数组和，如果此前pre有正增益，则pre+i，如果此前pre为负增益，则舍弃pre取i
+// 额外的result记录整个数组的最长连续子数组和，初始化不能为0，而为首元素，或者INT_MIN
 // 传统方法，动态规划。pre记录此前是否为负，产生负面影响。并时刻记录最大值
 int maxSubArray1(vector<int>& nums) {
   int maxValue = nums[0];
@@ -36,6 +35,7 @@ int maxSubArray1(vector<int>& nums) {
   }
   return maxValue;
 }
+
 // 动态规划。dp记录包括i的此前最大子序列和
 int maxSubArray3(vector<int>& nums) {
   vector<int> dp(nums.size(), 0);

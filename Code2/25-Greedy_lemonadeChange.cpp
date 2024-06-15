@@ -20,22 +20,19 @@
 前 2 位顾客那里，我们按顺序收取 2 张 5 美元的钞票。
 对于接下来的 2 位顾客，我们收取一张 10 美元的钞票，然后返还 5 美元。
 对于最后一位顾客，我们无法退回 15 美元，因为我们现在只有两张 10 美元的钞票。
-由于不是每位顾客都得到了正确的找零，所以答案是 false。
- */
+由于不是每位顾客都得到了正确的找零，所以答案是 false。 */
 
-// 直接模拟，5、10美元数即可，不必设置20美元数。
-bool lemonadeChange(vector<int> &bills) {
+bool lemonadeChange(vector<int>& bills) {
   int five = 0, ten = 0;
-  for (int bill : bills) {
-    if (bill == 5)
+  for (int i = 0; i < bills.size(); i++) {
+    if (bills[i] == 5)
       five++;
-    else if (bill == 10) {
-      ten++;
-      five--;
-      if (five < 0)
+    else if (bills[i] == 10) {
+      if (--five < 0)
         return false;
+      ten++;
     } else {
-      if (ten > 0) {
+      if (ten) {
         ten--;
         five--;
       } else {
@@ -49,8 +46,8 @@ bool lemonadeChange(vector<int> &bills) {
 }
 
 // 使用普通整形变量基数，分三种情况讨论即可。注意收到20时，优先判断10和5够不够，再次判断5有没有3个以上。其余情况都是不可行的
-// twenty 这个变量可有可无
-bool lemonadeChange1(vector<int> &bills) {
+// 直接模拟，5、10美元数即可，不必设置20美元数。twenty 这个变量可有可无
+bool lemonadeChange1(vector<int>& bills) {
   int five = 0, ten = 0, twenty = 0;
   for (int bill : bills) {
     if (bill == 5)

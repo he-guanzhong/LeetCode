@@ -22,30 +22,34 @@
 输入：people = {{6,0},{5,0},{4,0},{3,2},{2,2},{1,4}}
 输出：{{4,0},{5,0},{2,2},{3,2},{1,4},{6,0}}*/
 
-// 先按照身高从大到小，次序从小到大排序，二次遍历时前面i个身高大于自身数量，即插入的位置。
-// vector频繁插入时间复杂度n^2较大。使用list替代，但其不支持迭代器随机访问，必须设定int临时变量挪动步数
-vector<vector<int>> reconstructQueue(vector<vector<int>> &people) {
-  sort(people.begin(), people.end(), [](vector<int> v1, vector<int> v2) {
-    if (v1[0] == v2[0])
-      return v1[1] < v2[1];
-    return v1[0] > v2[0];
+vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
+  sort(people.begin(), people.end(), [](vector<int> a, vector<int> b) {
+    if (a[0] == b[0])
+      return a[1] < b[1];
+    else
+      return a[0] > b[0];
   });
-  vector<vector<int>> result;
-  result.reserve(2001);
+  list<vector<int>> que;
   for (int i = 0; i < people.size(); i++) {
-    result.insert(result.begin() + people[i][1], people[i]);
+    auto it = que.begin();
+    int n = people[i][1];
+    while (n--)
+      it++;
+    que.insert(it, people[i]);
   }
-  return result;
+  return vector<vector<int>>(que.begin(), que.end());
 }
 
+// 先按照身高从大到小，次序从小到大排序，二次遍历时前面i个身高大于自身数量，即插入的位置。
+// vector频繁插入时间复杂度n^2较大。使用list替代，但其不支持迭代器随机访问，必须设定int临时变量挪动步数
 // 先按照首数字h从大到小排列，k由小到大排列。然后遍历，找到k代表的前方右几个数合格，就当作下标，插入结果中
 // 时间复杂度nlogn + n^2，因为插入需要大量资源
-static bool cmp(const vector<int> &a, const vector<int> &b) {
+static bool cmp(const vector<int>& a, const vector<int>& b) {
   if (a[0] == b[0])
     return a[1] < b[1];
   return a[0] > b[0];
 }
-vector<vector<int>> reconstructQueue1(vector<vector<int>> &people) {
+vector<vector<int>> reconstructQueue1(vector<vector<int>>& people) {
   sort(people.begin(), people.end(), cmp);
   vector<vector<int>> que;
   for (int i = 0; i < people.size(); i++) {
@@ -54,8 +58,9 @@ vector<vector<int>> reconstructQueue1(vector<vector<int>> &people) {
   }
   return que;
 }
+
 // 可以使用链表list来存储经常需要频繁插入的情况
-vector<vector<int>> reconstructQueue2(vector<vector<int>> &people) {
+vector<vector<int>> reconstructQueue2(vector<vector<int>>& people) {
   sort(people.begin(), people.end(), cmp);
   list<vector<int>> que;
   for (int i = 0; i < people.size(); i++) {
@@ -69,7 +74,7 @@ vector<vector<int>> reconstructQueue2(vector<vector<int>> &people) {
 }
 
 // 人为固定vector数组长度，避免capacity调整的时间复杂度影响
-vector<vector<int>> reconstructQueue3(vector<vector<int>> &people) {
+vector<vector<int>> reconstructQueue3(vector<vector<int>>& people) {
   sort(people.begin(), people.end(), cmp);
   vector<vector<int>> que(people.size(), vector<int>(2, -1));
   for (int i = 0; i < people.size(); i++) {
@@ -84,6 +89,7 @@ vector<vector<int>> reconstructQueue3(vector<vector<int>> &people) {
   }
   return que;
 }
+
 int main() {
   vector<vector<int>> people1 = {{5, 0}, {7, 0}, {5, 2},
                                  {6, 1}, {4, 4}, {7, 1}};

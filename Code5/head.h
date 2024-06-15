@@ -4,6 +4,8 @@
 #include <cmath>
 #include <iostream>
 #include <list>
+#include <map>
+#include <numeric>
 #include <queue>
 #include <set>
 #include <stack>
