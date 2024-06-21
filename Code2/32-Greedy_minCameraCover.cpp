@@ -1,42 +1,42 @@
 #include "head.h"
-#define null -1
 /* 968. 监控二叉树
 给定一个二叉树，我们在树的节点上安装摄像头。
 节点上的每个摄影头都可以监视其父对象、自身及其直接子对象。
 计算监控树的所有节点所需的最小摄像头数量。
 示例 1：
-输入：[0,0,null,0,0]
-输出：1
-解释：如图所示，一台摄像头足以监控所有节点
+  输入：[0,0,null,0,0]
+  输出：1
+  解释：如图所示，一台摄像头足以监控所有节点
 示例 2：
-输入：[0,0,null,0,null,0,null,null,0]
-输出：2
-解释：需要至少两个摄像头来监视树的所有节点。
-上图显示了摄像头放置的有效位置之一。*/
+  输入：[0,0,null,0,null,0,null,null,0]
+  输出：2
+  解释：需要至少两个摄像头来监视树的所有节点。
+  上图显示了摄像头放置的有效位置之一。*/
 
-// 后序遍历递归，回溯。摄像头数量额外设置传参，返回值表述前结点状态。0-未覆盖，1-摄像头，2-覆盖。空结点必为2-覆盖
-// 提取左右结点递归返回值状态。情况一，左右均覆盖，返回未覆盖；情况二、左右任一没覆盖，返回摄像头，数量加1。情况三、左右任一摄像头，返回覆盖。
-// 根节状态未处理，如果为未覆盖，则摄像头数+1.
-int traversal(TreeNode* root, int& result) {
+int traversal(TreeNode* root, int& ans) {
   if (!root)
     return 2;
-  int left = traversal(root->left, result);
-  int right = traversal(root->right, result);
+  int left = traversal(root->left, ans);
+  int right = traversal(root->right, ans);
   if (left == 2 && right == 2)
     return 0;
   else if (left == 0 || right == 0) {
-    result++;
+    ans++;
     return 1;
   } else if (left == 1 || right == 1)
     return 2;
   return -1;
 }
 int minCameraCover(TreeNode* root) {
-  int result = 0;
-  if (traversal(root, result) == 0)
-    result++;
-  return result;
+  int ans = 0;
+  if (traversal(root, ans) == 0)
+    ans++;
+  return ans;
 }
+
+// 后序遍历递归，回溯。摄像头数量额外设置传参，返回值表述前结点状态。0-未覆盖，1-摄像头，2-覆盖。空结点必为2-覆盖
+// 提取左右结点递归返回值状态。情况一，左右均覆盖，返回未覆盖；情况二、左右任一没覆盖，返回摄像头，数量加1。情况三、左右任一摄像头，返回覆盖。
+// 根节状态未处理，如果为未覆盖，则摄像头数+1.
 
 // 核心是从叶子节点的父节点开始布置摄像头，由下至上回溯，后序遍历。返回值设置为状态，0为无覆盖。1为摄像头，2为有覆盖
 // 返回条件是遇到空结点，只能认为其有覆盖2。提取左右返回状态。
