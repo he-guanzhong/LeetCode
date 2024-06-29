@@ -1,5 +1,4 @@
 #include "head.h"
-#define null -1
 /* 337. 打家劫舍 III
 小偷又发现了一个新的可行窃的地区。这个地区只有一个入口，我们称之为 root 。
 除了 root
@@ -7,31 +6,32 @@
 如果 两个直接相连的房子在同一天晚上被打劫 ，房屋将自动报警。
 给定二叉树的 root 。返回 在不触动警报的情况下 ，小偷能够盗取的最高金额 。
 示例 1:
-输入: root = [3,2,3,null,3,null,1]
-输出: 7
-解释: 小偷一晚能够盗取的最高金额 3 + 3 + 1 = 7
+  输入: root = [3,2,3,null,3,null,1]
+  输出: 7
+  解释: 小偷一晚能够盗取的最高金额 3 + 3 + 1 = 7
 示例 2:
-输入: root = [3,4,5,1,3,null,1]
-输出: 9
-解释: 小偷一晚能够盗取的最高金额 4 + 5 = 9 */
+  输入: root = [3,4,5,1,3,null,1]
+  输出: 9
+  解释: 小偷一晚能够盗取的最高金额 4 + 5 = 9 */
 
-// 后序遍历，返回值用vector同时记录不偷和偷的最大数值。递归遇到根节点必返回0，提取左右子树返回结果。
-// 偷该节点，则左右子树必不偷。不偷该结点，左、右均可偷可不偷，取最大值返回。
-vector<int> robTest(TreeNode* root) {
+vector<int> traversal(TreeNode* root) {
   if (!root)
     return {0, 0};
   if (!root->left && !root->right)
     return {0, root->val};
-  vector<int> left = robTest(root->left);
-  vector<int> right = robTest(root->right);
-  int yes = left[0] + right[0] + root->val;
-  int no = max(left[0], left[1]) + max(right[0], right[1]);
-  return {no, yes};
+  vector<int> l = traversal(root->left);
+  vector<int> r = traversal(root->right);
+  int rob = root->val + l[0] + r[0];
+  int notRob = max(l[0], l[1]) + max(r[0], r[1]);
+  return {notRob, rob};
 }
 int rob(TreeNode* root) {
-  vector<int> result = robTest(root);
-  return max(result[0], result[1]);
+  vector<int> ans = traversal(root);
+  return max(ans[0], ans[1]);
 }
+
+// 后序遍历，返回值用vector同时记录不偷和偷的最大数值。递归遇到根节点必返回0，提取左右子树返回结果。
+// 偷该节点，则左右子树必不偷。不偷该结点，左、右均可偷可不偷，取最大值返回。
 
 // 树形dp。返回值可以为两个值的数组，记录了到该结点时，不偷与偷分别的价值大小。
 // 退出条件为，空结点，无论偷不偷都是0。叶子结点，不偷必为0，偷就是该点值大小。依旧是后序遍历，保存左右分支值
@@ -92,7 +92,9 @@ int rob3(TreeNode* root) {
 int main() {
   TreeNode* root1 = construct_binary_tree({3, 2, 3, null, 3, null, 1});
   TreeNode* root2 = construct_binary_tree({3, 4, 5, 1, 3, null, 1});
-  cout << rob(root1) << " " << rob(root2) << endl;
-  cout << rob1(root1) << " " << rob1(root2) << endl;
+  TreeNode* root3 = construct_binary_tree({4, 1, null, 2, null, 3, null});
+
+  cout << rob(root1) << " " << rob(root2) << " " << rob(root3) << endl;
+  cout << rob1(root1) << " " << rob1(root2) << " " << rob1(root3) << endl;
   return 0;
 }

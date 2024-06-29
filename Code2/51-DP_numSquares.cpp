@@ -13,14 +13,13 @@
 输出：2
 解释：13 = 4 + 9 */
 
-// 无限取平方数，完全背包。容量为n，物品为i*i，先初始化为INT_MAX，由于平方数必从1开始，第一轮遍历即消除所有INT_MAX
-// 后续递推公式，无需判断是否可能。dp[j]表示数j由完全平方数组成的最小数量，其值等于减去本轮i*i的数量加一。遍历背包和容量，二者均可
 int numSquares(int n) {
   vector<int> dp(n + 1, INT_MAX);
   dp[0] = 0;
   for (int i = 1; i * i <= n; i++) {
     for (int j = i * i; j <= n; j++) {
-      dp[j] = min(dp[j], dp[j - i * i] + 1);
+      if (dp[j - i * i] != INT_MAX)
+        dp[j] = min(dp[j], dp[j - i * i] + 1);
     }
   }
   return dp[n];
@@ -42,6 +41,8 @@ int numSquares1(int n) {
   return dp[n];
 }
 
+// 无限取平方数，完全背包。容量为n，物品为i*i，先初始化为INT_MAX，由于平方数必从1开始，第一轮遍历即消除所有INT_MAX
+// 后续递推公式，无需判断是否可能。dp[j]表示数j由完全平方数组成的最小数量，其值等于减去本轮i*i的数量加一。
 // 也可以先遍历背包，再遍历物品
 int numSquares2(int n) {
   vector<int> dp(n + 1, INT_MAX);
@@ -54,6 +55,7 @@ int numSquares2(int n) {
   }
   return dp[n];
 }
+
 int main() {
   cout << numSquares(12) << " " << numSquares(13) << " " << numSquares(25)
        << endl;

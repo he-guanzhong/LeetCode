@@ -4,35 +4,38 @@
 中找出并返回总和为 target 的元素组合的个数。
 题目数据保证答案符合 32 位整数范围。
 示例 1：
-输入：nums = [1,2,3], target = 4
-输出：7
-解释：
-所有可能的组合为：
-(1, 1, 1, 1)
-(1, 1, 2)
-(1, 2, 1)
-(1, 3)
-(2, 1, 1)
-(2, 2)
-(3, 1)
-请注意，顺序不同的序列被视作不同的组合。
+  输入：nums = [1,2,3], target = 4
+  输出：7
+  解释：
+  所有可能的组合为：
+    (1, 1, 1, 1)
+    (1, 1, 2)
+    (1, 2, 1)
+    (1, 3)
+    (2, 1, 1)
+    (2, 2)
+    (3, 1)
+  请注意，顺序不同的序列被视作不同的组合。
 示例 2：
-输入：nums = [9], target = 3
-输出：0*/
+  输入：nums = [9], target = 3
+  输出：0
+进阶：如果给定的数组中含有负数会发生什么？问题会产生何种变化？如果允许负数出现，需要向题目中添加哪些限制条件？*/
 
-// 完全背包，从前向后遍历。求排列数，先遍历容量，再遍历物品。
-// 注意，此题在某dp[j]值会大于INT_MAX，故额外条件限制，只计算dp[j]小于INT_MAX的结果
 int combinationSum4(vector<int>& nums, int target) {
   vector<int> dp(target + 1, 0);
   dp[0] = 1;
-  for (int j = 0; j <= target; j++) {
+  for (int j = 1; j <= target; j++) {
     for (int i = 0; i < nums.size(); i++) {
-      if (j >= nums[i] && dp[j] + dp[j - nums[i]] < INT_MAX)
+      if (j >= nums[i] && dp[j] + dp[j - nums[i]] <= INT_MAX)
         dp[j] += dp[j - nums[i]];
     }
   }
+  // printVector(dp);
   return dp[target];
 }
+
+// 完全背包，从前向后遍历。求排列数，先遍历容量，再遍历物品。
+// 注意，此题在某dp[j]值会大于INT_MAX，故额外条件限制，只计算dp[j]小于INT_MAX的结果
 
 // 完全背包问题，如果求具体排列，必须回溯。但是求数量，可以完全背包，注意外层遍历背包，内层遍历物品
 // 由于力扣内部存在两个数相加超过INT_MAX的数据，所以if判断条件要额外加INT_MAX判断
@@ -47,6 +50,7 @@ int combinationSum41(vector<int>& nums, int target) {
   }
   return dp[target];
 }
+
 int main() {
   int target1 = 4, target2 = 3, target3 = 999;
   vector<int> nums1 = {1, 2, 3};
@@ -65,4 +69,5 @@ int main() {
   cout << combinationSum41(nums1, target1) << " "
        << combinationSum41(nums2, target2) << " "
        << combinationSum41(nums3, target3) << endl;
+  return 0;
 }
