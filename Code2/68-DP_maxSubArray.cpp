@@ -4,30 +4,25 @@
 ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
 子数组 是数组中的一个连续部分。
 示例 1：
-输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
-输出：6
-解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
+  输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
+  输出：6
+  解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
 示例 2：
-输入：nums = [1]
-输出：1
+  输入：nums = [1]
+  输出：1
 示例 3：
-输入：nums = [5,4,-1,7,8]
-输出：23   */
+  输入：nums = [5,4,-1,7,8]
+  输出：23   */
 
-// 贪心，返回结果，一定初始化为首元素值，不能为0。保存到i前最大子数组pre，如果其为负即舍弃，为正即相加。返回值根据pre实时更新
-// 动态规划。dp[i]表示以i结尾的连续子数组和最大值，不一定在最后一个元素。dp[i]基础为nums[i]，是否加dp[i-1]取决于其是否为正
 int maxSubArray(vector<int>& nums) {
-  if (nums.size() == 0)
-    return 0;
-  vector<int> dp(nums.size(), 0);
-  dp[0] = nums[0];
-  int result = nums[0];
-  for (int i = 1; i < nums.size(); i++) {
-    dp[i] = max(dp[i - 1] + nums[i], nums[i]);
-    result = max(dp[i], result);
+  int dp[2] = {0, 0};
+  int ans = 0;
+  for (int i = 0; i < nums.size(); i++) {
+    dp[1] = max(nums[i], dp[0] + nums[i]);
+    dp[0] = dp[1];
+    ans = max(ans, dp[1]);
   }
-
-  return result;
+  return ans;
 }
 
 // 动态规划。dp[i]代表以nums[i]为结尾的连续子数组最大和。则dp[0]=nums[0]。
@@ -43,7 +38,9 @@ int maxSubArray1(vector<int>& nums) {
   }
   return result;
 }
-// 贪心算法
+
+// 贪心，返回结果，一定初始化为首元素值，不能为0。保存到i前最大子数组pre，如果其为负即舍弃，为正即相加。返回值根据pre实时更新
+// 动态规划。dp[i]表示以i结尾的连续子数组和最大值，不一定在最后一个元素。dp[i]基础为nums[i]，是否加dp[i-1]取决于其是否为正
 int maxSubArray2(vector<int>& nums) {
   int result = nums[0];
   int pre = 0;

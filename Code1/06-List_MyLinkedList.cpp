@@ -8,8 +8,7 @@ addAtTail(val)：将值为 val的节点追加到链表的最后一个元素。
 addAtIndex(index,val)：在链表中的第 index个节点之前添加值为 val  的节点。如果
 index等于链表的长度，则该节点将附加到链表的末尾。如果
 index大于链表长度，则不会插入节点。如果index小于0，则在头部插入节点。
-deleteAtIndex(index)：如果索引 index 有效，则删除链表中的第 index 个节点。
-*/
+deleteAtIndex(index)：如果索引 index 有效，则删除链表中的第 index 个节点。 */
 
 // 自设链表，其必须依赖已经创建好的ListNode，为了头插简便，成员变量要有虚头结点dummy_，为了方便判断越界，要有size_
 // 构造函数中，size_置0，而虚头结点，不能为nullptr，必须为值为0的真实结点，否则其next,也即真实的链表头结点不存在
