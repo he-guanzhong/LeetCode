@@ -4,44 +4,47 @@
 岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
 此外，你可以假设该网格的四条边均被水包围。
 示例 1：
-输入：grid = {
+  输入：grid = {
   {'1','1','1','1','0'},
   {'1','1','0','1','0'},
   {'1','1','0','0','0'},
   {'0','0','0','0','0'}
-}
-输出：1
+  }
+  输出：1
 示例 2：
-输入：grid = {
+  输入：grid = {
   {'1','1','0','0','0'},
   {'1','1','0','0','0'},
   {'0','0','1','0','0'},
   {'0','0','0','1','1'}
-}
-输出：3 */
+  }
+  输出：3 */
 
 int dfs(vector<vector<char>>& grid, int x, int y) {
-  int dir[5] = {0, 1, 0, -1, 0};
   int area = 1;
-  for (int i = 0; i < 4; i++) {
-    int nextX = x + dir[i];
-    int nextY = y + dir[i + 1];
-    if (nextX < 0 || nextX >= grid.size() || nextY < 0 ||
-        nextY >= grid[0].size() || grid[nextX][nextY] == '0')
-      return 0;
-    grid[nextX][nextY] = '0';
-    area += dfs(grid, nextX, nextY) + 1;
+  grid[x][y] = '0';
+  int dir[] = {1, 0, -1, 0, 1};
+  for (int k = 0; k < 4; k++) {
+    int nextx = x + dir[k];
+    int nexty = y + dir[k + 1];
+    if (nextx < 0 || nextx >= grid.size() || nexty < 0 ||
+        nexty >= grid[0].size() || grid[nextx][nexty] == '0')
+      continue;
+    area += dfs(grid, nextx, nexty);
   }
   return area;
 }
 int numIslands(vector<vector<char>>& grid) {
-  vector<int> result;
+  int cnt = 0;
   for (int i = 0; i < grid.size(); i++) {
-    for (int j = 0; j < grid[0].size(); j++)
-      if (grid[i][j] == '1')
-        result.push_back(dfs(grid, i, j));
+    for (int j = 0; j < grid[0].size(); j++) {
+      if (grid[i][j] == '1') {
+        dfs(grid, i, j);
+        cnt++;
+      }
+    }
   }
-  return result.size();
+  return cnt;
 }
 
 // 深度搜索版，官方推荐写法。使用visited矩阵，记录是否访问过。
@@ -110,6 +113,7 @@ int numIslands3(vector<vector<char>>& grid) {
   }
   return result;
 }
+
 int main() {
   vector<vector<char>> grid1 = {{'1', '1', '1', '1', '0'},
                                 {'1', '1', '0', '1', '0'},
@@ -120,6 +124,14 @@ int main() {
                                 {'0', '0', '1', '0', '0'},
                                 {'0', '0', '0', '1', '1'}};
   cout << numIslands(grid1) << " " << numIslands(grid2) << endl;
+  grid1 = {{'1', '1', '1', '1', '0'},
+           {'1', '1', '0', '1', '0'},
+           {'1', '1', '0', '0', '0'},
+           {'0', '0', '0', '0', '0'}};
+  grid2 = {{'1', '1', '0', '0', '0'},
+           {'1', '1', '0', '0', '0'},
+           {'0', '0', '1', '0', '0'},
+           {'0', '0', '0', '1', '1'}};
   cout << numIslands1(grid1) << " " << numIslands1(grid2) << endl;
 
   return 0;

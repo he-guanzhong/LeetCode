@@ -3,32 +3,32 @@
 给定 n 个非负整数表示每个宽度为 1
 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
 示例 1：
-输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]
-输出：6
-解释：上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接
-6 个单位的雨水（蓝色部分表示雨水）。 示例 2：
-输入：height = [4,2,0,3,2,5]
-输出：9  */
+  输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]
+  输出：6
+  解释：上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1]
+    表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水。
+示例 2：
+  输入：height = [4,2,0,3,2,5]
+  输出：9  */
+
+int trap(vector<int>& height) {
+  int n = height.size();
+  int ans = 0;
+  vector<int> left(n), right(n);
+  left[0] = height[0], right[n - 1] = height[n - 1];
+  for (int i = 1; i < height.size(); i++)
+    left[i] = max(height[i], left[i - 1]);
+  for (int i = n - 2; i >= 0; i--)
+    right[i] = max(right[i + 1], height[i]);
+  for (int i = 0; i < n; i++) {
+    if (left[i] > height[i] && right[i] > height[i])
+      ans += min(left[i], right[i]) - height[i];
+  }
+  return ans;
+}
 
 // 双指针求列雨水。记录每一列的最大左柱高、最大右柱高，对每一列雨水高度求和。注意只有两柱不能接雨水。
 // 单调栈求行雨水。从栈底到栈头从大到小排列。遇下一个更大的元素，根据左柱、底部、右柱三个信息计算。top为雨水底，弹出后若栈仍不空，才有左柱可以计算
-int trap(vector<int>& height) {
-  if (height.size() <= 2)
-    return 0;
-  int result = 0;
-  vector<int> maxLeft(height.size(), 0);
-  vector<int> maxRight(height.size(), 0);
-  maxLeft[0] = height[0];
-  maxRight[height.size() - 1] = height[height.size() - 1];
-  for (int i = 1; i < height.size(); i++)
-    maxLeft[i] = max(maxLeft[i - 1], height[i]);
-  for (int i = height.size() - 2; i >= 0; i--)
-    maxRight[i] = max(maxRight[i + 1], height[i]);
-  for (int i = 1; i < height.size() - 1; i++) {
-    result += (min(maxLeft[i], maxRight[i]) - height[i]);
-  }
-  return result;
-}
 
 // 单调栈，从栈底到栈顶，按照从大到小排序，可以求下一个比本元素更大的位置。stack中记录下标即可。若新元素比栈顶元素小，直接压入。
 // 新元素等于栈顶元素，则将老元素弹出，再压入新元素，如此是为了保证接雨水的左柱实时更新
