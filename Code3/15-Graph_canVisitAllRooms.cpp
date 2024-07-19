@@ -6,38 +6,37 @@
 给你一个数组 rooms 其中 rooms[i] 是你进入 i 号房间可以获得的钥匙集合。如果能进入
 所有 房间返回 true，否则返回 false。
 示例 1：
-输入：rooms = [[1],[2],[3],[]]
-输出：true
-解释：
-我们从 0 号房间开始，拿到钥匙 1。
-之后我们去 1 号房间，拿到钥匙 2。
-然后我们去 2 号房间，拿到钥匙 3。
-最后我们去了 3 号房间。
-由于我们能够进入每个房间，我们返回 true。
+  输入：rooms = [[1],[2],[3],[]]
+  输出：true
+  解释：
+    我们从 0 号房间开始，拿到钥匙 1。
+    之后我们去 1 号房间，拿到钥匙 2。
+    然后我们去 2 号房间，拿到钥匙 3。
+    最后我们去了 3 号房间。
+    由于我们能够进入每个房间，我们返回 true。
 示例 2：
-输入：rooms = [[1,3],[3,0,1],[2],[0]]
-输出：false
-解释：我们不能进入 2 号房间。
- */
+  输入：rooms = [[1,3],[3,0,1],[2],[0]]
+  输出：false
+  解释：我们不能进入 2 号房间。 */
 
-// 深度优先搜索，设立visited数组记录是否访问过。传参为当前房间，结点在本层处理。访问过即直接返回。没访问过就标记访问，并执行下一层
-void dfs(vector<vector<int>>& rooms, vector<bool>& visited, int x) {
-  visited[x] = true;
-  for (int i = 0; i < rooms[x].size(); i++) {
-    if (visited[rooms[x][i]] == false)
-      dfs(rooms, visited, rooms[x][i]);
+void dfs(vector<vector<int>>& rooms, int index, vector<bool>& visited) {
+  visited[index] = true;
+  for (int room : rooms[index]) {
+    if (!visited[room])
+      dfs(rooms, room, visited);
   }
 }
 bool canVisitAllRooms(vector<vector<int>>& rooms) {
   vector<bool> visited(rooms.size(), false);
-  dfs(rooms, visited, 0);
-  for (bool i : visited) {
-    if (i == false)
+  dfs(rooms, 0, visited);
+  for (bool room : visited) {
+    if (!room)
       return false;
   }
   return true;
 }
 
+// 深度优先搜索，设立visited数组记录是否访问过。传参为当前房间，结点在本层处理。访问过即直接返回。没访问过就标记访问，并执行下一层
 // 深度优先搜索。方式一，在递归中处理，标记当前结点
 void dfs2(vector<vector<int>>& rooms, int key, vector<bool>& visited) {
   if (visited[key] == true)
@@ -97,6 +96,7 @@ bool canVisitAllRooms3(vector<vector<int>>& rooms) {
   }
   return true;
 }
+
 int main() {
   vector<vector<int>> rooms1 = {{1}, {2}, {3}, {0}};
   vector<vector<int>> rooms2 = {{1, 3}, {3, 0, 1}, {2}, {0}};

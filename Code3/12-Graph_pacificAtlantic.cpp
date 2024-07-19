@@ -2,60 +2,67 @@
 /* 417. 太平洋大西洋水流问题
 有一个 m × n 的矩形岛屿，与 太平洋 和 大西洋 相邻。 “太平洋”
 处于大陆的左边界和上边界，而 “大西洋” 处于大陆的右边界和下边界。
-这个岛被分割成一个由若干方形单元格组成的网格。给定一个 m x n 的整数矩阵 heights
-， heights[r][c] 表示坐标 (r, c) 上单元格 高于海平面的高度 。
+这个岛被分割成一个由若干方形单元格组成的网格。给定一个 m x n 的整数矩阵
+heights， heights[r][c] 表示坐标 (r, c) 上单元格 高于海平面的高度 。
 岛上雨水较多，如果相邻单元格的高度 小于或等于
 当前单元格的高度，雨水可以直接向北、南、东、西流向相邻单元格。水可以从海洋附近的任何单元格流入海洋。
 返回网格坐标 result 的 2D 列表 ，其中 result[i] = [ri, ci] 表示雨水从单元格 (ri,
 ci) 流动 既可流向太平洋也可流向大西洋 。
 示例 1：
-输入: heights = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]
-输出: [[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]
+  输入: heights =
+    [[1,2,2,3,5],
+    [3,2,3,4,4],
+    [2,4,5,3,1],
+    [6,7,1,4,5],
+    [5,1,1,2,4]]
+  输出: [[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]
 示例 2：
-输入: heights = [[2,1],[1,2]]
-输出: [[0,0],[0,1],[1,0],[1,1]]
- */
+  输入: heights = [[2,1],[1,2]]
+  输出: [[0,0],[0,1],[1,0],[1,1]] */
 
-// 遍历左上边界太平洋，右下边界大西洋。标记逆流能走到的所有结点。最后全图遍历，两洋同时能到达的即压入结果。时间和空间复杂度均为2*m*n
 void dfs(vector<vector<int>>& heights,
-         vector<vector<int>>& ocean,
          int x,
-         int y) {
-  ocean[x][y] = 1;
+         int y,
+         vector<vector<int>>& ocean,
+         vector<vector<int>>& ans,
+         int index) {
+  if (ocean[x][y] == index)
+    return;
+  if (ocean[x][y] == 1 && index == 2)
+    ans.push_back({x, y});
+
+  ocean[x][y] = index;
   int dir[] = {1, 0, -1, 0, 1};
-  for (int i = 0; i < 4; i++) {
-    int nextX = x + dir[i];
-    int nextY = y + dir[i + 1];
-    if (nextX < 0 || nextX >= heights.size() || nextY < 0 ||
-        nextY >= heights[0].size() || ocean[nextX][nextY] == 1)
+  for (int k = 0; k < 4; k++) {
+    int nextx = x + dir[k];
+    int nexty = y + dir[k + 1];
+    if (nextx < 0 || nextx >= heights.size() || nexty < 0 ||
+        nexty >= heights[0].size())
       continue;
-    if (heights[nextX][nextY] >= heights[x][y]) {
-      dfs(heights, ocean, nextX, nextY);
-    }
+    if (heights[nextx][nexty] < heights[x][y] || ocean[nextx][nexty] == index ||
+        ocean[nextx][nexty] == 3)
+      continue;
+    dfs(heights, nextx, nexty, ocean, ans, index);
   }
 }
 vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
   int m = heights.size(), n = heights[0].size();
-  vector<vector<int>> result;
-  vector<vector<int>> pac(m, vector<int>(n, 0));
-  vector<vector<int>> alt = pac;
+  vector<vector<int>> ocean(m, vector<int>(n, 0));
+  vector<vector<int>> ans;
   for (int i = 0; i < m; i++) {
-    dfs(heights, pac, i, 0);      // 左边界太平洋
-    dfs(heights, alt, i, n - 1);  // 右边界大西洋
+    dfs(heights, i, 0, ocean, ans, 1);
   }
-  for (int j = 0; j < n; j++) {
-    dfs(heights, pac, 0, j);      // 上边界太平洋
-    dfs(heights, alt, m - 1, j);  // 下边界大西洋
+  for (int j = 1; j < n; j++) {
+    dfs(heights, 0, j, ocean, ans, 1);
   }
-  for (int i = 0; i < m; i++) {
-    for (int j = 0; j < n; j++) {
-      if (pac[i][j] == 1 && alt[i][j] == 1)
-        result.push_back({i, j});
-    }
-  }
-  return result;
+  for (int i = 0; i < m; i++)
+    dfs(heights, i, n - 1, ocean, ans, 2);
+  for (int j = 0; j < n; j++)
+    dfs(heights, m - 1, j, ocean, ans, 2);
+  return ans;
 }
 
+// 遍历左上边界太平洋，右下边界大西洋。标记逆流能走到的所有结点。最后全图遍历，两洋同时能到达的即压入结果。时间和空间复杂度均为2*m*n
 // 不能对每一个结点，进行横向和纵向搜索，如果同时触碰到了海边为为真，时间复杂度O(n^2*m^2)
 // 反向思考，从四条海边向内陆搜索，使用两个矩阵保存两个大洋能到达的结果，如果内陆某个点同时来自大西洋和太平洋，即为所求结点。
 // dfs中的visited为形参，已访问矩阵，实参为大西洋和太平洋矩阵。超出界外跳过。由于从低向高搜索，碰到更低洼的地即跳过。
@@ -111,12 +118,17 @@ int main() {
                                  {5, 1, 1, 2, 4}};
   vector<vector<int>> height2 = {{2, 1}, {1, 2}};
   vector<vector<int>> height3 = {{0}};
+  vector<vector<int>> height4 = {{1, 1}, {1, 1}};
 
   printMat(pacificAtlantic(height1));
   printMat(pacificAtlantic(height2));
   printMat(pacificAtlantic(height3));
+  printMat(pacificAtlantic(height4));
+
   printMat(pacificAtlantic1(height1));
   printMat(pacificAtlantic1(height2));
   printMat(pacificAtlantic1(height3));
+  printMat(pacificAtlantic1(height4));
+
   return 0;
 }

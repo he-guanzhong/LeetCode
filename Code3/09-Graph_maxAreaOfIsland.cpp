@@ -2,57 +2,69 @@
 /* 695. 岛屿的最大面积
 给你一个大小为 m x n 的二进制矩阵 grid 。
 岛屿 是由一些相邻的 1 (代表土地) 构成的组合，这里的「相邻」要求两个 1 必须在
-水平或者竖直的四个方向上 相邻。你可以假设 grid 的四个边缘都被
-0（代表水）包围着。
+水平或者竖直的四个方向上 相邻。你可以假设 grid 的四个边缘都被0（代表水）包围着。
 岛屿的面积是岛上值为 1 的单元格的数目。
 计算并返回 grid 中最大的岛屿面积。如果没有岛屿，则返回面积为 0 。
 示例 1：
-输入：grid =
-{{0,0,1,0,0,0,0,1,0,0,0,0,0},{0,0,0,0,0,0,0,1,1,1,0,0,0},{0,1,1,0,1,0,0,0,0,0,0,0,0},{0,1,0,0,1,1,0,0,1,0,1,0,0},{0,1,0,0,1,1,0,0,1,1,1,0,0},{0,0,0,0,0,0,0,0,0,0,1,0,0},{0,0,0,0,0,0,0,1,1,1,0,0,0},{0,0,0,0,0,0,0,1,1,0,0,0,0}}
-输出：6
-解释：答案不应该是 11 ，因为岛屿只能包含水平或垂直这四个方向上的 1 。
+  输入：grid =
+    {{0,0,1,0,0,0,0,1,0,0,0,0,0},
+    {0,0,0,0,0,0,0,1,1,1,0,0,0},
+    {0,1,1,0,1,0,0,0,0,0,0,0,0},
+    {0,1,0,0,1,1,0,0,1,0,1,0,0},
+    {0,1,0,0,1,1,0,0,1,1,1,0,0},
+    {0,0,0,0,0,0,0,0,0,0,1,0,0},
+    {0,0,0,0,0,0,0,1,1,1,0,0,0},
+    {0,0,0,0,0,0,0,1,1,0,0,0,0}}
+  输出：6
+  解释：答案不应该是 11 ，因为岛屿只能包含水平或垂直这四个方向上的 1 。
 示例 2：
-输入：grid = {{0,0,0,0,0,0,0,0}}
-输出：0
- */
+  输入：grid = {{0,0,0,0,0,0,0,0}}
+  输出：0 */
 
-// BFS注意，一、压结点和标识visited同步。二、四方拓展节点，要以curX,curY为基准，而不是x,y
-// DFS注意。可以主函数标记visited，dfs中以返回值为计算面积。二、dfs外部设置退出条件，通过后即标记，for循环计算面积
-int dfs(vector<vector<int>>& grid,
+int bfs(vector<vector<int>>& grid,
         vector<vector<bool>>& visited,
         int x,
         int y) {
-  int dir[] = {0, 1, 0, -1, 0};
-  int surface = 1;
-  for (int i = 0; i < 4; i++) {
-    int nextX = x + dir[i];
-    int nextY = y + dir[i + 1];
-    if (nextX < 0 || nextX >= grid.size() || nextY < 0 ||
-        nextY >= grid[0].size() || visited[nextX][nextY] == true ||
-        grid[nextX][nextY] == 0)
-      continue;
-    visited[nextX][nextY] = true;
-    surface += dfs(grid, visited, nextX, nextY);
+  int area = 1;
+  visited[x][y] = true;
+  int dir[] = {1, 0, -1, 0, 1};
+  queue<pair<int, int>> que;
+  que.push({x, y});
+  while (!que.empty()) {
+    int curx = que.front().first;
+    int cury = que.front().second;
+    que.pop();
+    for (int k = 0; k < 4; k++) {
+      int nextx = curx + dir[k];
+      int nexty = cury + dir[k + 1];
+      if (nextx < 0 || nextx >= grid.size() || nexty < 0 ||
+          nexty >= grid[0].size() || grid[nextx][nexty] == 0 ||
+          visited[nextx][nexty] == true)
+        continue;
+      area++;
+      que.push({nextx, nexty});
+      visited[nextx][nexty] = true;
+    }
   }
-  return surface;
+  return area;
 }
 int maxAreaOfIsland(vector<vector<int>>& grid) {
-  vector<vector<bool>> visited(grid.size(),
-                               vector<bool>(grid[0].size(), false));
-  int maxArea = 0;
-  for (int i = 0; i < grid.size(); i++) {
-    for (int j = 0; j < grid[0].size(); j++) {
+  int m = grid.size(), n = grid[0].size(), ans = 0;
+  vector<vector<bool>> visited(m, vector<bool>(n, false));
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
       if (grid[i][j] == 1 && visited[i][j] == false) {
-        visited[i][j] = true;
-        int m = dfs(grid, visited, i, j);
-        maxArea = max(maxArea, m);
+        int area = bfs(grid, visited, i, j);
+        ans = max(ans, area);
       }
     }
   }
-  return maxArea;
+  return ans;
 }
 
-// 广度优先搜索。注意，一旦满足条件，要立刻将计数置为1，本结点已访问，并使用bfs进行拓展cnt
+// BFS注意：一、压结点和标识visited同步。二、四方拓展节点，要以curX,curY为基准，而不是x,y
+// DFS注意：一、可以主函数标记visited，dfs中以返回值为计算面积。二、dfs外部设置退出条件，通过后即标记，for循环计算面积
+// 广度优先搜索BFS。注意，一旦满足条件，要立刻将计数置为1，本结点已访问，并使用bfs进行拓展cnt
 // bfs函数内部，也四个新方向结点，一旦满足条件，先修改visited，然后cnt++，最后再压入
 int dir1[4][2] = {1, 0, -1, 0, 0, 1, 0, -1};
 int cnt;

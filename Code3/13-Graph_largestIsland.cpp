@@ -4,86 +4,79 @@
 返回执行此操作后，grid 中最大的岛屿面积是多少？
 岛屿 由一组上、下、左、右四个方向相连的 1 形成。
 示例 1:
-输入: grid = [[1, 0], [0, 1]]
-输出: 3
-解释: 将一格0变成1，最终连通两个小岛得到面积为 3 的岛屿。
+  输入: grid = [[1, 0], [0, 1]]
+  输出: 3
+  解释: 将一格0变成1，最终连通两个小岛得到面积为 3 的岛屿。
 示例 2:
-输入: grid = [[1, 1], [1, 0]]
-输出: 4
-解释: 将一格0变成1，岛屿的面积扩大为 4。
+  输入: grid = [[1, 1], [1, 0]]
+  输出: 4
+  解释: 将一格0变成1，岛屿的面积扩大为 4。
 示例 3:
-输入: grid = [[1, 1], [1, 1]]
-输出: 4
-解释: 没有0可以让我们变成1，面积依然为 4。 */
+  输入: grid = [[1, 1], [1, 1]]
+  输出: 4
+  解释: 没有0可以让我们变成1，面积依然为 4。 */
 
-// 一轮遍历，记录岛屿名称及其面积。二轮遍历，对任意'0'海水向四周拓展，如遇到岛屿即加上其面积。
-// 注意：全图均为陆地，在两轮遍历之间，作为特殊情况考虑。否则第二轮找不到海水0无输出。第二轮遍历中，需使用uset记录该岛屿是否以加过，否则易重复
-int dfs(vector<vector<int>>& grid,
-        vector<vector<int>>& flg,
-        int x,
-        int y,
-        int index) {
-  int dir[] = {1, 0, -1, 0, 1};
+int direction[] = {1, 0, -1, 0, 1};
+int dfs(vector<vector<int>>& grid, int x, int y, int mark) {
+  grid[x][y] = mark;
   int area = 1;
-  flg[x][y] = index;
-  for (int i = 0; i < 4; i++) {
-    int nextX = x + dir[i];
-    int nextY = y + dir[i + 1];
-    if (nextX < 0 || nextX >= grid.size() || nextY < 0 ||
-        nextY >= grid[0].size() || grid[nextX][nextY] == 0 ||
-        flg[nextX][nextY] <= index)
+  for (int k = 0; k < 4; k++) {
+    int nextx = x + direction[k];
+    int nexty = y + direction[k + 1];
+    if (nextx < 0 || nextx >= grid.size() || nexty < 0 ||
+        nexty >= grid[0].size() || grid[nextx][nexty] != 1)
       continue;
-    area += dfs(grid, flg, nextX, nextY, index);
+    area += dfs(grid, nextx, nexty, mark);
   }
   return area;
 }
 int largestIsland(vector<vector<int>>& grid) {
-  vector<int> result;
-  int maxVal = 0;
-  vector<vector<int>> flg(grid.size(), vector<int>(grid[0].size(), 0));
-  int index = 1;
-  for (int i = 0; i < grid.size(); i++) {
-    for (int j = 0; j < grid[0].size(); j++) {
-      if (grid[i][j] == 1 && flg[i][j] == 0) {
-        int area = dfs(grid, flg, i, j, index);
-        result.push_back(area);
-        index++;
+  int m = grid.size(), n = grid[0].size();
+  int mark = 2;
+  unordered_map<int, int> mapInfo;
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      if (grid[i][j] == 1) {
+        int area = dfs(grid, i, j, mark);
+        mapInfo[mark] = area;
+        if (mapInfo[mark] == m * n)
+          return m * n;
+        mark++;
       }
     }
   }
-  if (!result.empty() && result[0] == grid.size() * grid[0].size())
-    maxVal = grid.size() * grid[0].size();
-  int dir[] = {1, 0, -1, 0, 1};
-  int val = 0;
-  unordered_set<int> uset;
-  for (int i = 0; i < grid.size(); i++) {
-    for (int j = 0; j < grid[0].size(); j++) {
-      if (grid[i][j] == 0) {
-        val = 1;
-        uset.clear();
-        for (int k = 0; k < 4; k++) {
-          int nextX = i + dir[k];
-          int nextY = j + dir[k + 1];
-          if (nextX < 0 || nextX >= grid.size() || nextY < 0 ||
-              nextY >= grid[0].size() || grid[nextX][nextY] == 0 ||
-              flg[nextX][nextY] == 0)
-            continue;
-          if (uset.count(flg[nextX][nextY]) > 0)
-            continue;
-          uset.insert(flg[nextX][nextY]);
-          val += result[flg[nextX][nextY] - 1];
-        }
-        maxVal = max(val, maxVal);
+  int ans = 1;
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      if (grid[i][j] != 0)
+        continue;
+      int tmpArea = 1;
+      vector<bool> visited(mark, false);
+      for (int k = 0; k < 4; k++) {
+        int nextx = i + direction[k];
+        int nexty = j + direction[k + 1];
+        if (nextx < 0 || nextx >= grid.size() || nexty < 0 ||
+            nexty >= grid[0].size() || grid[nextx][nexty] == 0)
+          continue;
+        int tmp_mark = grid[nextx][nexty];
+        if (visited[tmp_mark])
+          continue;
+        visited[tmp_mark] = true;
+        tmpArea += mapInfo[tmp_mark];
+        ans = max(tmpArea, ans);
       }
     }
   }
-  return maxVal;
+  return ans;
 }
+
+// 一轮遍历，记录岛屿名称及其面积。二轮遍历，对任意'0'海水向四周拓展，如遇到岛屿即加上其面积。
+// 注意：全图均为陆地，在两轮遍历之间，作为特殊情况考虑。否则第二轮找不到海水0无输出。第二轮遍历中，需使用uset记录该岛屿是否以加过，否则易重复
 
 // 第一步，遍历所有岛，使用grid[i][j]=2\3\4..标记每个岛，计算每个岛的面积，存于unordered_map中
 // 第二步，对剩余每个gird[i][j]=0的海水结点，四周搜索是否由岛，如果有则加上岛屿面积。最终输出最大值
 // 注意：1.额外需要判断是否全为岛的变量；unordered_set记录每个0海水，周围的岛屿面积加过与否。故每一个0海水初始必须clear
-int dir[4][2] = {1, 0, -1, 0, 0, 1, 0, -1};
+int dir1[4][2] = {1, 0, -1, 0, 0, 1, 0, -1};
 int cnt1 = 0;
 void dfs1(vector<vector<int>>& grid,
           vector<vector<bool>>& visited,
@@ -96,8 +89,8 @@ void dfs1(vector<vector<int>>& grid,
   grid[x][y] = mark;
   cnt1++;
   for (int i = 0; i < 4; i++) {
-    int nextX = x + dir[i][0];
-    int nextY = y + dir[i][1];
+    int nextX = x + dir1[i][0];
+    int nextY = y + dir1[i][1];
     if (nextX < 0 || nextX >= grid.size() || nextY < 0 ||
         nextY >= grid[0].size())
       continue;
@@ -131,8 +124,8 @@ int largestIsland1(vector<vector<int>>& grid) {
         cnt1 = 1;
         visitedGrid.clear();  // 每次使用时必清空!
         for (int k = 0; k < 4; k++) {
-          int nextX = i + dir[k][0];
-          int nextY = j + dir[k][1];
+          int nextX = i + dir1[k][0];
+          int nextY = j + dir1[k][1];
           if (nextX < 0 || nextX >= grid.size() || nextY < 0 ||
               nextY >= grid[0].size())
             continue;
@@ -152,9 +145,14 @@ int main() {
   vector<vector<int>> grid1 = {{1, 0}, {0, 1}};
   vector<vector<int>> grid2 = {{1, 1}, {0, 1}};
   vector<vector<int>> grid3 = {{1, 1}, {1, 1}};
+  vector<vector<int>> grid4 = {{0, 0}, {0, 0}};
   cout << largestIsland(grid1) << " " << largestIsland(grid2) << " "
-       << largestIsland(grid3) << endl;
+       << largestIsland(grid3) << " " << largestIsland(grid4) << endl;
+  grid1 = {{1, 0}, {0, 1}};
+  grid2 = {{1, 1}, {0, 1}};
+  grid3 = {{1, 1}, {1, 1}};
+  grid4 = {{0, 0}, {0, 0}};
   cout << largestIsland1(grid1) << " " << largestIsland1(grid2) << " "
-       << largestIsland1(grid3) << endl;
+       << largestIsland1(grid3) << " " << largestIsland1(grid4) << endl;
   return 0;
 }
