@@ -23,12 +23,43 @@
   6 7 1
 输出示例：6 */
 
-int prim(vector<vector<int>>& grid, int V, int E) {
+int prim(vector<vector<int>>& grid, int V) {
+  vector<int> minDist(V + 1, 10001);
+  vector<bool> isInTree(V + 1, false);
+  vector<int> parent(V + 1, -1);
+  for (int i = 1; i < V; i++) {
+    int minVal = INT_MAX;
+    int cur = -1;
+    for (int j = 1; j <= V; j++) {
+      if (!isInTree[j] && minDist[j] < minVal) {
+        minVal = minDist[j];
+        cur = j;
+      }
+    }
+    isInTree[cur] = true;
+    for (int j = 1; j <= V; j++) {
+      if (!isInTree[j] && grid[cur][j] < minDist[j]) {
+        minDist[j] = grid[cur][j];
+        parent[j] = cur;
+      }
+    }
+  }
+  int ans;
+  for (int i = 2; i <= V; i++)
+    ans += minDist[i];
+
+  /*   for (int i = 1; i < parent.size(); i++)
+      std::cout << i << "->" << parent[i] << "\t";
+    std::cout << endl; */
+  return ans;
+}
+
+int prim1(vector<vector<int>>& grid, int V) {
   vector<int> minDist(V + 1, 10001);
   vector<bool> isInTree(V + 1, false);
   vector<int> parent(V + 1, -1);  // 一维数组记录边
-                                  // 从第一结点开始，循环V-1次
-  for (int i = 1; i < V; i++) {
+
+  for (int i = 1; i < V; i++) {  // 从第一结点开始，循环V-1次
     // 1. 选距最小生成树最近的结点，首轮必选结点1
     int cur = -1;
     int minVal = INT_MAX;
@@ -50,8 +81,8 @@ int prim(vector<vector<int>>& grid, int V, int E) {
     }
   }
   for (int i = 1; i < parent.size(); i++)
-    cout << i << "->" << parent[i] << "\t";
-  cout << endl;
+    std::cout << i << "->" << parent[i] << "\t";
+  std::cout << endl;
   // 收集最小生成树边的权值，不计第一个结点，因为只有其余v-1个边有值
   int ans = 0;
   for (int i = 2; i <= V; i++)
@@ -68,6 +99,8 @@ int main() {
   grid[3][4] = grid[4][3] = 1, grid[4][5] = grid[5][4] = 1;
   grid[5][6] = grid[6][5] = 2, grid[5][7] = grid[7][5] = 1;
   grid[6][7] = grid[7][6] = 1;
-  cout << prim(grid, V, E) << endl;
+  cout << prim(grid, V) << endl;
+  cout << prim1(grid, V) << endl;
+
   return 0;
 }

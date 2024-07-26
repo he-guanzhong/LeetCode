@@ -9,21 +9,22 @@
 给你数组 edges 和整数 n、source 和 destination，如果从 source 到 destination
 存在 有效路径 ，则返回 true，否则返回 false 。
 示例 1：
-输入：n = 3, edges = [[0,1],[1,2],[2,0]], source = 0, destination = 2
-输出：true
-解释：存在由顶点 0 到顶点 2 的路径:
-- 0 → 1 → 2
-- 0 → 2
+  输入：n = 3, edges = [[0,1],[1,2],[2,0]], source = 0, destination = 2
+  输出：true
+  解释：存在由顶点 0 到顶点 2 的路径:
+    - 0 → 1 → 2
+    - 0 → 2
 示例 2：
-输入：n = 6, edges = [[0,1],[0,2],[3,5],[5,4],[4,3]], source = 0, destination =
-5 输出：false 解释：不存在由顶点 0 到顶点 5 的路径.
- */
-
-// 并查集基础题目，题目中n无用。find()函数中最终返回的是父节点
-int m = 200001;
-int father[200001];
+  输入：n = 6, edges = [[0,1],[0,2],[3,5],[5,4],[4,3]], source = 0,
+        destination = 5
+  输出：false
+  解释：不存在由顶点 0 到顶点 5 的路径.
+提示：
+    1 <= n <= 2 * 105
+    0 <= edges.length <= 2 * 105*/
+int father[20005];
 void init() {
-  for (int i = 0; i < m; i++)
+  for (int i = 0; i < 20005; i++)
     father[i] = i;
 }
 int find(int u) {
@@ -39,10 +40,10 @@ void join(int u, int v) {
   v = find(v);
   if (u == v)
     return;
-  father[u] = v;
+  father[v] = u;
 }
 bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
-  // memset(father, 0, sizeof(father));
+  memset(father, 0, sizeof(father));
   init();
   for (int i = 0; i < edges.size(); i++) {
     join(edges[i][0], edges[i][1]);
@@ -50,6 +51,7 @@ bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
   return isSame(source, destination);
 }
 
+// 并查集基础题目，题目中n无用。find()函数中最终返回的是父节点
 // 无向图，可以使用并查集来判断是否联通。查并集标准题目。注意外部定义最大结点数
 // 对于每一个edges，将对应两个结点joint，最后判断起始两结点是否isSame
 // 结点总数，一定要外部定义，比最大的大一些即可。father要特殊初始化

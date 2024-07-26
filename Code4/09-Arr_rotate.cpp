@@ -2,24 +2,24 @@
 /* 189. 轮转数组
 给定一个整数数组 nums，将数组中的元素向右轮转 k 个位置，其中 k 是非负数。
 示例 1:
-输入: nums = [1,2,3,4,5,6,7], k = 3
-输出: [5,6,7,1,2,3,4]
-解释:
-向右轮转 1 步: [7,1,2,3,4,5,6]
-向右轮转 2 步: [6,7,1,2,3,4,5]
-向右轮转 3 步: [5,6,7,1,2,3,4]
+  输入: nums = [1,2,3,4,5,6,7], k = 3
+  输出: [5,6,7,1,2,3,4]
+  解释:
+    向右轮转 1 步: [7,1,2,3,4,5,6]
+    向右轮转 2 步: [6,7,1,2,3,4,5]
+    向右轮转 3 步: [5,6,7,1,2,3,4]
 示例 2:
-输入：nums = [-1,-100,3,99], k = 2
-输出：[3,99,-1,-100]
-解释:
-向右轮转 1 步: [99,-1,-100,3]
-向右轮转 2 步: [3,99,-1,-100] */
+  输入：nums = [-1,-100,3,99], k = 2
+  输出：[3,99,-1,-100]
+  解释:
+    向右轮转 1 步: [99,-1,-100,3]
+    向右轮转 2 步: [3,99,-1,-100] */
 
 void rotate(vector<int>& nums, int k) {
   k %= nums.size();
+  reverse(nums.begin(), nums.end() - k);
+  reverse(nums.end() - k, nums.end());
   reverse(nums.begin(), nums.end());
-  reverse(nums.begin(), nums.begin() + k);
-  reverse(nums.begin() + k, nums.end());
 }
 
 // 方法一，使用额外数组，原数组i向右移动k步，故在新数组的位置为(i+k)%n。使用assign函数将其赋值到原数组上。空间复杂度O(n)
@@ -38,6 +38,7 @@ void rotate2(vector<int>& nums, int k) {
   reverse(nums.begin(), nums.begin() + k);
   reverse(nums.begin() + k, nums.end());
 }
+
 int main() {
   vector<int> nums1{1, 2, 3, 4, 5, 6, 7}, nums2{-1, -100, 3, 99},
       nums3{1, -1, 0}, nums4{-1};
@@ -52,10 +53,10 @@ int main() {
   printVector(nums4);
   nums1 = {1, 2, 3, 4, 5, 6, 7}, nums2 = {-1, -100, 3, 99}, nums3 = {1, -1, 0},
   nums4 = {-1};
-  rotate1(nums1, k1);
-  rotate1(nums2, k2);
-  rotate1(nums3, k3);
-  rotate1(nums4, k4);
+  rotate2(nums1, k1);
+  rotate2(nums2, k2);
+  rotate2(nums3, k3);
+  rotate2(nums4, k4);
   printVector(nums1);
   printVector(nums2);
   printVector(nums3);

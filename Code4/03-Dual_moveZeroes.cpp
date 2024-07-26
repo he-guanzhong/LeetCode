@@ -4,19 +4,20 @@
 移动到数组的末尾，同时保持非零元素的相对顺序。 请注意
 ，必须在不复制数组的情况下原地对数组进行操作。
 示例 1:
-输入: nums = [0,1,0,3,12]
-输出: [1,3,12,0,0]
+  输入: nums = [0,1,0,3,12]
+  输出: [1,3,12,0,0]
 示例 2:
-输入: nums = [0]
-输出: [0] */
+  输入: nums = [0]
+  输出: [0] */
 
-// 推荐使用一次遍历快排，其次两次遍历
 void moveZeroes(vector<int>& nums) {
-  int j = 0;
+  int slow = 0;
   for (int i = 0; i < nums.size(); i++) {
     if (nums[i])
-      swap(nums[i], nums[j++]);
+      nums[slow++] = nums[i];
   }
+  for (int i = slow; i < nums.size(); i++)
+    nums[i] = 0;
 }
 
 // 方法一，快慢指针两次遍历。第一次，快指针如果指向不是0，就慢指针赋值并挪动。如此慢指针停到所有非0值的下一位，二次遍历，对之后的所有数赋0
@@ -40,6 +41,7 @@ void moveZeroes2(vector<int>& nums) {
   }
   return;
 }
+
 int main() {
   vector<int> nums1 = {0, 1, 0, 3, 12}, nums2 = {0}, nums3 = {};
   moveZeroes(nums1);

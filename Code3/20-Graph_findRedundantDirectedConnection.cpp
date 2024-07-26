@@ -10,30 +10,25 @@ n）的树及一条附加的有向边构成。附加的边包含在 1 到 n1
 返回一条能删除的边，使得剩下的图是有 n1
 个节点的有根树。若有多个答案，返回最后出现在给定二维数组的答案。
 示例 1：
-输入：edges = [[1,2],[1,3],[2,3]]
-输出：[2,3]
+  输入：edges = [[1,2],[1,3],[2,3]]
+  输出：[2,3]
 示例 2：
-输入：edges = [[1,2],[2,3],[3,4],[4,1],[1,5]]
-输出：[4,1]
+  输入：edges = [[1,2],[2,3],[3,4],[4,1],[1,5]]
+  输出：[4,1]
 提示：
     n == edges.length
     3 <= n <= 1000 */
 
-// 分三种情况。2入度的要看删除那条边成树。入度为0，必成环要删除成环边。故首先统计入度。倒序遍历所有边，记录其入度为2结点的下标，入vec
-// 若vec内不为空，则用一个函数，看删除vec[0]或vec[1]哪个可以成树，返回该下标对应边。若vec为空，则用一个函数，直接删除成环边。
-int m = 1003;
 int father[1003];
 void init() {
-  for (int i = 0; i < m; i++)
+  for (int i = 0; i < 1003; i++)
     father[i] = i;
 }
 int find(int u) {
   return father[u] == u ? u : father[u] = find(father[u]);
 }
 bool isSame(int u, int v) {
-  u = find(u);
-  v = find(v);
-  return u == v;
+  return find(u) == find(v);
 }
 void join(int u, int v) {
   u = find(u);
@@ -42,48 +37,50 @@ void join(int u, int v) {
     return;
   father[v] = u;
 }
-bool isTreeAfterRemoveEdge(vector<vector<int>>& edges, int deleteEdge) {
+bool isTreeAfterRemove(vector<vector<int>>& edges, int index) {
   init();
   for (int i = 0; i < edges.size(); i++) {
-    if (i == deleteEdge)
+    if (i == index)
       continue;
     if (isSame(edges[i][0], edges[i][1]))
       return false;
-    else
-      join(edges[i][0], edges[i][1]);
+    join(edges[i][0], edges[i][1]);
   }
   return true;
 }
-vector<int> getRemoveEdge(vector<vector<int>>& edges) {
+vector<int> checkLoop(vector<vector<int>>& edges) {
   init();
   for (int i = 0; i < edges.size(); i++) {
     if (isSame(edges[i][0], edges[i][1]))
-      return edges[i];
-    else
-      join(edges[i][0], edges[i][1]);
+      return {edges[i][0], edges[i][1]};
+    join(edges[i][0], edges[i][1]);
   }
   return {};
 }
 vector<int> findRedundantDirectedConnection(vector<vector<int>>& edges) {
-  static int N = 1003;
-  /*   int inDeg[N];
-    memset(inDeg, 0, sizeof(inDeg)); */
-  vector<int> inDeg(N, 0);
-  for (int i = 0; i < edges.size(); i++)
-    inDeg[edges[i][1]]++;
-  vector<int> vec;
+  // 统计入度
+  vector<int> inDeg(1003, 0);
+  for (vector<int> edge : edges) {
+    inDeg[edge[1]]++;
+  }
+  vector<int> vec;  // 倒序统计所有导致入度为2结点的边
   for (int i = edges.size() - 1; i >= 0; i--) {
     if (inDeg[edges[i][1]] == 2)
       vec.push_back(i);
   }
-  if (!vec.empty()) {
-    if (isTreeAfterRemoveEdge(edges, vec[0]))
+  if (vec.size()) {
+    if (isTreeAfterRemove(edges, vec[0]))
       return edges[vec[0]];
     else
       return edges[vec[1]];
   }
-  return getRemoveEdge(edges);
+
+  return checkLoop(edges);
 }
+
+// 分三种情况。2入度的要看删除那条边成树。入度为0，必成环要删除成环边。故首先统计入度。倒序遍历所有边，记录其入度为2结点的下标，入vec
+// 若vec内不为空，则用一个函数，看删除vec[0]或vec[1]哪个可以成树，返回该下标对应边。若vec为空，则用一个函数，直接删除成环边。
+
 // 对于有向图，想改树，必先遍历所有边的第二个数值，统计每个结点的入度。
 // 遍历所有边，找到入度为2的结点。记录边下标。此过程必反向遍历，因为最后要删除的边，如此可在vec的头两位记录与之相连边号
 // 如果存在入度为2的结点，判断其第一边，或第二边，删除后可成树与否。如是，返回该边
@@ -151,6 +148,7 @@ vector<int> findRedundantDirectedConnection1(vector<vector<int>>& edges) {
   }
   return getRemoveEdge1(edges);
 }
+
 int main() {
   vector<vector<int>> edges1 = {{1, 2}, {1, 3}, {2, 3}};
   vector<vector<int>> edges2 = {{1, 2}, {2, 3}, {3, 4}, {4, 1}, {1, 5}};
