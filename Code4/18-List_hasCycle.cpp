@@ -7,18 +7,17 @@
 。仅仅是为了标识链表的实际情况。
 如果链表中存在环 ，则返回 true 。 否则，返回 false 。
 示例 1：
-输入：head = [3,2,0,-4], pos = 1
-输出：true
-解释：链表中有一个环，其尾部连接到第二个节点。
+  输入：head = [3,2,0,-4], pos = 1
+  输出：true
+  解释：链表中有一个环，其尾部连接到第二个节点。
 示例 2：
-输入：head = [1,2], pos = 0
-输出：true
-解释：链表中有一个环，其尾部连接到第一个节点。
+  输入：head = [1,2], pos = 0
+  输出：true
+  解释：链表中有一个环，其尾部连接到第一个节点。
 示例 3：
-输入：head = [1], pos = -1
-输出：false
-解释：链表中没有环。
-*/
+  输入：head = [1], pos = -1
+  输出：false
+  解释：链表中没有环。 */
 
 bool hasCycle(ListNode* head) {
   ListNode *p = head, *q = head;
@@ -44,12 +43,24 @@ bool hasCycle1(ListNode* head) {
     return false;
   ListNode* fast = head->next;
   ListNode* slow = head;
-  while (fast && fast->next && fast != slow) {
+  while (fast != slow) {
     if (!fast || !fast->next)
       return false;
     fast = fast->next->next;
     slow = slow->next;
   }
+  return true;
+}
+
+// do_while语句经典范例
+bool hasCycle2(ListNode* head) {
+  ListNode *fast = head, *slow = head;
+  do {
+    if (!fast || !fast->next)
+      return false;
+    fast = fast->next->next;
+    slow = slow->next;
+  } while (fast != slow);
   return true;
 }
 

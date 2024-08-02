@@ -3,16 +3,44 @@
 给你一个单链表的头节点 head ，请你判断该链表是否为回文链表。如果是，返回 true
 ；否则，返回 false 。
 示例 1：
-输入：head = [1,2,2,1]
-输出：true
+  输入：head = [1,2,2,1]
+  输出：true
 示例 2：
-输入：head = [1,2]
-输出：false
-*/
+  输入：head = [1,2]
+  输出：false */
+
+ListNode* reverseList(ListNode* head) {
+  ListNode *p = head, *pre = nullptr;
+  while (p) {
+    ListNode* tmp = p->next;
+    p->next = pre;
+    pre = p;
+    p = tmp;
+  }
+  return pre;
+}
+bool isPalindrome(ListNode* head) {
+  if (!head || !head->next)
+    return true;
+  ListNode *p = head, *q = head;
+  while (p && p->next) {
+    p = p->next->next;
+    q = q->next;
+  }
+  p = head;
+  q = reverseList(q);
+  while (p && q) {
+    if (p->val != q->val)
+      return false;
+    p = p->next;
+    q = q->next;
+  }
+  return true;
+}
 
 // 空间复杂度O(1)算法。辅助函数一，快慢指针找链表中心点（偶数为左，奇数为正中）。辅助函数二，反转链表，代价是将原链表中间截断。
 // 利用链表中心点，保存第一段结尾，第二段反转后的开头。p\q分别指向第一、第二段开始，逐位val比较。结束后，第一段结尾指向再次反转后的第二段开头，恢复链表原始形态。
-ListNode* endOfFirstHalf(ListNode* head) {
+ListNode* endOfFirstHalf1(ListNode* head) {
   ListNode *fast = head, *slow = head;
   while (fast->next && fast->next->next) {
     fast = fast->next->next;
@@ -20,7 +48,7 @@ ListNode* endOfFirstHalf(ListNode* head) {
   }
   return slow;
 }
-ListNode* reverseList(ListNode* head) {
+ListNode* reverseList1(ListNode* head) {
   ListNode *pre = nullptr, *p = head;
   while (p) {
     ListNode* q = p->next;
@@ -31,11 +59,11 @@ ListNode* reverseList(ListNode* head) {
   return pre;
 }
 
-bool isPalindrome(ListNode* head) {
+bool isPalindrome1(ListNode* head) {
   if (!head || !head->next)
     return true;
-  ListNode* firstEnd = endOfFirstHalf(head);
-  ListNode* SecondStart = reverseList(firstEnd->next);
+  ListNode* firstEnd = endOfFirstHalf1(head);
+  ListNode* SecondStart = reverseList1(firstEnd->next);
   ListNode* p = head;
   ListNode* q = SecondStart;
   while (q) {
@@ -44,12 +72,12 @@ bool isPalindrome(ListNode* head) {
     p = p->next;
     q = q->next;
   }
-  firstEnd->next = reverseList(SecondStart);
+  firstEnd->next = reverseList1(SecondStart);
   return true;
 }
 
 // 转化为数组，双指针法判断是否回文，空间复杂度O(n)
-bool isPalindrome1(ListNode* head) {
+bool isPalindrome2(ListNode* head) {
   vector<int> vec;
   ListNode* p = head;
   while (p) {
@@ -71,6 +99,9 @@ int main() {
   ListNode* l3 = createList(v3);
   cout << isPalindrome(l1) << " " << isPalindrome(l2) << " " << isPalindrome(l3)
        << endl;
+  l1 = createList(v1);
+  l2 = createList(v2);
+  l3 = createList(v3);
   cout << isPalindrome1(l1) << " " << isPalindrome1(l2) << " "
        << isPalindrome1(l3) << endl;
   return 0;
