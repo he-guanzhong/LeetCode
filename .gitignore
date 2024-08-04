@@ -1,9 +1,10 @@
 # Folders
+/.vscode/
 /cpp/
 /cpp_old/
 /DataStructure/
 /LeetCode/
-.vscode/
+
 
 # Prerequisites
 *.d
