@@ -14,28 +14,26 @@
 给你一个整数数组 nums ，找出 nums 的下一个排列。
 必须 原地 修改，只允许使用额外常数空间。
 示例 1：
-输入：nums = [1,2,3]
-输出：[1,3,2]
+  输入：nums = [1,2,3]
+  输出：[1,3,2]
 示例 2：
-输入：nums = [3,2,1]
-输出：[1,2,3]
+  输入：nums = [3,2,1]
+  输出：[1,2,3]
 示例 3：
-输入：nums = [1,1,5]
-输出：[1,5,1] */
+  输入：nums = [1,1,5]
+  输出：[1,5,1] */
 
 void nextPermutation(vector<int>& nums) {
-  int i = nums.size() - 2;
-  while (i >= 0 && nums[i] >= nums[i + 1])
-    i--;
-  if (i == -1) {
-    reverse(nums.begin(), nums.end());
-    return;
+  for (int i = nums.size() - 1; i >= 0; i--) {
+    for (int j = nums.size() - 1; j > i; j--) {
+      if (nums[j] > nums[i]) {
+        swap(nums[i], nums[j]);
+        reverse(nums.begin() + i + 1, nums.end());
+        return;
+      }
+    }
   }
-  int j = nums.size() - 1;
-  while (j > i && nums[j] <= nums[i])
-    j--;
-  swap(nums[i], nums[j]);
-  reverse(nums.begin() + i, nums.end());
+  reverse(nums.begin(), nums.end());
 }
 
 // 不要使用回溯全排列。实质是找组成整数紧接着更大的一个。第一步，从后向前，找第一个有序数对a[i]<a[i+1]。具体操作是先初始化i=n-2，如果a[i]>=a[i+1]就不断前移
@@ -53,7 +51,22 @@ void nextPermutation1(vector<int>& nums) {
   }
   reverse(nums.begin() + i + 1, nums.end());
 }
+
+// 数组是中间高两边低的尖峰型，核心是找到第一个左侧nums[i]小于右侧nums[j]的对，二者置换，然后对置换后[i+1,n]区间反转重排
 void nextPermutation2(vector<int>& nums) {
+  for (int i = nums.size() - 1; i >= 0; i--) {
+    for (int j = nums.size() - 1; j > i; j--) {
+      if (nums[j] > nums[i]) {
+        swap(nums[i], nums[j]);
+        reverse(nums.begin() + i + 1, nums.end());
+        return;
+      }
+    }
+  }
+  reverse(nums.begin(), nums.end());
+}
+
+void nextPermutation3(vector<int>& nums) {
   next_permutation(nums.begin(), nums.end());
 }
 

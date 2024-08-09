@@ -4,26 +4,30 @@
 的子数组的个数 。
 子数组是数组中元素的连续非空序列。
 示例 1：
-输入：nums = [1,1,1], k = 2
-输出：2
+  输入：nums = [1,1,1], k = 2
+  输出：2
 示例 2：
-输入：nums = [1,2,3], k = 3
-输出：2  */
+  输入：nums = [1,2,3], k = 3
+  输出：2
+提示：
+    1 <= nums.length <= 2 * 104
+    -1000 <= nums[i] <= 1000
+    -107 <= k <= 107  */
 
 int subarraySum(vector<int>& nums, int k) {
-  int pre = 0, ans = 0;
+  int ans = 0, sum = 0;
   unordered_map<int, int> umap;
   umap[0] = 1;
-  for (int& num : nums) {
-    pre += num;
-    if (umap.count(pre - k))
-      ans += umap[pre - k];
-    umap[pre]++;
+  for (int i = 0; i < nums.size(); i++) {
+    sum += nums[i];
+    if (umap.count(sum - k) > 0)
+      ans += umap[sum - k];
+    umap[sum]++;
   }
   return ans;
 }
 
-// 前缀和+哈希表。pre记录[0,i]连续数组和，核心是pre[i]-pre[j]==k的判断。umap键为某连续数组和，值为该和出现次数。初始化和为0数组次数为i。
+// 前缀和+哈希表。pre记录[0,i]连续数组和，核心是pre[i]-pre[j]==k的判断。umap键为某连续数组和，值为该和出现次数。初始化和为0数组次数为1。
 // 寻找pre[i]-k的值，之前是否出现过，若有，就叠加上其出现的次数。最后，记录当前pre[i]出现次数+1
 int subarraySum1(vector<int>& nums, int k) {
   unordered_map<int, int> umap;
@@ -53,11 +57,14 @@ int subarraySum2(vector<int>& nums, int k) {
 }
 
 int main() {
-  vector<int> nums1{1, 1, 1}, nums2{1, 2, 3}, nums3{1, -1, 0};
-  int k1 = 2, k2 = 3, k3 = 0;
+  vector<int> nums1{1, 1, 1}, nums2{1, 2, 3}, nums3{1, -1, 0}, nums4{-1, -1, 1},
+      nums5{1, 2, 1, 2, 1};
+  int k1 = 2, k2 = 3, k3 = 0, k4 = 0, k5 = 3;
   cout << subarraySum(nums1, k1) << " " << subarraySum(nums2, k2) << " "
-       << subarraySum(nums3, k3) << endl;
+       << subarraySum(nums3, k3) << " " << subarraySum(nums4, k4) << " "
+       << subarraySum(nums5, k5) << endl;
   cout << subarraySum1(nums1, k1) << " " << subarraySum1(nums2, k2) << " "
-       << subarraySum1(nums3, k3) << endl;
+       << subarraySum1(nums3, k3) << " " << subarraySum1(nums4, k4) << " "
+       << subarraySum1(nums5, k5) << endl;
   return 0;
 }

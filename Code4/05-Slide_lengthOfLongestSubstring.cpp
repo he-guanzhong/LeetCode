@@ -2,27 +2,29 @@
 /* 3. 无重复字符的最长子串
 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
 示例 1:
-输入: s = "abcabcbb"
-输出: 3
-解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+  输入: s = "abcabcbb"
+  输出: 3
+  解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
 示例 2:
-输入: s = "bbbbb"
-输出: 1
-解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+  输入: s = "bbbbb"
+  输出: 1
+  解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
 示例 3:
-输入: s = "pwwkew"
-输出: 3
-解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
+  输入: s = "pwwkew"
+  输出: 3
+  解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
      请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。  */
 
 int lengthOfLongestSubstring(string s) {
-  unordered_set<char> uset;
-  int ans = 0;
+  unordered_set<int> uset;
   int j = 0;
+  int ans = 0;
   for (int i = 0; i < s.size(); i++) {
-    while (uset.count(s[i])) {
-      uset.erase(s[j]);
-      j++;
+    if (uset.count(s[i]) > 0) {
+      while (uset.count(s[i])) {
+        uset.erase(s[j]);
+        j++;
+      }
     }
     uset.insert(s[i]);
     ans = max(ans, i - j + 1);
@@ -30,8 +32,8 @@ int lengthOfLongestSubstring(string s) {
   return ans;
 }
 
-// 滑动窗口，核心是保证窗口内uset内无重复元素。遍历控制右指针i，并将元素加入uset。
-// 只要新s[i]出现过在uset内，就不断弹出左指针元素j，并移动左指针,直至uset内没有新s[i]为止。
+// 滑动窗口，核心是保证窗口内无重复元素，应使用集合uset。遍历控制右指针i。
+// 只要新s[i]在uset内出现过，就不断弹出左指针元素j，并移动左指针，直至uset内没有即将重新入列的新s[i]为止，新元素加入uset后，计算此时字串长度。
 int lengthOfLongestSubstring1(string s) {
   unordered_set<char> uset;
   int j = 0;

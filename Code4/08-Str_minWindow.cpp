@@ -6,46 +6,45 @@
     对于 t 中重复字符，我们寻找的子字符串中该字符数量必须不少于 t 中该字符数量。
     如果 s 中存在这样的子串，我们保证它是唯一的答案。
 示例 1：
-输入：s = "ADOBECODEBANC", t = "ABC"
-输出："BANC"
-解释：最小覆盖子串 "BANC" 包含来自字符串 t 的 'A'、'B' 和 'C'。
+  输入：s = "ADOBECODEBANC", t = "ABC"
+  输出："BANC"
+  解释：最小覆盖子串 "BANC" 包含来自字符串 t 的 'A'、'B' 和 'C'。
 示例 2：
-输入：s = "a", t = "a"
-输出："a"
-解释：整个字符串 s 是最小覆盖子串。
+  输入：s = "a", t = "a"
+  输出："a"
+  解释：整个字符串 s 是最小覆盖子串。
 示例 3:
-输入: s = "a", t = "aa"
-输出: ""
-解释: t 中两个字符 'a' 均应包含在 s 的子串中，
-因此没有符合条件的子字符串，返回空字符串。 */
+  输入: s = "a", t = "aa"
+  输出: ""
+  解释: t 中两个字符 'a' 均应包含在 s 的子串中，
+    因此没有符合条件的子字符串，返回空字符串。 */
 
-unordered_map<char, int> ori, cnt;
-bool check() {
-  for (auto i : ori) {
-    if (i.second > cnt[i.first])
+bool isCover(unordered_map<char, int>& smap, unordered_map<char, int>& tmap) {
+  for (auto t : tmap) {
+    if (smap[t.first] < t.second)
       return false;
   }
   return true;
 }
 string minWindow(string s, string t) {
+  unordered_map<char, int> tmap;
   for (char c : t)
-    ori[c]++;
-  int left = 0, right = -1;
-  int ansL = -1, len = INT_MAX;
-  while (right < (int)s.size()) {
-    if (ori.count(s[++right]))
-      cnt[s[right]]++;
-    while (check() && left <= right) {
-      if (right - left + 1 < len) {
-        len = right - left + 1;
-        ansL = left;
+    tmap[c]++;
+  unordered_map<char, int> smap;
+  int j = 0, len = INT_MAX, index = 0;
+  for (int i = 0; i < s.size(); i++) {
+    smap[s[i]]++;
+    while (isCover(smap, tmap)) {
+      if (i - j + 1 < len) {
+        len = i - j + 1;
+        index = j;
       }
-      if (ori.count(s[left]))
-        cnt[s[left]]--;
-      left++;
+      if (--smap[s[j]] == 0)
+        smap.erase(s[j]);
+      j++;
     }
   }
-  return ansL == -1 ? string() : s.substr(ansL, len);
+  return len == INT_MAX ? "" : s.substr(index, len);
 }
 
 // 判断函数，对于origin内每个元素，检测其数量是否大于滑动窗口中元素数量。是即为假，左指针可以不移动了

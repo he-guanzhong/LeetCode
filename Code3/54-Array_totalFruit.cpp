@@ -11,30 +11,44 @@
 一旦你走到某棵树前，但水果不符合篮子的水果类型，那么就必须停止采摘。
 给你一个整数数组 fruits ，返回你可以收集的水果的 最大 数目。
 示例 1：
-输入：fruits = [1,2,1]
-输出：3
-解释：可以采摘全部 3 棵树。
+  输入：fruits = [1,2,1]
+  输出：3
+  解释：可以采摘全部 3 棵树。
 示例 2：
-输入：fruits = [0,1,2,2]
-输出：3
-解释：可以采摘 [1,2,2] 这三棵树。
-如果从第一棵树开始采摘，则只能采摘 [0,1] 这两棵树。
+  输入：fruits = [0,1,2,2]
+  输出：3
+  解释：可以采摘[1,2,2]这三棵树。如果从第一棵树开始采摘，则只能采摘[0,1]这两棵树。
 示例 3：
-输入：fruits = [1,2,3,2,2]
-输出：4
-解释：可以采摘 [2,3,2,2] 这四棵树。
-如果从第一棵树开始采摘，则只能采摘 [1,2] 这两棵树。
+  输入：fruits = [1,2,3,2,2]
+  输出：4
+  解释：可以采摘[2,3,2,2]这四棵树。如果从第一棵树开始采摘，则只能采摘[1,2]这两棵树。
 示例 4：
-输入：fruits = [3,3,3,1,2,1,1,2,3,3,4]
-输出：5
-解释：可以采摘 [1,2,1,1,2] 这五棵树。
+  输入：fruits = [3,3,3,1,2,1,1,2,3,3,4]
+  输出：5
+  解释：可以采摘 [1,2,1,1,2] 这五棵树。
 提示：
-1 <= fruits.length <= 105
-0 <= fruits[i] < fruits.length*/
+  1 <= fruits.length <= 105
+  0 <= fruits[i] < fruits.length*/
+
+int totalFruit(vector<int>& fruits) {
+  unordered_map<int, int> umap;
+  int j = 0, ans = 0;
+  for (int i = 0; i < fruits.size(); i++) {
+    umap[fruits[i]]++;
+    while (umap.size() > 2) {
+      umap[fruits[j]]--;
+      if (umap[fruits[j]] == 0)
+        umap.erase(fruits[j]);
+      j++;
+    }
+    ans = max(ans, i - j + 1);
+  }
+  return ans;
+}
 
 // 左右指针记录滑动窗口大小，哈希表size为篮中物品种类数量，键为物品号，值为物品数量。右指针遍历过程中，同时增加新物品种类、数量
 // 若篮中物品超过两种，则对左指针记录物品数量减一，直至数量为0，哈希表清除该物品。最终返回结果是，左右指针能记录的书品总数量
-int totalFruit(vector<int>& fruits) {
+int totalFruit1(vector<int>& fruits) {
   int ans = 0;
   unordered_map<int, int> umap;
   int j = 0;
@@ -57,6 +71,7 @@ int main() {
               fruit4 = {3, 3, 3, 1, 2, 1, 1, 2, 3, 3, 4};
   cout << totalFruit(fruit1) << " " << totalFruit(fruit2) << " "
        << totalFruit(fruit3) << " " << totalFruit(fruit4) << endl;
-
+  cout << totalFruit1(fruit1) << " " << totalFruit1(fruit2) << " "
+       << totalFruit1(fruit3) << " " << totalFruit1(fruit4) << endl;
   return 0;
 }
