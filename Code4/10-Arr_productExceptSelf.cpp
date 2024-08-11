@@ -6,23 +6,23 @@
 整数范围内。
 请 不要使用除法，且在 O(n) 时间复杂度内完成此题。
 示例 1:
-输入: nums = [1,2,3,4]
-输出: [24,12,8,6]
+  输入: nums = [1,2,3,4]
+  输出: [24,12,8,6]
 示例 2:
-输入: nums = [-1,1,0,-3,3]
-输出: [0,0,9,0,0]*/
+  输入: nums = [-1,1,0,-3,3]
+  输出: [0,0,9,0,0]*/
 
 vector<int> productExceptSelf(vector<int>& nums) {
-  vector<int> left(nums.size(), 1);
+  vector<int> ans(nums.size(), 1);
   for (int i = 1; i < nums.size(); i++) {
-    left[i] = left[i - 1] * nums[i - 1];
+    ans[i] = ans[i - 1] * nums[i - 1];
   }
-  int right = nums[nums.size() - 1];
-  for (int i = nums.size() - 2; i >= 0; i--) {
-    left[i] *= right;
+  int right = 1;
+  for (int i = nums.size() - 1; i >= 0; i--) {
+    ans[i] *= right;
     right *= nums[i];
   }
-  return left;
+  return ans;
 }
 
 // 类似双指针接雨水，两个数组两次遍历，分别保存i处，左侧所有元素乘积，和右侧所有元素乘积。再次遍历，求每个位置左右积之积

@@ -17,9 +17,9 @@
 
 void rotate(vector<int>& nums, int k) {
   k %= nums.size();
-  reverse(nums.begin(), nums.end() - k);
-  reverse(nums.end() - k, nums.end());
   reverse(nums.begin(), nums.end());
+  reverse(nums.begin(), nums.begin() + k);
+  reverse(nums.begin() + k, nums.end());
 }
 
 // 方法一，使用额外数组，原数组i向右移动k步，故在新数组的位置为(i+k)%n。使用assign函数将其赋值到原数组上。空间复杂度O(n)
