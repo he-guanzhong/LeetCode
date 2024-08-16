@@ -101,7 +101,6 @@ class LRUCache {
 
 // 哈希表+双向链表。双向链表记录访问优先级，访问过就置首，内部要同时记录key和value，以便四个辅助函数删除结点、新增结点到头部，移动结点到头部。删除末尾结点
 // 删除末尾结点需要返回值，其key用于哈希表删除。构造函数初始化，要初始化虚拟头、尾结点，并将其链接。同时更新容量capacity
-
 class LRUCache1 {
  public:
   LRUCache1(int _capacity) {

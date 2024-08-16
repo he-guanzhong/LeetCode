@@ -15,30 +15,37 @@ random_index] 表示：
 n-1）；如果不指向任何节点，则为  null 。
 你的代码 只 接受原链表的头节点 head 作为传入参数。
 示例 1：
-输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
-输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]
+  输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
+  输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]
 示例 2：
-输入：head = [[1,1],[2,1]]
-输出：[[1,1],[2,1]]
+  输入：head = [[1,1],[2,1]]
+  输出：[[1,1],[2,1]]
 示例 3：
-输入：head = [[3,null],[3,0],[3,null]]
-输出：[[3,null],[3,0],[3,null]] */
+  输入：head = [[3,null],[3,0],[3,null]]
+  输出：[[3,null],[3,0],[3,null]]
+提示：
+    0 <= n <= 1000
+    -104 <= Node.val <= 104
+    Node.random 为 null 或指向链表中的节点。*/
 
 Node* copyRandomList(Node* head) {
+  if (!head)
+    return nullptr;
+  Node* q = head;
   for (Node* p = head; p; p = p->next->next) {
-    Node* q = new Node(p->val);
-    q->next = p->next;
-    p->next = q;
+    q = p->next;
+    p->next = new Node(p->val);
+    p->next->next = q;
   }
   for (Node* p = head; p; p = p->next->next) {
-    Node* q = p->next;
+    q = p->next;
     q->random = p->random ? p->random->next : nullptr;
   }
   Node* newHead = head->next;
   for (Node* p = head; p; p = p->next) {
-    Node* q = p->next;
+    q = p->next;
     p->next = q->next;
-    q->next = q->next ? q->next->next : nullptr;
+    q->next = p->next ? p->next->next : nullptr;
   }
   return newHead;
 }
@@ -84,6 +91,8 @@ Node* copyRandomList1(Node* head) {
 }
 
 void printNode(Node* head) {
+  if (!head)
+    cout << "nullptr";
   while (head) {
     cout << head->val << " [" << head->next << ", " << head->random
          << "]    \t";
@@ -91,6 +100,7 @@ void printNode(Node* head) {
   }
   cout << endl;
 }
+
 int main() {
   Node* p1 = new Node(1);
   Node* p2 = new Node(2);

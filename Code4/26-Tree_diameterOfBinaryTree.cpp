@@ -5,25 +5,27 @@
 。这条路径可能经过也可能不经过根节点 root 。
 两节点之间路径的 长度 由它们之间边数表示。
 示例 1：
-输入：root = [1,2,3,4,5]
-输出：3
-解释：3 ，取路径 [4,2,1,3] 或 [5,2,1,3] 的长度。
+  输入：root = [1,2,3,4,5]
+  输出：3
+  解释：3 ，取路径 [4,2,1,3] 或 [5,2,1,3] 的长度。
 示例 2：
-输入：root = [1,2]
-输出：1 */
+  输入：root = [1,2]
+  输出：1 */
 
-int depth(TreeNode* root, int& ans) {
+int helper(TreeNode* root, int& ans) {
   if (!root)
     return 0;
-  int l = depth(root->left, ans);
-  int r = depth(root->right, ans);
-  ans = max(ans, l + r + 1);
-  return max(l, r) + 1;
+  if (!root->left && !root->right)
+    return 1;
+  int left = helper(root->left, ans);
+  int right = helper(root->right, ans);
+  ans = max(ans, left + right);
+  return max(left, right) + 1;
 }
 int diameterOfBinaryTree(TreeNode* root) {
   int ans = 0;
-  depth(root, ans);
-  return ans - 1;
+  helper(root, ans);
+  return ans;
 }
 
 // 辅助函数返回值为该点深度，若将高度定义为，一个结点也为1。则其为左、右孩子深度最大者+1。最长路径值为其路径上结点数-1，而结点数等于左、右深度之和再+1

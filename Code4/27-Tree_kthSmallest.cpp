@@ -1,19 +1,20 @@
 #include "head.h"
-#define null -1
 /* 230. 二叉搜索树中第K小的元素
 给定一个二叉搜索树的根节点 root ，和一个整数 k ，请你设计一个算法查找其中第 k
 个最小元素（从 1 开始计数）。
 示例 1：
-输入：root = [3,1,4,null,2], k = 1
-输出：1
+  输入：root = [3,1,4,null,2], k = 1
+  输出：1
 示例 2：
-输入：root = [5,3,6,2,4,null,null,1], k = 3
-输出：3 */
+  输入：root = [5,3,6,2,4,null,null,1], k = 3
+  输出：3
+进阶：如果二叉搜索树经常被修改（插入/删除操作）并且你需要频繁地查找第 k
+  小的值，你将如何优化算法？*/
 
 int kthSmallest(TreeNode* root, int k) {
   TreeNode* cur = root;
   stack<TreeNode*> st;
-  while (!st.empty() || cur) {
+  while (st.size() || cur) {
     if (cur) {
       st.push(cur);
       cur = cur->left;
@@ -21,11 +22,11 @@ int kthSmallest(TreeNode* root, int k) {
       cur = st.top();
       st.pop();
       if (--k == 0)
-        return cur->val;
+        break;
       cur = cur->right;
     }
   }
-  return 0;
+  return cur->val;
 }
 
 // 二叉搜索树性质，中序遍历，使用迭代法可不遍历整棵树。处理结点方式为k--，一旦k==0即停止，不必向右转移。此时cur即指向第k个最小元素

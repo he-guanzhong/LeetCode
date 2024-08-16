@@ -5,39 +5,39 @@ k 是一个正整数，它的值小于或等于链表的长度。如果节点总
 的整数倍，那么请将最后剩余的节点保持原有顺序。
 你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。
 示例 1：
-输入：head = [1,2,3,4,5], k = 2
-输出：[2,1,4,3,5]
+  输入：head = [1,2,3,4,5], k = 2
+  输出：[2,1,4,3,5]
 示例 2：
-输入：head = [1,2,3,4,5], k = 3
-输出：[3,2,1,4,5] */
+  输入：head = [1,2,3,4,5], k = 3
+  输出：[3,2,1,4,5] */
 
-ListNode* reverse(ListNode* head, ListNode* tail) {
-  ListNode* pre = nullptr;
-  ListNode* p = head;
-  while (pre != tail) {
-    ListNode* q = p->next;
+pair<ListNode*, ListNode*> reverseList(ListNode* head, ListNode* tail) {
+  ListNode *p = head, *pre = nullptr, *tmp = nullptr;
+  ListNode* tar = tail->next;
+  while (p != tar) {
+    tmp = p->next;
     p->next = pre;
     pre = p;
-    p = q;
+    p = tmp;
   }
-  return pre;
+  // cout << "in: " << pre->val << " " << head->val << endl;
+  return {pre, head};
 }
 ListNode* reverseKGroup(ListNode* head, int k) {
-  ListNode* dummy = new ListNode(0);
-  dummy->next = head;
-  ListNode* before = dummy;
-  ListNode* p = dummy;
+  ListNode* dummy = new ListNode(-1, head);
+  ListNode *p = dummy, *pre = dummy;
   while (p) {
-    for (int i = 0; i < k && p; i++)
+    for (int i = 0; i < k; i++) {
       p = p->next;
-    if (p) {
-      ListNode* after = p->next;
-      before->next = reverse(before->next, p);
-      for (int j = 0; j < k; j++)
-        before = before->next;
-      before->next = after;
-      p = before;
+      if (!p || !p->next)
+        return dummy->next;
     }
+    ListNode* newStart = p->next;
+    tie(head, p) = reverseList(head, p);
+    pre->next = head;
+    p->next = newStart;
+    pre = p;
+    head = p->next;
   }
   return dummy->next;
 }

@@ -2,14 +2,15 @@
 /* 148. 排序链表
 给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。
 示例 1：
-输入：head = [4,2,1,3]
-输出：[1,2,3,4]
+  输入：head = [4,2,1,3]
+  输出：[1,2,3,4]
 示例 2：
-输入：head = [-1,5,3,4,0]
-输出：[-1,0,3,4,5]
+  输入：head = [-1,5,3,4,0]
+  输出：[-1,0,3,4,5]
 示例 3：
-输入：head = []
-输出：[]  */
+  输入：head = []
+  输出：[]
+进阶：你可以在 O(n log n) 时间复杂度和常数级空间复杂度下，对链表进行排序吗？ */
 
 ListNode* merge(ListNode* l1, ListNode* l2) {
   ListNode* dummy = new ListNode(-1);
@@ -27,41 +28,19 @@ ListNode* merge(ListNode* l1, ListNode* l2) {
   p->next = l1 ? l1 : l2;
   return dummy->next;
 }
-
 ListNode* sortList(ListNode* head) {
   if (!head || !head->next)
     return head;
-  ListNode* dummy = new ListNode(-1, head);
-  ListNode* p = head;
-  int len = 0;
-  while (p) {
-    p = p->next;
-    len++;
+  ListNode *fast = head, *slow = head;
+  while (fast->next && fast->next->next) {
+    fast = fast->next->next;
+    slow = slow->next;
   }
-  for (int subLen = 1; subLen < len; subLen *= 2) {
-    ListNode* pre = dummy;
-    p = dummy->next;
-    while (p) {
-      ListNode* head1 = p;
-      for (int i = 1; i < subLen && p->next; i++)
-        p = p->next;
-      ListNode* head2 = p->next;
-      p->next = nullptr;
-      p = head2;
-      for (int i = 1; i < subLen && p && p->next; i++)
-        p = p->next;
-      ListNode* rest = nullptr;
-      if (p) {
-        rest = p->next;
-        p->next = nullptr;
-      }
-      pre->next = merge(head1, head2);
-      while (pre->next)
-        pre = pre->next;
-      p = rest;
-    }
-  }
-  return dummy->next;
+  ListNode *head1 = head, *head2 = slow->next;
+  slow->next = nullptr;
+  head1 = sortList(head1);
+  head2 = sortList(head2);
+  return merge(head1, head2);
 }
 
 // 推荐自底向上归并排序，时间复杂度O(nlogn)空间复杂度O(1)。排除空指针后，先求链表总长度。设置虚拟头指针，将链表分为subLen从1到总长,以2的倍数遍历一遍.
@@ -123,7 +102,7 @@ ListNode* sortList1(ListNode* head) {
 
 // 题目要求时间复杂度O(nlogn)，使用递归分治+合并有序链表方法。从上至下将链表按中央切割，分别对左右两半排序，再用merge函数链接。
 // 递归函数的传参为链表片段的[head,tail)。退出条件为head为空，或head至tail仅有一个结点。必须先断开head->next的联系,再返回head。
-// 快慢指针找中心点。终止条件fast==tail，因为是右开区间。快慢先走一步，如果可能，快再走一步。慢指针为分割点。
+// 快慢指针找中心点。终止条件fast==tail，因为是右开区间。快慢先走一步，如果可能，快再走一步。慢指针为分割点。但此方法空间复杂度为logN
 ListNode* sortList2(ListNode* head, ListNode* tail) {
   if (head == nullptr)
     return head;

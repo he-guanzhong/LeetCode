@@ -3,23 +3,23 @@
 给你一个链表数组，每个链表都已经按升序排列。
 请你将所有链表合并到一个升序链表中，返回合并后的链表。
 示例 1：
-输入：lists = [[1,4,5],[1,3,4],[2,6]]
-输出：[1,1,2,3,4,4,5,6]
-解释：链表数组如下：
-[  1->4->5,
-  1->3->4,
-  2->6 ]
-将它们合并到一个有序链表中得到。
-1->1->2->3->4->4->5->6
+  输入：lists = [[1,4,5],[1,3,4],[2,6]]
+  输出：[1,1,2,3,4,4,5,6]
+  解释：链表数组如下：
+  [ 1->4->5,
+    1->3->4,
+    2->6 ]
+  将它们合并到一个有序链表中得到。
+    1->1->2->3->4->4->5->6
 示例 2：
-输入：lists = []
-输出：[]
+  输入：lists = []
+  输出：[]
 示例 3：
-输入：lists = [[]]
-输出：[] */
+  输入：lists = [[]]
+  输出：[] */
 
 ListNode* merge(ListNode* l1, ListNode* l2) {
-  ListNode* dummy = new ListNode(0);
+  ListNode* dummy = new ListNode(-1);
   ListNode* p = dummy;
   while (l1 && l2) {
     if (l1->val < l2->val) {
@@ -32,24 +32,20 @@ ListNode* merge(ListNode* l1, ListNode* l2) {
     p = p->next;
   }
   p->next = l1 ? l1 : l2;
-
   return dummy->next;
 }
-ListNode* mergeKLists(vector<ListNode*>& lists) {
-  if (lists.empty())
+ListNode* mergeKHelper(vector<ListNode*>& lists, int start, int end) {
+  if (start > end)
     return nullptr;
-  else if (lists.size() == 1)
-    return lists[0];
-  else if (lists.size() == 2)
-    return merge(lists[0], lists[1]);
-  vector<ListNode*> second;
-  for (int i = 0; i < lists.size() / 2; i++) {
-    second.push_back(lists.back());
-    lists.pop_back();
-  }
-  ListNode* head1 = mergeKLists(lists);
-  ListNode* head2 = mergeKLists(second);
+  if (start == end)
+    return lists[start];
+  int mid = start + ((end - start) >> 1);
+  ListNode* head1 = mergeKHelper(lists, start, mid);
+  ListNode* head2 = mergeKHelper(lists, mid + 1, end);
   return merge(head1, head2);
+}
+ListNode* mergeKLists(vector<ListNode*>& lists) {
+  return mergeKHelper(lists, 0, lists.size() - 1);
 }
 
 // 传统方法，设置一个链表ans,与vec每一个元素合并，其时间复杂度是O(k2n)，因为要执行k次，最长为kn的链表，空间复杂度O(1);

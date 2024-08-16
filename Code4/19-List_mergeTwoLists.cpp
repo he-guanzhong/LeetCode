@@ -3,14 +3,15 @@
 将两个升序链表合并为一个新的 升序
 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
 示例 1：
-输入：l1 =
-[1,2,4], l2 = [1,3,4] 输出：[1,1,2,3,4,4]
+  输入：l1 = [1,2,4], l2 = [1,3,4]
+  输出：[1,1,2,3,4,4]
 示例 2：
-输入：l1 = [], l2 = []
-输出：[]
+  输入：l1 = [], l2 = []
+  输出：[]
 示例 3：
-输入：l1 = [], l2 = [0]
-输出：[0] */
+  输入：l1 = [], l2 = [0]
+  输出：[0] */
+
 ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
   if (!list1)
     return list2;
@@ -26,7 +27,7 @@ ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
 }
 
 // 迭代法。设立虚拟头节点，对l1和l2元素一一比较，值小的承接p指针，并挪动l1、l2和p。
-// 由于l1和l2最终指向未处理结点，故一为空时，p指向不为空的结点，返回虚拟头节点的下一节点。时间复杂度O(mn)空间复杂度O(1)
+// 由于l1和l2最终指向未处理结点，故一为空时，p指向不为空的结点，返回虚拟头节点的下一节点。时间复杂度O(m+n)空间复杂度O(1)
 ListNode* mergeTwoLists1(ListNode* list1, ListNode* list2) {
   ListNode* dummy = new ListNode(-1);
   ListNode* p = dummy;
@@ -58,6 +59,7 @@ ListNode* mergeTwoLists2(ListNode* list1, ListNode* list2) {
     return list2;
   }
 }
+
 int main() {
   vector<int> v1 = {1, 2, 4}, v2 = {1, 3, 4};
   vector<int> v3 = {}, v4 = {};

@@ -1,35 +1,32 @@
 #include "head.h"
-#define null -1
 /* 199. 二叉树的右视图
 给定一个二叉树的 根节点
 root，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
 示例 1:
-输入: [1,2,3,null,5,null,4]
-输出: [1,3,4]
+  输入: [1,2,3,null,5,null,4]
+  输出: [1,3,4]
 示例 2:
-输入: [1,null,3]
-输出: [1,3]
+  输入: [1,null,3]
+  输出: [1,3]
 示例 3:
-输入: []
-输出: [] */
+  输入: []
+  输出: [] */
 
 vector<int> rightSideView(TreeNode* root) {
   vector<int> ans;
-  queue<TreeNode*> que;
+  stack<pair<TreeNode*, int>> st;
   if (root)
-    que.push(root);
-  while (!que.empty()) {
-    int n = que.size();
-    for (int i = 0; i < n; i++) {
-      TreeNode* cur = que.front();
-      que.pop();
-      if (i == 0)
-        ans.push_back(cur->val);
-      if (cur->right)
-        que.push(cur->right);
-      if (cur->left)
-        que.push(cur->left);
-    }
+    st.push({root, 1});
+  while (st.size()) {
+    TreeNode* cur = st.top().first;
+    int depth = st.top().second;
+    st.pop();
+    if (ans.empty() || depth > ans.size())
+      ans.push_back(cur->val);
+    if (cur->left)
+      st.push({cur->left, depth + 1});
+    if (cur->right)
+      st.push({cur->right, depth + 1});
   }
   return ans;
 }
@@ -58,6 +55,26 @@ vector<int> rightSideView1(TreeNode* root) {
   }
   for (int i = 0; i <= maxDep; i++)
     ans.push_back(rightValAtDepth[i]);
+  return ans;
+}
+
+// 不用哈希表，逆前序遍历时，首次突破最深深度结点，即为所需右视图值，而ans.size()正好为已记录的右视图结点层数
+vector<int> rightSideView3(TreeNode* root) {
+  vector<int> ans;
+  stack<pair<TreeNode*, int>> st;
+  if (root)
+    st.push({root, 1});
+  while (st.size()) {
+    TreeNode* cur = st.top().first;
+    int depth = st.top().second;
+    st.pop();
+    if (depth > ans.size())
+      ans.push_back(cur->val);
+    if (cur->left)
+      st.push({cur->left, depth + 1});
+    if (cur->right)
+      st.push({cur->right, depth + 1});
+  }
   return ans;
 }
 
