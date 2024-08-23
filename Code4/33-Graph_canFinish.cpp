@@ -6,41 +6,44 @@ prerequisites[i] = [ai, bi] ，表示如果要学习课程 ai 则 必须 先学�
     例如，先修课程对 [0, 1] 表示：想要学习课程 0 ，你需要先完成课程 1 。
 请你判断是否可能完成所有课程的学习？如果可以，返回 true ；否则，返回 false 。
 示例 1：
-输入：numCourses = 2, prerequisites = [[1,0]]
-输出：true
-解释：总共有 2 门课程。学习课程 1 之前，你需要完成课程 0 。这是可能的。
+  输入：numCourses = 2, prerequisites = [[1,0]]
+  输出：true
+  解释：总共有 2 门课程。学习课程 1 之前，你需要完成课程 0 。这是可能的。
 示例 2：
-输入：numCourses = 2, prerequisites = [[1,0],[0,1]]
-输出：false
-解释：总共有 2 门课程。学习课程 1
-之前，你需要先完成​课程 0 ；并且学习课程 0
-之前，你还应先完成课程 1 。这是不可能的。*/
+  输入：numCourses = 2, prerequisites = [[1,0],[0,1]]
+  输出：false
+  解释：总共有 2 门课程。学习课程 1
+    之前，你需要先完成​课程 0 ；并且学习课程 0
+    之前，你还应先完成课程 1 。这是不可能的。*/
 
 bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+  vector<int> inDeg(numCourses);
   unordered_map<int, vector<int>> umap;
-  vector<int> inDeg(numCourses, 0);
-  for (vector<int>& direct : prerequisites) {
-    umap[direct[1]].push_back(direct[0]);
-    inDeg[direct[0]]++;
+  for (const auto& req : prerequisites) {
+    inDeg[req[0]]++;
+    umap[req[1]].push_back(req[0]);
   }
   queue<int> que;
   for (int i = 0; i < numCourses; i++) {
     if (inDeg[i] == 0)
       que.push(i);
   }
-  int visited = 0;
-  while (!que.empty()) {
-    int i = que.front();
+  vector<bool> visit(numCourses);
+  while (que.size()) {
+    int cur = que.front();
     que.pop();
-    visited++;
-    for (int j : umap[i]) {
-      inDeg[j]--;
-      if (inDeg[j] == 0)
-        que.push(j);
+    visit[cur] = true;
+    for (auto& next : umap[cur]) {
+      if (--inDeg[next] == 0)
+        que.push(next);
     }
+    umap.erase(cur);
   }
-
-  return visited == numCourses;
+  for (auto i : visit) {
+    if (!i)
+      return false;
+  }
+  return true;
 }
 
 // dfs1搜索，拓扑排序。额外需要三个变量，edges记录统计过的，每个起点分别能到达什么终点。visited记录结点访问状态，0-未访问，1-搜索中，2-已搜索

@@ -4,42 +4,38 @@
 nums2。请你找出并返回这两个正序数组的 中位数 。
 算法的时间复杂度应该为 O(log (m+n)) 。
 示例 1：
-输入：nums1 = [1,3], nums2 = [2]
-输出：2.00000
-解释：合并数组 = [1,2,3] ，中位数 2
+  输入：nums1 = [1,3], nums2 = [2]
+  输出：2.00000
+  解释：合并数组 = [1,2,3] ，中位数 2
 示例 2：
-输入：nums1 = [1,2], nums2 = [3,4]
-输出：2.50000
-解释：合并数组 = [1,2,3,4] ，中位数 (2 + 3) / 2 = 2.5 */
+  输入：nums1 = [1,2], nums2 = [3,4]
+  输出：2.50000
+  解释：合并数组 = [1,2,3,4] ，中位数 (2 + 3) / 2 = 2.5 */
 
-int getKmin(vector<int>& nums1,
-            vector<int>& nums2,
-            int l1,
-            int r1,
-            int l2,
-            int r2,
-            int k) {
-  int len1 = r1 - l1 + 1, len2 = r2 - l2 + 1;
-  if (len1 > len2)
-    return getKmin(nums2, nums1, l2, r2, l1, r1, k);
-  if (len1 == 0)
-    return nums2[l2 + k - 1];
-  if (k == 1)
-    return min(nums1[l1], nums2[l2]);
-  int i = l1 + min(k / 2, len1) - 1, j = l2 + min(k / 2, len2) - 1;
-  if (nums1[i] < nums2[j])
-    return getKmin(nums1, nums2, i + 1, r1, l2, r2, k - (i - l1 + 1));
-  else
-    return getKmin(nums1, nums2, l1, r1, j + 1, r2, k - (j - l2 + 1));
-}
 double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-  int len1 = nums1.size(), len2 = nums2.size();
-  return (getKmin(nums1, nums2, 0, len1 - 1, 0, len2 - 1,
-                  (len1 + len2 + 1) / 2) +
-          getKmin(nums1, nums2, 0, len1 - 1, 0, len2 - 1,
-                  (len1 + len2) / 2 + 1)) /
-         2.0;
+  
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 简易思路是两个数组合并，根据长度为奇数、偶数返回中位数，时间复杂度和空间复杂度均为O(m+n)
 // 问题转化为求第k个最小元素。主函数可以求两个第k值，即（总长度+1）/2，和（总长度）+2/2，取中二者平均值

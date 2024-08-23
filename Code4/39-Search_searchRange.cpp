@@ -5,37 +5,32 @@ target。请你找出给定目标值在数组中的开始位置和结束位置�
 如果数组中不存在目标值 target，返回 [-1, -1]。
 你必须设计并实现时间复杂度为 O(log n) 的算法解决此问题。
 示例 1：
-输入：nums = [5,7,7,8,8,10], target = 8
-输出：[3,4]
+  输入：nums = [5,7,7,8,8,10], target = 8
+  输出：[3,4]
 示例 2：
-输入：nums = [5,7,7,8,8,10], target = 6
-输出：[-1,-1]
+  输入：nums = [5,7,7,8,8,10], target = 6
+  输出：[-1,-1]
 示例 3：
-输入：nums = [], target = 0
-输出：[-1,-1] */
+  输入：nums = [], target = 0
+  输出：[-1,-1] */
 
-int search(vector<int>& nums, int target, bool begin) {
+int helper(vector<int>& nums, int target, bool first) {
   int left = 0, right = nums.size() - 1;
   while (left <= right) {
     int mid = left + ((right - left) >> 1);
-    if (target < nums[mid] || begin && target == nums[mid])
+    if (nums[mid] > target || nums[mid] == target && first)
       right = mid - 1;
     else
       left = mid + 1;
   }
-  if (begin)
-    return (left >= 0 && left < nums.size() && nums[left] == target) ? left
-                                                                     : -1;
-  else
-    return (right >= 0 && right < nums.size() && nums[right] == target) ? right
-                                                                        : -1;
+  return first ? left : right;
 }
 vector<int> searchRange(vector<int>& nums, int target) {
-  if (nums.size() == 0)
-    return {-1, -1};
-  int left = search(nums, target, true);
-  int right = search(nums, target, false);
-  return {left, right};
+  int l = helper(nums, target, 1);
+  int r = helper(nums, target, 0);
+  l = l >= 0 && l < nums.size() && nums[l] == target ? l : -1;
+  r = r >= 0 && r < nums.size() && nums[r] == target ? r : -1;
+  return {l, r};
 }
 
 // 单独设立二分法函数，同时寻找第一个大于等于target的位置，为left（target<=nums[mid]，即使相等也右指针左移）。

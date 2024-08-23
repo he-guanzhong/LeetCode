@@ -9,25 +9,32 @@ nums[k-1]]（下标 从 0 开始 计数）。例如， [0,1,2,4,5,6,7] 在下标
 ，则返回它的下标，否则返回 -1 。
 你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。
 示例 1：
-输入：nums = [4,5,6,7,0,1,2], target = 0
-输出：4
+  输入：nums = [4,5,6,7,0,1,2], target = 0
+  输出：4
 示例 2：
-输入：nums = [4,5,6,7,0,1,2], target = 3
-输出：-1
+  输入：nums = [4,5,6,7,0,1,2], target = 3
+  输出：-1
 示例 3：
-输入：nums = [1], target = 0
-输出：-1 */
+  输入：nums = [1], target = 0
+  输出：-1 */
 
 int search(vector<int>& nums, int target) {
   int l = 0, r = nums.size() - 1;
   while (l <= r) {
-    int mid = l + ((r - l) >> 1);
-    if (target == nums[mid])
-      return mid;
-    else if (nums[l] <= nums[mid])
-      target >= nums[l] && target < nums[mid] ? r = mid - 1 : l = mid + 1;
-    else
-      target <= nums[r] && target > nums[mid] ? l = mid + 1 : r = mid - 1;
+    int m = l + ((r - l) >> 1);
+    if (target == nums[m]) {
+      return m;
+    } else if (nums[m] > nums[r]) {
+      if (target >= nums[l] && target < nums[m])
+        r = m - 1;
+      else
+        l = m + 1;
+    } else {
+      if (target <= nums[r] && target > nums[m])
+        l = m + 1;
+      else
+        r = m - 1;
+    }
   }
   return -1;
 }
@@ -50,10 +57,12 @@ int search1(vector<int>& nums, int target) {
 }
 
 int main() {
-  vector<int> nums1 = {4, 5, 6, 7, 0, 1, 2}, nums2 = nums1, nums3 = {1};
+  vector<int> nums1 = {4, 5, 6, 7, 0, 1, 2}, nums2 = nums1, nums3 = {1},
+              nums4 = {1, 3}, nums5 = {3, 1};
   cout << search(nums1, 0) << " " << search(nums2, 3) << " " << search(nums3, 0)
-       << endl;
+       << " " << search(nums4, 3) << " " << search(nums5, 1) << endl;
   cout << search1(nums1, 0) << " " << search1(nums2, 3) << " "
-       << search1(nums3, 0) << endl;
+       << search1(nums3, 0) << " " << search1(nums4, 3) << " "
+       << search1(nums5, 1) << endl;
   return 0;
 }

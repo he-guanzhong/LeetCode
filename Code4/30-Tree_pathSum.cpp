@@ -1,35 +1,43 @@
 #include "head.h"
-#define null -1
 /* 437. 路径总和 III
 给定一个二叉树的根节点 root ，和一个整数 targetSum ，求该二叉树里节点值之和等于
 targetSum 的 路径 的数目。
 路径
 不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
 示例 1：
-输入：root = [10,5,-3,3,2,null,11,3,-2,null,1], targetSum = 8
-输出：3
-解释：和等于 8 的路径有 3 条，如图所示。
+  输入：root = [10,5,-3,3,2,null,11,3,-2,null,1], targetSum = 8
+  输出：3
+  解释：和等于 8 的路径有 3 条，如图所示。
 示例 2：
-输入：root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22
-输出：3 */
+  输入：root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22
+  输出：3
+提示:
+    二叉树的节点个数的范围是 [0,1000]
+    -109 <= Node.val <= 109
+    -1000 <= targetSum <= 1000  */
 
-unordered_map<long long, int> umap;
-int dfs(TreeNode* root, int targetSum, long long cur) {
+int dfs(TreeNode* root,
+        int targetSum,
+        long long& sum,
+        unordered_map<long long, int>& umap) {
   if (!root)
     return 0;
-  cur += root->val;
-  int cnt1 = 0;
-  if (umap.count(cur - targetSum))
-    cnt1 += umap[cur - targetSum];
-  umap[cur]++;
-  int cnt2 = dfs(root->left, targetSum, cur);
-  int cnt3 = dfs(root->right, targetSum, cur);
-  umap[cur]--;
-  return cnt1 + cnt2 + cnt3;
+  sum += root->val;
+  int ans = 0;
+  if (umap.count(sum - targetSum))
+    ans += umap[sum - targetSum];
+  umap[sum]++;
+  ans += dfs(root->left, targetSum, sum, umap);
+  ans += dfs(root->right, targetSum, sum, umap);
+  umap[sum]--;
+  sum -= root->val;
+  return ans;
 }
 int pathSum(TreeNode* root, int targetSum) {
+  unordered_map<long long, int> umap;
   umap[0] = 1;
-  return dfs(root, targetSum, 0);
+  long long sum = 0;
+  return dfs(root, targetSum, sum, umap);
 }
 
 // 前缀树。返回值为该结点能返回路径树数量，传入参数为该结点前路径总和。哈希表记录每种总和，和对应的数量。
