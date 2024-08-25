@@ -10,17 +10,17 @@
 以内的答案将被接受。
 示例 1：
 输入
-["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"]
-[[], [1], [2], [], [3], []]
+  ["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"]
+  [[], [1], [2], [], [3], []]
 输出
-[null, null, null, 1.5, null, 2.0]
+  [null, null, null, 1.5, null, 2.0]
 解释
-MedianFinder medianFinder = new MedianFinder();
-medianFinder.addNum(1);    // arr = [1]
-medianFinder.addNum(2);    // arr = [1, 2]
-medianFinder.findMedian(); // 返回 1.5 ((1 + 2) / 2)
-medianFinder.addNum(3);    // arr[1, 2, 3]
-medianFinder.findMedian(); // return 2.0
+  MedianFinder medianFinder = new MedianFinder();
+  medianFinder.addNum(1);    // arr = [1]
+  medianFinder.addNum(2);    // arr = [1, 2]
+  medianFinder.findMedian(); // 返回 1.5 ((1 + 2) / 2)
+  medianFinder.addNum(3);    // arr[1, 2, 3]
+  medianFinder.findMedian(); // return 2.0
 提示:
     -105 <= num <= 105
     在调用 findMedian 之前，数据结构中至少有一个元素
@@ -31,7 +31,7 @@ class MedianFinder {
   MedianFinder() {}
 
   void addNum(int num) {
-    if (que2.empty() || num >= que2.top()) {
+    if (que2.size() && num > que2.top()) {
       que2.push(num);
       if (que2.size() > que1.size() + 1) {
         que1.push(que2.top());
@@ -47,10 +47,8 @@ class MedianFinder {
   }
 
   double findMedian() {
-    if (que2.size() == que1.size())
-      return (que1.top() + que2.top()) / 2.0;
-    else
-      return que2.top();
+    return que2.size() > que1.size() ? que2.top()
+                                     : (que1.top() + que2.top()) / 2.0;
   }
   priority_queue<int, vector<int>, less<>> que1;
   priority_queue<int, vector<int>, greater<>> que2;

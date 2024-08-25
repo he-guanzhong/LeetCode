@@ -8,29 +8,29 @@
     int top() 获取堆栈顶部的元素。
     int getMin() 获取堆栈中的最小元素。
 示例 1:
-输入：
-["MinStack","push","push","push","getMin","pop","top","getMin"]
-[[],[-2],[0],[-3],[],[],[],[]]
+  输入：
+    ["MinStack","push","push","push","getMin","pop","top","getMin"]
+    [[],[-2],[0],[-3],[],[],[],[]]
 输出：
-[null,null,null,null,-3,null,0,-2]
+  [null,null,null,null,-3,null,0,-2]
 解释：
-MinStack minStack = new MinStack();
-minStack.push(-2);
-minStack.push(0);
-minStack.push(-3);
-minStack.getMin();   --> 返回 -3.
-minStack.pop();
-minStack.top();      --> 返回 0.
-minStack.getMin();   --> 返回 -2. */
+  MinStack minStack = new MinStack();
+  minStack.push(-2);
+  minStack.push(0);
+  minStack.push(-3);
+  minStack.getMin();   --> 返回 -3.
+  minStack.pop();
+  minStack.top();      --> 返回 0.
+  minStack.getMin();   --> 返回 -2. */
 
 class MinStack {
  public:
+  /** initialize your data structure here. */
   MinStack() { st2.push(INT_MAX); }
 
-  void push(int val) {
-    st1.push(val);
-    ;
-    st2.push(min(val, st2.top()));
+  void push(int x) {
+    st1.push(x);
+    st2.push(min(x, st2.top()));
   }
 
   void pop() {

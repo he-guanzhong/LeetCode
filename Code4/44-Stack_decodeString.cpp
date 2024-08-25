@@ -7,41 +7,43 @@
 此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 k
 ，例如不会出现像 3a 或 2[4] 的输入。
 示例 1：
-输入：s = "3[a]2[bc]"
-输出："aaabcbc"
+  输入：s = "3[a]2[bc]"
+  输出："aaabcbc"
 示例 2：
-输入：s = "3[a2[c]]"
-输出："accaccacc"
+  输入：s = "3[a2[c]]"
+  输出："accaccacc"
 示例 3：
-输入：s = "2[abc]3[cd]ef"
-输出："abcabccdcdcdef"
+  输入：s = "2[abc]3[cd]ef"
+  输出："abcabccdcdcdef"
 示例 4：
-输入：s = "abc3[cd]xyz"
-输出："abccdcdcdxyz" */
+  输入：s = "abc3[cd]xyz"
+  输出："abccdcdcdxyz" */
 
 string decodeString(string s) {
-  stack<pair<string, int>> st;
-  string tmp;
-  int num = 0;
-  for (char c : s) {
-    if (c <= '9' && c >= '0')
-      num = num * 10 + (c - '0');
+  stack<string> stNum;
+  stack<string> stChar;
+  string str, num;
+  for (const auto& c : s) {
+    if (c >= '0' && c <= '9')
+      num += c;
     else if (c >= 'a' && c <= 'z')
-      tmp += c;
+      str += c;
     else if (c == '[') {
-      st.push(make_pair(tmp, num));
-      tmp.clear();
-      num = 0;
+      stNum.push(num);
+      num.clear();
+      stChar.push(str);
+      str.clear();
     } else {
-      int n = st.top().second;
-      string pre = st.top().first;
-      st.pop();
+      int n = stoi(stNum.top());
+      stNum.pop();
+      string pre = stChar.top();
+      stChar.pop();
       while (n--)
-        pre += tmp;
-      tmp = pre;
+        pre += str;
+      str = pre;
     }
   }
-  return tmp;
+  return str;
 }
 
 // 核心是利用栈，分四种情况。遇到字符、数字则分别记录。遇到[，立刻临时保存当前的str和num入栈，并清除当前str和num。

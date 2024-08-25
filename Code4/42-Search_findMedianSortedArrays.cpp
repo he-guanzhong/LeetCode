@@ -12,30 +12,35 @@ nums2。请你找出并返回这两个正序数组的 中位数 。
   输出：2.50000
   解释：合并数组 = [1,2,3,4] ，中位数 (2 + 3) / 2 = 2.5 */
 
-double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-  
+double help(vector<int>& nums1,
+            vector<int>& nums2,
+            int l1,
+            int r1,
+            int l2,
+            int r2,
+            int k) {
+  int len1 = r1 - l1 + 1, len2 = r2 - l2 + 1;
+  if (len1 > len2)
+    return help(nums2, nums1, l2, r2, l1, r1, k);
+  if (len1 == 0)
+    return nums2[l2 + k - 1];
+  if (k == 1)
+    return min(nums1[l1], nums2[l2]);
+  int i = l1 + min(k / 2, len1) - 1;
+  int j = l2 + min(k / 2, len2) - 1;
+  if (nums1[i] < nums2[j]) {
+    return help(nums1, nums2, i + 1, r1, l2, r2, k - min(k / 2, len1));
+  } else {
+    return help(nums1, nums2, l1, r1, j + 1, r2, k - min(k / 2, len2));
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+  int left = (nums1.size() + nums2.size() + 1) / 2;
+  int right = (nums1.size() + nums2.size() + 2) / 2;
+  return (help(nums1, nums2, 0, nums1.size() - 1, 0, nums2.size() - 1, left) +
+          help(nums1, nums2, 0, nums1.size() - 1, 0, nums2.size() - 1, right)) /
+         2.0;
+}
 
 // 简易思路是两个数组合并，根据长度为奇数、偶数返回中位数，时间复杂度和空间复杂度均为O(m+n)
 // 问题转化为求第k个最小元素。主函数可以求两个第k值，即（总长度+1）/2，和（总长度）+2/2，取中二者平均值
@@ -76,10 +81,13 @@ double findMedianSortedArrays1(vector<int>& nums1, vector<int>& nums2) {
 }
 
 int main() {
-  vector<int> nums1 = {1, 3}, nums2 = {2}, nums3 = {1, 2}, nums4 = {3, 4};
+  vector<int> nums1 = {1, 3}, nums2 = {2}, nums3 = {1, 2}, nums4 = {3, 4},
+              nums5 = {2}, nums6 = {1, 3, 4};
   cout << findMedianSortedArrays(nums1, nums2) << " "
-       << findMedianSortedArrays(nums3, nums4) << " " << endl;
+       << findMedianSortedArrays(nums3, nums4) << " "
+       << findMedianSortedArrays(nums5, nums6) << endl;
   cout << findMedianSortedArrays1(nums1, nums2) << " "
-       << findMedianSortedArrays1(nums3, nums4) << " " << endl;
+       << findMedianSortedArrays1(nums3, nums4) << " "
+       << findMedianSortedArrays1(nums5, nums6) << endl;
   return 0;
 }

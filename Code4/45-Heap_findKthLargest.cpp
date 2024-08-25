@@ -5,38 +5,34 @@
 请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
 你必须设计并实现时间复杂度为 O(n) 的算法解决此问题。
 示例 1:
-输入: [3,2,1,5,6,4], k = 2
-输出: 5
+  输入: [3,2,1,5,6,4], k = 2
+  输出: 5
 示例 2:
-输入: [3,2,3,1,2,4,5,5,6], k = 4
-输出: 4 */
-
-void quickSort(vector<int>& nums, int start, int end, int k) {
+  输入: [3,2,3,1,2,4,5,5,6], k = 4
+  输出: 4 */
+void quickSort(vector<int>& nums, int k, int start, int end) {
   if (start > end)
     return;
   srand(time(nullptr));
-  int index = rand() % (end - start + 1) + start;
-  swap(nums[start], nums[index]);
-  index = start + 1;
+  int random = rand() % (end - start + 1) + start;
+  swap(nums[random], nums[start]);
+  int j = start;
   for (int i = start + 1; i <= end; i++) {
-    if (nums[i] >= nums[start])
-      swap(nums[i], nums[index++]);
+    if (nums[i] >= nums[start]) {
+      swap(nums[i], nums[j + 1]);
+      j++;
+    }
   }
-  index--;  // 核心，index不再是下一个未排序处，而是已排序最后一位
-  swap(nums[index], nums[start]);
-  if (index < k) {
-    while (index < k && nums[index] == nums[index + 1])
-      index++;
-    quickSort(nums, index + 1, end, k);
-  } else if (index > k) {
-    while (index > k && nums[index] == nums[index - 1])
-      index--;
-    quickSort(nums, start, index - 1, k);
-  } else
-    return;
+  swap(nums[start], nums[j]);
+  /*   cout << "j: " << j << " \t";
+    printVector(nums); */
+  if (j > k - 1)
+    quickSort(nums, k, start, j - 1);
+  else if (j < k - 1)
+    quickSort(nums, k, j + 1, end);
 }
 int findKthLargest(vector<int>& nums, int k) {
-  quickSort(nums, 0, nums.size() - 1, k - 1);
+  quickSort(nums, k, 0, nums.size() - 1);
   return nums[k - 1];
 }
 
@@ -53,7 +49,8 @@ void quickSort1(vector<int>& nums, int start, int end, int target) {
   int random = rand() % (end - start + 1) + start;
   int base = nums[random];
   swap(nums[start], nums[random]);
-  int index = start;  // 此处是核心，index初始化为已经完成排序的最后一位。
+  int index =
+      start;  // 此处是核心，index初始化为已经完成排序的最后一位。不可以写成start+1，因为后面有强制交换
   for (int i = start + 1; i <= end; i++) {
     if (nums[i] >= base) {
       swap(nums[index + 1], nums[i]);
