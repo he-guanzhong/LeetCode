@@ -56,32 +56,38 @@
     0 <= s.length <= 200
     s 由英文字母（大写和小写）、数字（0-9）、' '、'+'、'-' 和 '.' 组成 */
 
+int myAtoi(string s) {
+  int sign = 1;
+  bool charac = false;
+  int ans = 0;
+  for (int i = 0; i < s.size(); i++) {
+    if (s[i] == ' ' && !charac)
+      continue;
+    else if (s[i] == '+' && !charac) {
+      sign = 1;
+      charac = true;
+    } else if (s[i] == '-' && !charac) {
+      sign = -1;
+      charac = true;
+    } else if (s[i] >= '0' && s[i] <= '9') {
+      charac = true;
+      if (sign * ans > INT_MAX / 10 ||
+          sign * ans == INT_MAX / 10 && s[i] >= '7')
+        return INT_MAX;
+      else if (sign * ans < INT_MIN / 10 ||
+               sign * ans == INT_MIN / 10 && s[i] >= '8')
+        return INT_MIN;
+      ans *= 10;
+      ans += s[i] - '0';
+    } else {
+      break;
+    }
+  }
+  return ans * sign;
+}
+
 // 先排除零，尤其时全零情况。然后直接排除+-号影响，设置单独sign为+-1。进入数字区间后，先判断当前ans是否大于limit，是则直接根据sign号返回INT_MIN和INT_MAX
 // 不得使用sign*INT_MAX，因为二者不相等。而最终返回结果则需要sign_ans
-int myAtoi(string str) {
-  int i = 0;
-  while (i < str.size() && str[i] == ' ')
-    i++;
-  int sign = 1;
-  int limit = INT_MAX / 10, ans = 0;
-  if (str[i] == '-') {
-    sign = -1;
-    i++;
-  } else if (str[i] == '+')
-    i++;
-  str = str.substr(i);
-
-  for (int i = 0; i < str.size(); i++) {
-    if (isdigit(str[i])) {
-      int num = str[i] - '0';
-      if (abs(ans) > limit || abs(ans) == limit && num > 7)
-        return sign == 1 ? INT_MAX : INT_MIN;
-      ans = ans * 10 + num;
-    } else
-      break;
-  }
-  return sign * ans;
-}
 
 // 三个整型变量，返回值，正负号，遍历下标i。空间复杂度O(1)。INT_MAX最大值是2147483647，超限边界INT_MAX/10=214748364。
 // 先去除头部空格，注意排除所有均为空格情况。对首个元素为空格，则再进一位，并记录正负号，其下一位必为数字。只考虑是数字的情况。
@@ -109,10 +115,12 @@ int myAtoi1(string str) {
 
 int main() {
   string s1 = "42", s2 = "   -42", s3 = "4193 with words", s4 = "words and 987",
-         s5 = "-91283472332", s6 = "+-2";
+         s5 = "-91283472332", s6 = "+-2", s7 = "0-1", s8 = "   +0 123";
   cout << myAtoi(s1) << " " << myAtoi(s2) << " " << myAtoi(s3) << " "
-       << myAtoi(s4) << " " << myAtoi(s5) << " " << myAtoi(s6) << endl;
+       << myAtoi(s4) << " " << myAtoi(s5) << " " << myAtoi(s6) << " "
+       << myAtoi(s7) << " " << myAtoi(s8) << endl;
   cout << myAtoi1(s1) << " " << myAtoi1(s2) << " " << myAtoi1(s3) << " "
-       << myAtoi1(s4) << " " << myAtoi1(s5) << " " << myAtoi1(s6) << endl;
+       << myAtoi1(s4) << " " << myAtoi1(s5) << " " << myAtoi1(s6) << " "
+       << myAtoi1(s7) << " " << myAtoi1(s8) << endl;
   return 0;
 }

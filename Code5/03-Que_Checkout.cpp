@@ -23,27 +23,27 @@ class Checkout {
  public:
   Checkout() {}
 
-  int get_max() { return deq.empty() ? -1 : deq.front(); }
+  int get_max() { return win.empty() ? -1 : win.front(); }
 
   void add(int value) {
     que.push(value);
-    while (!deq.empty() && value > deq.back())
-      deq.pop_back();
-    deq.push_back(value);
+    while (win.size() && value > win.back())
+      win.pop_back();
+    win.push_back(value);
   }
 
   int remove() {
-    if (que.empty())
-      return -1;
-    if (!deq.empty() && que.front() == deq.front())
-      deq.pop_front();
-    int ans = que.front();
-    que.pop();
+    int ans = -1;
+    if (que.size()) {
+      ans = que.front();
+      if (win.size() && ans == win.front())
+        win.pop_front();
+      que.pop();
+    }
     return ans;
   }
-
   queue<int> que;
-  deque<int> deq;
+  deque<int> win;
 };
 
 // 类似滑动窗口最大值，queue为滑动窗口，单独设置双端队列deque，保存队列最大值。
@@ -82,13 +82,13 @@ int main() {
   obj->add(7);
   cout << obj->get_max() << " " << obj->remove() << " " << obj->get_max()
        << endl;
-
+  delete obj;
   Checkout1* obj1 = new Checkout1();
   cout << obj1->get_max() << " " << obj1->remove() << " ";
   obj1->add(4);
   obj1->add(7);
   cout << obj1->get_max() << " " << obj1->remove() << " " << obj1->get_max()
        << endl;
-
+  delete obj1;
   return 0;
 }

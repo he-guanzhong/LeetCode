@@ -4,25 +4,27 @@
 大于 ⌊ n/2 ⌋ 的元素。
 你可以假设数组是非空的，并且给定的数组总是存在多数元素。
 示例 1：
-输入：nums = [3,2,3]
-输出：3
+  输入：nums = [3,2,3]
+  输出：3
 示例 2：
-输入：nums = [2,2,1,1,1,2,2]
-输出：2
+  输入：nums = [2,2,1,1,1,2,2]
+  输出：2
 进阶：尝试设计时间复杂度为 O(n)、空间复杂度为 O(1) 的算法解决此问题。*/
 
 int majorityElement(vector<int>& nums) {
-  int ans = nums[0];
-  int n = 0;
+  int cnt = 0;
+  int tmp = nums[0];
   for (int i : nums) {
-    if (ans == i)
-      n++;
-    else if (--n < 0) {
-      n = 1;
-      ans = i;
+    if (i == tmp)
+      cnt++;
+    else {
+      if (--cnt < 0) {
+        cnt = 1;
+        tmp = i;
+      }
     }
   }
-  return ans;
+  return tmp;
 }
 
 // 推荐使用Boyer-Moore投票算法。设置计数器cnt为0。当前众数候选值candidate（任意）。遍历每个元素，如candidate==num，则计数加一
@@ -51,10 +53,11 @@ int majorityElement2(vector<int>& nums) {
 }
 
 int main() {
-  vector<int> nums1 = {3, 2, 3}, nums2 = {2, 2, 1, 1, 1, 2, 2}, nums3 = {1};
+  vector<int> nums1 = {3, 2, 3}, nums2 = {2, 2, 1, 1, 1, 2, 2}, nums3 = {1},
+              nums4 = {6, 5, 5};
   cout << majorityElement(nums1) << " " << majorityElement(nums2) << " "
-       << majorityElement(nums3) << endl;
+       << majorityElement(nums3) << " " << majorityElement(nums4) << endl;
   cout << majorityElement1(nums1) << " " << majorityElement1(nums2) << " "
-       << majorityElement1(nums3) << endl;
+       << majorityElement1(nums3) << " " << majorityElement1(nums4) << endl;
   return 0;
 }

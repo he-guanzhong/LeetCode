@@ -5,13 +5,13 @@
 测试用例的答案是一个 32-位 整数。
 子数组 是数组的连续子序列。
 示例 1:
-输入: nums = [2,3,-2,4]
-输出: 6
-解释: 子数组 [2,3] 有最大乘积 6。
+  输入: nums = [2,3,-2,4]
+  输出: 6
+  解释: 子数组 [2,3] 有最大乘积 6。
 示例 2:
-输入: nums = [-2,0,-1]
-输出: 0
-解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。
+  输入: nums = [-2,0,-1]
+  输出: 0
+  解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。
 提示:
     1 <= nums.length <= 2 * 104
     -10 <= nums[i] <= 10
@@ -20,15 +20,13 @@
 int maxProduct(vector<int>& nums) {
   vector<int> maxVal(nums.size(), 0);
   vector<int> minVal(nums.size(), 0);
-  if (nums.size() == 1)
-    return nums[0];
   int ans = nums[0];
-  maxVal[0] = minVal[0] = nums[0];
+  maxVal[0] = max(nums[0], 0), minVal[0] = min(nums[0], 0);
   for (int i = 1; i < nums.size(); i++) {
     maxVal[i] =
-        max({minVal[i - 1] * nums[i], maxVal[i - 1] * nums[i], nums[i]});
+        max({nums[i], maxVal[i - 1] * nums[i], minVal[i - 1] * nums[i]});
     minVal[i] =
-        min({minVal[i - 1] * nums[i], maxVal[i - 1] * nums[i], nums[i]});
+        min({nums[i], maxVal[i - 1] * nums[i], minVal[i - 1] * nums[i]});
     ans = max(ans, maxVal[i]);
   }
   return ans;
@@ -47,14 +45,26 @@ int maxProduct1(vector<int>& nums) {
   }
   return ans;
 }
+
+// 由于i状态之和i-1有关，故节省空间复杂度
+int maxProduct2(vector<int>& nums) {
+  int ans = nums[0], maxF = nums[0], minF = nums[0];
+  for (int i = 1; i < nums.size(); i++) {
+    maxF = max({nums[i], nums[i] * maxF, nums[i] * minF});
+    minF = min({nums[i], nums[i] * maxF, nums[i] * minF});
+    ans = max(maxF, ans);
+  }
+  return ans;
+}
+
 int main() {
   vector<int> nums1 = {2, 3, -2, 4}, nums2 = {-2, 0, -1}, nums3 = {-2, 3, -4},
               nums4 = {0, 2}, nums5 = {2, -1, 1, 1};
   cout << maxProduct(nums1) << " " << maxProduct(nums2) << " "
        << maxProduct(nums3) << " " << maxProduct(nums4) << " "
        << maxProduct(nums5) << endl;
-  cout << maxProduct1(nums1) << " " << maxProduct1(nums2) << " "
-       << maxProduct1(nums3) << " " << maxProduct1(nums4) << " "
-       << maxProduct1(nums5) << endl;
+  cout << maxProduct2(nums1) << " " << maxProduct2(nums2) << " "
+       << maxProduct2(nums3) << " " << maxProduct2(nums4) << " "
+       << maxProduct2(nums5) << endl;
   return 0;
 }
