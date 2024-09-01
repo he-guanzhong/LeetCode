@@ -4,15 +4,15 @@
 值都不重复，只有当它们可能是在最初空栈上进行的推入 push 和弹出 pop
 操作序列的结果时，返回 true；否则，返回 false 。
 示例 1：
-输入：pushed = [1,2,3,4,5], popped = [4,5,3,2,1]
-输出：true
-解释：我们可以按以下顺序执行：
-push(1), push(2), push(3), push(4), pop() -> 4,
-push(5), pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
+  输入：pushed = [1,2,3,4,5], popped = [4,5,3,2,1]
+  输出：true
+  解释：我们可以按以下顺序执行：
+    push(1), push(2), push(3), push(4), pop() -> 4,
+    push(5), pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
 示例 2：
-输入：pushed = [1,2,3,4,5], popped = [4,3,5,1,2]
-输出：false
-解释：1 不能在 2 之前弹出。
+  输入：pushed = [1,2,3,4,5], popped = [4,3,5,1,2]
+  输出：false
+  解释：1 不能在 2 之前弹出。
 提示：
     1 <= pushed.length <= 1000
     0 <= pushed[i] <= 1000
@@ -25,9 +25,9 @@ bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
   int j = 0;
   for (int i = 0; i < pushed.size(); i++) {
     st.push(pushed[i]);
-    while (!st.empty() && st.top() == popped[j]) {
-      j++;
+    while (j < popped.size() && st.size() && popped[j] == st.top()) {
       st.pop();
+      j++;
     }
   }
   return st.empty();
@@ -64,6 +64,7 @@ bool validateStackSequences2(int* pushed,
   free(st);
   return top > 0 ? false : true;
 }
+
 int main() {
   vector<int> pushed1 = {1, 2, 3, 4, 5}, popped1 = {4, 5, 3, 2, 1};
   vector<int> pushed2 = {1, 2, 3, 4, 5}, popped2 = {4, 3, 5, 1, 2};
