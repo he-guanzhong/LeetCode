@@ -7,37 +7,37 @@
 的格子，其中 digit(x) 表示数字 x 的各数位之和。
 请返回整理师 总共需要整理多少个格子。
 示例 1：
-输入：m = 4, n = 7, cnt = 5
-输出：18
+  输入：m = 4, n = 7, cnt = 5
+  输出：18
 提示：
     1 <= n, m <= 100
     0 <= cnt <= 20 */
 
-// si,sj表示各数位之和
 int wardrobeFinishing(int m, int n, int cnt) {
-  int ans = 0;
-  vector<vector<bool>> visited(m, vector<bool>(n, false));
+  vector<vector<bool>> visited(m, vector<bool>(n, 0));
   queue<vector<int>> que;
+  int ans = 0;
   que.push({0, 0, 0, 0});
-  while (!que.empty()) {
-    int i = que.front()[0];
-    int j = que.front()[1];
-    int si = que.front()[2];
-    int sj = que.front()[3];
+  while (que.size()) {
+    int curx = que.front()[0];
+    int cury = que.front()[1];
+    int sx = que.front()[2];
+    int sy = que.front()[3];
     que.pop();
-    if (i >= m || j >= n || si + sj > cnt || visited[i][j])
+    if (curx >= m || cury >= n || sx + sy > cnt || visited[curx][cury])
       continue;
+    visited[curx][cury] = true;
     ans++;
-    visited[i][j] = true;
-    int si_1 = (i + 1) % 10 ? si + 1 : si - 8;
-    int sj_1 = (j + 1) % 10 ? sj + 1 : sj - 8;
-    que.push({i + 1, j, si_1, sj});
-    que.push({i, j + 1, si, sj_1});
+    int next_sx = curx % 10 == 9 ? sx - 8 : sx + 1;
+    int next_sy = cury % 10 == 9 ? sy - 8 : sy + 1;
+    que.push({curx + 1, cury, next_sx, sy});
+    que.push({curx, cury + 1, sx, next_sy});
   }
   return ans;
 }
 
-// dfs解法，数位和的增量公式，如果数字i+1逢10进位，则s[i]减8，其余情况s[i]加一。s[i+1]==(i+1)%10?s[i]-8:s[i]+1
+// si,sj表示各数位之和
+// DFS解法，数位和的增量公式，如果数字i+1逢10进位，则s[i]减8，其余情况s[i]加一。s[i+1]==(i+1)%10?s[i]-8:s[i]+1
 // 退出条件是，超过矩阵边界，或者数位和大于定值，或结点已经访问过。
 int dfs1(int i,
          int j,
@@ -83,9 +83,9 @@ int wardrobeFinishing2(int m, int n, int cnt) {
 }
 
 int main() {
-  cout << wardrobeFinishing(4, 7, 5) << " " << wardrobeFinishing(4, 7, 5)
-       << endl;
+  cout << wardrobeFinishing(4, 7, 5) << " " << wardrobeFinishing(4, 7, 5) << " "
+       << wardrobeFinishing(38, 15, 9) << endl;
   cout << wardrobeFinishing1(4, 7, 5) << " " << wardrobeFinishing1(4, 7, 5)
-       << endl;
+       << " " << wardrobeFinishing1(38, 15, 9) << endl;
   return 0;
 }

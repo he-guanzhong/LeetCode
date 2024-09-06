@@ -4,14 +4,17 @@
 存在于网格中，返回 true ；否则，返回 false 。
 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
 示例 1：
-输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word =
-"ABCCED" 输出：true
+  输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]],
+        word = "ABCCED"
+  输出：true
 示例 2：
-输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word =
-"SEE" 输出：true
+  输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]],
+        word = "SEE"
+  输出：true
 示例 3：
-输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word =
-"ABCB" 输出：false
+  输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]],
+        word = "ABCB"
+  输出：false
 提示：
     m == board.length
     n = board[i].length
@@ -23,10 +26,45 @@
 
 bool dfs(vector<vector<char>>& board,
          string word,
+         vector<vector<bool>>& visited,
          int x,
          int y,
-         int k,
-         vector<vector<bool>>& visited) {
+         int index) {
+  if (index == word.size())
+    return true;
+  visited[x][y] = true;
+  int dir[] = {1, 0, -1, 0, 1};
+  for (int k = 0; k < 4; k++) {
+    int nextx = x + dir[k];
+    int nexty = y + dir[k + 1];
+    if (nextx < 0 || nextx >= board.size() || nexty < 0 ||
+        nexty >= board[0].size() || visited[nextx][nexty] ||
+        board[nextx][nexty] != word[index])
+      continue;
+    if (dfs(board, word, visited, nextx, nexty, index + 1))
+      return true;
+  }
+  visited[x][y] = false;
+  return false;
+}
+
+bool exist(vector<vector<char>>& board, string word) {
+  vector<vector<bool>> visited(board.size(), vector<bool>(board[0].size(), 0));
+  for (int i = 0; i < board.size(); i++) {
+    for (int j = 0; j < board[0].size(); j++) {
+      if (board[i][j] == word[0] && dfs(board, word, visited, i, j, 1))
+        return true;
+    }
+  }
+  return false;
+}
+
+bool dfs1(vector<vector<char>>& board,
+          string word,
+          int x,
+          int y,
+          int k,
+          vector<vector<bool>>& visited) {
   if (k == word.size() - 1)
     return true;
   visited[x][y] = true;
@@ -39,18 +77,18 @@ bool dfs(vector<vector<char>>& board,
         newY >= board[0].size() || visited[newX][newY] ||
         word[k] != board[newX][newY])
       continue;
-    if (dfs(board, word, newX, newY, k, visited))
+    if (dfs1(board, word, newX, newY, k, visited))
       return true;
   }
   visited[x][y] = false;
   return false;
 }
-bool exis(vector<vector<char>>& board, string word) {
+bool exist1(vector<vector<char>>& board, string word) {
   int m = board.size(), n = board[0].size();
   vector<vector<bool>> visited(m, vector<bool>(n, false));
   for (int i = 0; i < m; i++) {
     for (int j = 0; j < n; j++) {
-      if (board[i][j] == word[0] && dfs(board, word, i, j, 0, visited))
+      if (board[i][j] == word[0] && dfs1(board, word, i, j, 0, visited))
         return true;
     }
   }
@@ -58,11 +96,17 @@ bool exis(vector<vector<char>>& board, string word) {
 }
 
 int main() {
-  vector<vector<char>> board = {
+  vector<vector<char>> board1 = {
       {'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}};
-  string word1 = "ABCCED", word2 = "SEE", word3 = "ABCB";
-  cout << exist(board, word1) << " " << exist(board, word2) << " "
-       << exist(board, word3) << endl;
-
+  vector<vector<char>> board2 = {
+      {'A', 'A', 'A', 'A', 'A', 'A'}, {'A', 'A', 'A', 'A', 'A', 'A'},
+      {'A', 'A', 'A', 'A', 'A', 'A'}, {'A', 'A', 'A', 'A', 'A', 'A'},
+      {'A', 'A', 'A', 'A', 'A', 'A'}, {'A', 'A', 'A', 'A', 'A', 'A'}};
+  string word1 = "ABCCED", word2 = "SEE", word3 = "ABCB",
+         word4 = "AAAAAAAAAAAAAAB";
+  cout << exist(board1, word1) << " " << exist(board1, word2) << " "
+       << exist(board1, word3) << " " << exist(board2, word4) << endl;
+  cout << exist1(board1, word1) << " " << exist1(board1, word2) << " "
+       << exist1(board1, word3) << " " << exist1(board2, word4) << endl;
   return 0;
 }

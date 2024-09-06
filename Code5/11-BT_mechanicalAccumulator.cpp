@@ -4,16 +4,16 @@
 的总和。注意这是一个只能进行加法操作的程序，不具备乘除、if-else、switch-case、for
 循环、while 循环，及条件判断语句等高级功能。
 示例 1：
-输入: target = 5
-输出: 15
+  输入: target = 5
+  输出: 15
 示例 2：
-输入: target = 7
-输出: 28
+  输入: target = 7
+  输出: 28
 提示：
     1 <= target <= 10000  */
 
 int mechanicalAccumulator(int target) {
-  target > 1 && (target += mechanicalAccumulator(target - 1));
+  target >= 1 && (target += mechanicalAccumulator(target - 1));
   return target;
 }
 

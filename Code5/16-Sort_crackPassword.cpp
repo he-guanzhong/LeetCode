@@ -5,21 +5,22 @@
     密码是 password 中所有元素拼接后得到的最小的一个数
 请编写一个程序返回这个密码。
 示例 1:
-输入: password = [15, 8, 7]
-输出: "1578"
+  输入: password = [15, 8, 7]
+  输出: "1578"
 示例 2:
-输入: password = [0, 3, 30, 34, 5, 9]
-输出: "03033459" */
+  输入: password = [0, 3, 30, 34, 5, 9]
+  输出: "03033459" */
 
 string crackPassword(vector<int>& password) {
-  vector<string> tmp;
-  for (int i : password)
-    tmp.push_back(to_string(i));
-  sort(tmp.begin(), tmp.end(),
-       [](string a, string b) { return a + b < b + a; });
+  vector<string> vec(password.size());
+  for (int i = 0; i < password.size(); i++) {
+    vec[i] = to_string(password[i]);
+  }
+  sort(vec.begin(), vec.end(),
+       [](const string& a, const string& b) { return a + b < b + a; });
   string ans;
-  for (string i : tmp)
-    ans += i;
+  for (int i = 0; i < vec.size(); i++)
+    ans += vec[i];
   return ans;
 }
 

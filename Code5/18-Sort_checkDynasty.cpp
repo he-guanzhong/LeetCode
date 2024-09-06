@@ -5,23 +5,28 @@
 位文物的所属朝代编号。其中，编号为 0
 的朝代表示未知朝代。请判断并返回这排文物的所属朝代编号是否连续（如遇未知朝代可算作连续情况）。
 示例 1：
-输入: places = [0, 6, 9, 0, 7]
-输出: True
+  输入: places = [0, 6, 9, 0, 7]
+  输出: True
 示例 2：
-输入: places = [7, 8, 9, 10, 11]
-输出: True  */
+  输入: places = [7, 8, 9, 10, 11]
+  输出: True
+提示：
+    places.length = 5
+    0 <= places[i] <= 13 */
 
 bool checkDynasty(vector<int>& places) {
-  unordered_set<int> uset;
+  if (places.size() < 2)
+    return true;
   int minVal = 14, maxVal = 0;
-  for (int i : places) {
-    if (i == 0)
-      continue;
-    if (uset.count(i))
-      return false;
-    uset.insert(i);
-    minVal = min(i, minVal);
-    maxVal = max(i, maxVal);
+  bool arr[14] = {0};
+  for (int i = 0; i < places.size(); i++) {
+    if (places[i] != 0) {
+      if (arr[places[i]])
+        return false;
+      arr[places[i]] = true;
+      maxVal = fmax(places[i], maxVal);
+      minVal = fmin(places[i], minVal);
+    }
   }
   return maxVal - minVal < 5;
 }
@@ -58,9 +63,12 @@ bool checkDynasty2(vector<int>& places) {
 }
 
 int main() {
-  vector<int> places1 = {0, 6, 9, 0, 7}, places2 = {7, 8, 9, 10, 11};
-  cout << checkDynasty(places1) << " " << checkDynasty(places2) << endl;
-  cout << checkDynasty1(places1) << " " << checkDynasty1(places2) << endl;
+  vector<int> places1 = {0, 6, 9, 0, 7}, places2 = {7, 8, 9, 10, 11},
+              places3 = {13, 13, 9, 12, 10};
+  cout << checkDynasty(places1) << " " << checkDynasty(places2) << " "
+       << checkDynasty(places3) << endl;
+  cout << checkDynasty1(places1) << " " << checkDynasty1(places2) << " "
+       << checkDynasty1(places3) << endl;
 
   return 0;
 }
