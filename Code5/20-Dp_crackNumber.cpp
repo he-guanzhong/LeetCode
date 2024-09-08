@@ -5,23 +5,23 @@
     数字 0-25 分别对应字母 a-z
 请根据上述规则将密文 ciphertext 解密为字母，并返回共有多少种解密结果。
 示例 1:
-输入: ciphertext = 216612
-输出: 6
-解释: 216612 解密后有 6 种不同的形式，分别是
-"cbggbc"，"vggbc"，"vggm"，"cbggm"，"cqggbc" 和 "cqggm"  */
+  输入: ciphertext = 216612
+  输出: 6
+  解释: 216612 解密后有 6 种不同的形式，分别是
+    "cbggbc"，"vggbc"，"vggm"，"cbggm"，"cqggbc" 和 "cqggm"  */
 
 int crackNumber(int ciphertext) {
-  int dp0 = 1, dp1 = 1, x, y = ciphertext % 10;
-  while (ciphertext > 9) {
-    ciphertext /= 10;
-    x = ciphertext % 10;
-    int tmp = 10 * x + y;
-    int dp2 = (tmp >= 10 && tmp <= 25) ? dp1 + dp0 : dp1;
-    dp0 = dp1;
-    dp1 = dp2;
-    y = x;
+  string tmp = to_string(ciphertext);
+  int n = tmp.size();
+  vector<int> dp(n + 1, 1);
+  for (int i = 2; i <= n; i++) {
+    string s = tmp.substr(i - 2, 2);
+    if (s[0] != '0' && stoi(s) < 26)
+      dp[i] = dp[i - 1] + dp[i - 2];
+    else
+      dp[i] = dp[i - 1];
   }
-  return dp1;
+  return dp[n];
 }
 
 // 字符串，整数转化位字符串，方便切割当前位i的前两位数字[i-2,i)，直接利用string的字符串比较函数。其范围[00,99]，只接受[10,25]
@@ -58,8 +58,9 @@ int crackNumber2(int ciphertext) {
 
 int main() {
   int ciphertext1 = 216612;
-  cout << crackNumber(ciphertext1) << " " << crackNumber(24547) << endl;
-  cout << crackNumber2(ciphertext1) << " " << crackNumber2(24547) << endl;
-
+  cout << crackNumber(ciphertext1) << " " << crackNumber(24547) << " "
+       << crackNumber(26) << " " << crackNumber(506) << endl;
+  cout << crackNumber2(ciphertext1) << " " << crackNumber2(24547) << " "
+       << crackNumber2(26) << " " << crackNumber2(506) << endl;
   return 0;
 }

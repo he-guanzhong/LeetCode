@@ -3,16 +3,16 @@
 仓库管理员以数组 stock 形式记录商品库存表，其中 stock[i]
 表示对应商品库存余量。请返回库存余量最少的 cnt 个商品余量，返回 顺序不限。
 示例 1：
-输入：stock = [2,5,7,4], cnt = 1
-输出：[2]
+  输入：stock = [2,5,7,4], cnt = 1
+  输出：[2]
 示例 2：
-输入：stock = [0,2,3,6], cnt = 2
-输出：[0,2] 或 [2,0] */
+  输入：stock = [0,2,3,6], cnt = 2
+  输出：[0,2] 或 [2,0] */
 
-void quickSort(vector<int>& stock, int cnt, int l, int r) {
+void quick(vector<int>& stock, int l, int r, int cnt) {
   if (l >= r)
     return;
-  int i = l, j = r;
+  int i = l + 1, j = r;
   while (i < j) {
     while (i < j && stock[j] >= stock[l])
       j--;
@@ -21,14 +21,17 @@ void quickSort(vector<int>& stock, int cnt, int l, int r) {
     swap(stock[i], stock[j]);
   }
   swap(stock[l], stock[i]);
-  if (i < cnt)
-    quickSort(stock, cnt, i + 1, r);
-  else if (i > cnt)
-    quickSort(stock, cnt, l, i - 1);
+  if (i > cnt)
+    quick(stock, l, i - 1, cnt);
+  else if (i < cnt) {
+    quick(stock, i + 1, r, cnt);
+  }
 }
 vector<int> inventoryManagement(vector<int>& stock, int cnt) {
-  quickSort(stock, cnt, 0, stock.size() - 1);
-  vector<int> ans(stock.begin(), stock.begin() + cnt);
+  vector<int> ans;
+  quick(stock, 0, stock.size() - 1, cnt);
+  for (int i = 0; i < cnt; i++)
+    ans.push_back(stock[i]);
   return ans;
 }
 
@@ -80,6 +83,7 @@ vector<int> inventoryManagement2(vector<int>& stock, int cnt) {
   vector<int> ans(stock.begin(), stock.begin() + cnt);
   return ans;
 }
+
 int main() {
   vector<int> stock1 = {2, 5, 7, 4}, stock2 = {0, 2, 3, 6};
   printVector(inventoryManagement(stock1, 1));
