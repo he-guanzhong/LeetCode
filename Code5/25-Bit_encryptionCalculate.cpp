@@ -5,16 +5,17 @@ dataA 和 dataB 分别为随机抽样的两次通信的数据量：
     正数为发送量
     负数为接受量
     0 为数据遗失
-请不使用四则运算符的情况下实现一个函数计算两次通信的数据量之和（三种情况均需被统计），以确保在数据传输过程中的高安全性和保密性。
+请不使用四则运算符的情况下实现一个函数计算两次通信的数据量之和（三种情况均需被统计），
+以确保在数据传输过程中的高安全性和保密性。
 示例 1:
-输入：dataA = 5, dataB = -1
-输出：4 */
+  输入：dataA = 5, dataB = -1
+  输出：4 */
 
 int encryptionCalculate(int dataA, int dataB) {
   while (dataB) {
-    int c = (unsigned long)(dataA & dataB) << 1;
+    int tmp = (dataB & dataA) << 1;
     dataA ^= dataB;
-    dataB = c;
+    dataB = tmp;
   }
   return dataA;
 }

@@ -4,25 +4,25 @@
 表示该袜子的颜色编号。礼盒中除了一款撞色搭配的袜子，每种颜色的袜子均有两只。请设计一个程序，在时间复杂度
 O(n)，空间复杂度O(1) 内找到这双撞色搭配袜子的两个颜色编号。
 示例 1：
-输入：sockets = [4, 5, 2, 4, 6, 6]
-输出：[2,5] 或 [5,2]
+  输入：sockets = [4, 5, 2, 4, 6, 6]
+  输出：[2,5] 或 [5,2]
 示例 2：
-输入：sockets = [1, 2, 4, 1, 4, 3, 12, 3]
-输出：[2,12] 或 [12,2]  */
+  输入：sockets = [1, 2, 4, 1, 4, 3, 12, 3]
+  输出：[2,12] 或 [12,2]  */
 
 vector<int> sockCollocation(vector<int>& sockets) {
   int n = 0;
-  for (int i : sockets)
-    n ^= i;
+  for (int i = 0; i < sockets.size(); i++)
+    n ^= sockets[i];
   int m = 1;
   while ((m & n) == 0)
     m <<= 1;
   int x = 0, y = 0;
-  for (int i : sockets) {
-    if (i & m)
-      x ^= i;
+  for (int i = 0; i < sockets.size(); i++) {
+    if (sockets[i] & m)
+      x ^= sockets[i];
     else
-      y ^= i;
+      y ^= sockets[i];
   }
   return {x, y};
 }

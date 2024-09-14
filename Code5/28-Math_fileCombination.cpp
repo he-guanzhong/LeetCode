@@ -7,35 +7,31 @@
     每种组合按照文件编号 升序 排列；
     不同组合按照第一个文件编号 升序 排列。
 示例 1：
-输入：target = 12
-输出：[[3, 4, 5]]
-解释：在上述示例中，存在一个连续正整数序列的和为 12，为 [3, 4, 5]。
+  输入：target = 12
+  输出：[[3, 4, 5]]
+  解释：在上述示例中，存在一个连续正整数序列的和为 12，为 [3, 4, 5]。
 示例 2：
-输入：target = 18
-输出：[[3,4,5,6],[5,6,7]]
-解释：在上述示例中，存在两个连续正整数序列的和分别为 18，分别为 [3, 4, 5, 6] 和
-[5, 6, 7]。 */
+  输入：target = 18
+  输出：[[3,4,5,6],[5,6,7]]
+  解释：在上述示例中，存在两个连续正整数序列的和分别为 18，分别为 [3, 4, 5, 6]
+和 [5, 6, 7]。 */
 
 vector<vector<int>> fileCombination(int target) {
   vector<vector<int>> ans;
-  int i = 0, j = 0;
-  int cnt = 0;
-  do {
-    if (cnt < target) {
+  deque<int> path;
+  int sum = 0;
+  int j = 1;
+  for (int i = 1; i < target / 2 + 1; i++) {
+    sum += i;
+    path.push_back(i);
+    while (sum >= target) {
+      if (sum == target)
+        ans.push_back(vector<int>(path.begin(), path.end()));
+      path.pop_front();
+      sum -= j;
       j++;
-      cnt += j;
-
-    } else {
-      if (cnt == target) {
-        vector<int> path;
-        for (int k = i; k <= j; k++)
-          path.push_back(k);
-        ans.push_back(path);
-      }
-      cnt -= i;
-      i++;
     }
-  } while ((i < j));
+  }
   return ans;
 }
 
@@ -86,10 +82,12 @@ int main() {
   printMat(fileCombination(10));
   printMat(fileCombination(12));
   printMat(fileCombination(18));
+  printMat(fileCombination(9));
   printMat(fileCombination(50252));
   printMat(fileCombination(10));
   printMat(fileCombination1(12));
   printMat(fileCombination1(18));
+  printMat(fileCombination1(9));
   printMat(fileCombination1(50252));
   return 0;
 }

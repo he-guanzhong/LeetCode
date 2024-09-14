@@ -3,27 +3,27 @@
 给你一个整数 n ，请你在无限的整数序列 [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ...]
 中找出并返回第 n 位上的数字。
 示例 1：
-输入：n = 3
-输出：3
+  输入：n = 3
+  输出：3
 示例 2：
-输入：n = 11
-输出：0
-解释：第 11 位数字在序列 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ... 里是 0 ，它是 10
-的一部分。
-提示：
-    1 <= n <= 231 - 1 */
+  输入：n = 11
+  输出：0
+  解释：第 11 位数字在序列 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ... 里是 0 ，它是
+    10 的一部分。 提示： 1 <= n <= 231 - 1 */
 
 int findNthDigit(int n) {
-  int digit = 1, start = 1;
-  long cnt = 9;
+  int digit = 1;
+  long cnt = 9, start = 1;
+  int ans = 0;
   while (n > cnt) {
     n -= cnt;
-    digit++;
     start *= 10;
+    digit++;
     cnt = digit * 9 * start;
   }
   int num = start + (n - 1) / digit;
-  return to_string(num)[(n - 1) % digit] - '0';
+  string tmp = to_string(num);
+  return tmp[(n - 1) % digit] - '0';
 }
 
 // 分三步。一、确定n所在是几位数digit。对于数字n，定义三个特殊变量。数位digit，代表个十百千万等几位数，为int整型。
