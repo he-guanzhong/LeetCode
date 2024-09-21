@@ -4,32 +4,32 @@
 ，如果对这个子数组进行升序排序，那么整个数组都会变为升序排序。
 请你找出符合题意的 最短 子数组，并输出它的长度。
 示例 1：
-输入：nums = [2,6,4,8,10,9,15]
-输出：5
-解释：你只需要对 [6, 4, 8, 10, 9] 进行升序排序，那么整个表都会变为升序排序。
+  输入：nums = [2,6,4,8,10,9,15]
+  输出：5
+  解释：你只需要对 [6, 4, 8, 10, 9] 进行升序排序，那么整个表都会变为升序排序。
 示例 2：
-输入：nums = [1,2,3,4]
-输出：0
+  输入：nums = [1,2,3,4]
+  输出：0
 示例 3：
-输入：nums = [1]
-输出：0
-进阶：你可以设计一个时间复杂度为 O(n) 的解决方案吗？ */
+  输入：nums = [1]
+  输出：0
+  进阶：你可以设计一个时间复杂度为 O(n) 的解决方案吗？ */
 
 int findUnsortedSubarray(vector<int>& nums) {
-  int minV = INT_MAX, maxV = INT_MIN;
+  int start = -1, end = -1;
+  int minVal = INT_MIN, maxVal = INT_MAX;
   int n = nums.size();
-  int left = n - 1, right = 0;
   for (int i = 0; i < n; i++) {
-    if (nums[i] >= maxV)
-      maxV = nums[i];
+    if (nums[i] < minVal)
+      start = i;
     else
-      right = i;
-    if (nums[n - 1 - i] <= minV)
-      minV = nums[n - 1 - i];
+      minVal = nums[i];
+    if (nums[n - 1 - i] > maxVal)
+      end = n - 1 - i;
     else
-      left = n - 1 - i;
+      maxVal = nums[n - 1 - i];
   }
-  return right > left ? right - left + 1 : 0;
+  return (start != -1) ? start - end + 1 : 0;
 }
 
 // 方法一，排序。注意C++11新函数is_sorted()，其默认是less<>即e1<e2从小到大排列，此时greater<>是e1>e2从大到小排列
@@ -70,14 +70,15 @@ int findUnsortedSubarray2(vector<int>& nums) {
 
 int main() {
   vector<int> nums1 = {2, 6, 4, 8, 10, 9, 15}, nums2 = {1, 2, 3, 4},
-              nums3 = {1}, nums4 = {1, 2, 3, 3, 3}, nums5 = {2, 1};
+              nums3 = {1}, nums4 = {1, 2, 3, 3, 3}, nums5 = {2, 1},
+              nums6 = {1, 3, 2, 2, 2};
   cout << findUnsortedSubarray(nums1) << " " << findUnsortedSubarray(nums2)
        << " " << findUnsortedSubarray(nums3) << " "
        << findUnsortedSubarray(nums4) << " " << findUnsortedSubarray(nums5)
-       << endl;
+       << " " << findUnsortedSubarray(nums6) << endl;
   cout << findUnsortedSubarray1(nums1) << " " << findUnsortedSubarray1(nums2)
        << " " << findUnsortedSubarray1(nums3) << " "
        << findUnsortedSubarray1(nums4) << " " << findUnsortedSubarray1(nums5)
-       << endl;
+       << " " << findUnsortedSubarray1(nums6) << endl;
   return 0;
 }

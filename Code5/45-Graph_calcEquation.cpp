@@ -12,64 +12,63 @@ equations{i] = [Ai, Bi] 和 values[i] 共同表示等式 Ai / Bi = values[i] 。
 的情况，且不存在任何矛盾的结果。
 注意：未在等式列表中出现的变量是未定义的，因此无法确定它们的答案。
 示例 1：
-输入：equations = [["a","b"],["b","c"]], values = [2.0,3.0], queries =
-[["a","c"],["b","a"],["a","e"],["a","a"],["x","x"]]
-输出：[6.00000,0.50000,-1.00000,1.00000,-1.00000]
-解释：
-条件：a / b = 2.0, b / c = 3.0
-问题：a / c = ?, b / a = ?, a / e = ?, a / a = ?, x / x = ?
-结果：[6.0, 0.5, -1.0, 1.0, -1.0 ]
-注意：x 是未定义的 => -1.0
+  输入：equations = [["a","b"],["b","c"]], values = [2.0,3.0], queries =
+    [["a","c"],["b","a"],["a","e"],["a","a"],["x","x"]]
+  输出：[6.00000,0.50000,-1.00000,1.00000,-1.00000]
+  解释：
+  条件：a / b = 2.0, b / c = 3.0
+  问题：a / c = ?, b / a = ?, a / e = ?, a / a = ?, x / x = ?
+  结果：[6.0, 0.5, -1.0, 1.0, -1.0 ]
+  注意：x 是未定义的 => -1.0
 示例 2：
-输入：equations = [["a","b"],["b","c"],["bc","cd"]], values = [1.5,2.5,5.0],
-queries = [["a","c"],["c","b"],["bc","cd"],["cd","bc"]]
-输出：[3.75000,0.40000,5.00000,0.20000]
+  输入：equations = [["a","b"],["b","c"],["bc","cd"]], values = [1.5,2.5,5.0],
+    queries = [["a","c"],["c","b"],["bc","cd"],["cd","bc"]]
+  输出：[3.75000,0.40000,5.00000,0.20000]
 示例 3：
-输入：equations = [["a","b"]], values = [0.5], queries =
-[["a","b"],["b","a"],["a","c"],["x","y"]]
-输出：[0.50000,2.00000,-1.00000,-1.00000] */
+  输入：equations = [["a","b"]], values = [0.5], queries =
+    [["a","b"],["b","a"],["a","c"],["x","y"]]
+  输出：[0.50000,2.00000,-1.00000,-1.00000] */
 
-void dfs(unordered_map<string, vector<pair<string, double>>>& umap,
+bool dfs(const string& cur,
+         const string& dest,
+         unordered_map<string, vector<pair<string, double>>>& umap,
          unordered_map<string, bool>& visited,
-         string start,
-         string target,
-         double val,
-         bool& found,
-         vector<double>& ans) {
-  if (found)
-    return;
-  if (umap.find(start) == umap.end())
-    return;
-  if (start == target) {
-    found = true;
-    ans.push_back(val);
-    return;
-  }
-  visited[start] = true;
-  for (int i = 0; i < umap[start].size(); i++) {
-    if (visited[umap[start][i].first])
+         double& val) {
+  if (umap.count(cur) == 0)
+    return false;
+  if (cur == dest)
+    return true;
+  visited[cur] = true;
+  for (int i = 0; i < umap[cur].size(); i++) {
+    string next = umap[cur][i].first;
+    double num = umap[cur][i].second;
+    if (visited[next] == true || umap.count(next) == 0)
       continue;
-    dfs(umap, visited, umap[start][i].first, target,
-        val * umap[start][i].second, found, ans);
+    val *= num;
+    if (dfs(next, dest, umap, visited, val))
+      return true;
+    val /= num;
   }
-  visited[start] = false;
+  visited[cur] = false;
+  return false;
 }
 vector<double> calcEquation(vector<vector<string>>& equations,
                             vector<double>& values,
                             vector<vector<string>>& queries) {
-  vector<double> ans;
   unordered_map<string, vector<pair<string, double>>> umap;
   for (int i = 0; i < equations.size(); i++) {
     umap[equations[i][0]].push_back({equations[i][1], values[i]});
     umap[equations[i][1]].push_back({equations[i][0], 1.0 / values[i]});
   }
-  unordered_map<string, bool> visited;
+
+  vector<double> ans;
   for (int i = 0; i < queries.size(); i++) {
-    double val = 1;
-    bool found = false;
-    dfs(umap, visited, queries[i][0], queries[i][1], val, found, ans);
-    if (!found)
-      ans.push_back(-1);
+    unordered_map<string, bool> visited;
+    double path = 1.0;
+    if (dfs(queries[i][0], queries[i][1], umap, visited, path))
+      ans.push_back(path);
+    else
+      ans.push_back(-1.0);
   }
   return ans;
 }
@@ -103,6 +102,7 @@ void dfs1(unordered_map<string, vector<pair<string, double>>>& g,
     visited[next.first] = false;
   }
 }
+
 vector<double> calcEquation1(vector<vector<string>>& equations,
                              vector<double>& values,
                              vector<vector<string>>& queries) {

@@ -4,49 +4,54 @@
 ，删除最小数量的无效括号，使得输入的字符串有效。 返回所有可能的结果。答案可以按
 任意顺序 返回。
 示例 1：
-输入：s = "()())()"
-输出：["(())()","()()()"]
+  输入：s = "()())()"
+  输出：["(())()","()()()"]
 示例 2：
-输入：s = "(a)())()"
-输出：["(a())()","(a)()()"]
+  输入：s = "(a)())()"
+  输出：["(a())()","(a)()()"]
 示例 3：
-输入：s = ")("
-输出：[""] */
-bool isValid(string s) {
-  int left = 0;
-  for (char c : s) {
-    if (c == '(')
-      left++;
-    else if (c == ')') {
-      if (--left < 0)
+  输入：s = ")("
+  输出：[""] */
+
+bool isValid(const string& s) {
+  int cnt = 0;
+  for (int i = 0; i < s.size(); i++) {
+    if (s[i] == '(') {
+      cnt++;
+    } else if (s[i] == ')') {
+      if (--cnt < 0)
         return false;
     }
   }
-  return left == 0;
+  return true;
+}
+void dfs(string s, int start, int left, int right, vector<string>& ans) {
+  if (left == 0 && right == 0) {
+    if (isValid(s))
+      ans.push_back(s);
+    return;
+  }
+  for (int i = start; i < s.size(); i++) {
+    if (i > start && s[i] == s[i - 1])
+      continue;
+    if (left && s[i] == '(') {
+      dfs(s.substr(0, i) + s.substr(i + 1), i, left - 1, right, ans);
+    } else if (right && s[i] == ')')
+      dfs(s.substr(0, i) + s.substr(i + 1), i, left, right - 1, ans);
+  }
 }
 vector<string> removeInvalidParentheses(string s) {
-  unordered_set<string> cur;
-  cur.insert(s);
-  vector<string> ans;
-  while (1) {
-    for (string str : cur) {
-      if (isValid(str))
-        ans.push_back(str);
-    }
-    if (ans.size())
-      break;
-    unordered_set<string> next;
-    for (string str : cur) {
-      for (int i = 0; i < str.size(); i++) {
-        if (i > 0 && str[i] == str[i - 1] || str[i] != '(' && str[i] != ')')
-          continue;
-        string tmp = str.substr(0, i) + str.substr(i + 1);
-        if (next.find(tmp) == next.end())
-          next.insert(tmp);
-      }
-    }
-    cur = next;
+  int left = 0, right = 0;
+  for (int i = 0; i < s.size(); i++) {
+    if (s[i] == '(')
+      left++;
+    else if (s[i] == ')' && left > 0)
+      left--;
+    else if (s[i] == ')' && left == 0)
+      right++;
   }
+  vector<string> ans;
+  dfs(s, 0, left, right, ans);
   return ans;
 }
 
@@ -106,7 +111,7 @@ vector<string> removeInvalidParentheses1(string s) {
   return ans;
 }
 
-// 广度优先搜索BFS。每一轮，使用哈希表记录当前字符串。对该串遍历每个字符，只要时括号，就删除，并保存成下一轮字符串哈希表。
+// 广度优先搜索BFS。每一轮，使用哈希表记录当前字符串。对该串遍历每个字符，只要是括号，就删除，并保存成下一轮字符串哈希表。
 // 每一轮开始后判断，如果该轮存在有效值，则压入结果，直接返回，即为最少删除括号结果。
 // 时间复杂度O(n)=n*2^n，空间复杂度O(n)=n*C (n/2) n
 vector<string> removeInvalidParentheses2(string s) {
@@ -135,18 +140,20 @@ vector<string> removeInvalidParentheses2(string s) {
 }
 
 int main() {
-  string s1 = "()())()", s2 = "(a)())()", s3 = ")(", s4 = ")d))", s5 = "n";
+  string s1 = "()())()", s2 = "(a)())()", s3 = ")(", s4 = ")d))", s5 = "n",
+         s6 = "(()(";
   printVector(removeInvalidParentheses(s1));
   printVector(removeInvalidParentheses(s2));
   printVector(removeInvalidParentheses(s3));
   printVector(removeInvalidParentheses(s4));
   printVector(removeInvalidParentheses(s5));
-
+  printVector(removeInvalidParentheses(s6));
   printVector(removeInvalidParentheses1(s1));
   printVector(removeInvalidParentheses1(s2));
   printVector(removeInvalidParentheses1(s3));
   printVector(removeInvalidParentheses1(s4));
   printVector(removeInvalidParentheses1(s5));
+  printVector(removeInvalidParentheses1(s6));
 
   return 0;
 }

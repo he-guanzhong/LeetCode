@@ -3,22 +3,35 @@
 给你一个整数 n ，对于 0 <= i <= n 中的每个 i ，计算其二进制表示中 1 的个数
 ，返回一个长度为 n + 1 的数组 ans 作为答案。
 示例 1：
-输入：n = 2
-输出：[0,1,1]
-解释：
-0 --> 0
-1 --> 1
-2 --> 10
+  输入：n = 2
+  输出：[0,1,1]
+  解释：
+    0 --> 0
+    1 --> 1
+    2 --> 10
 示例 2：
-输入：n = 5
-输出：[0,1,1,2,1,2]
-解释：
-0 --> 0
-1 --> 1
-2 --> 10
-3 --> 11
-4 --> 100
-5 --> 101 */
+  输入：n = 5
+  输出：[0,1,1,2,1,2]
+  解释：
+    0 --> 0
+    1 --> 1
+    2 --> 10
+    3 --> 11
+    4 --> 100
+    5 --> 101
+进阶:
+    给出时间复杂度为 O(n*sizeof(integer)) 的解答非常容易。但你可以在线性时间
+O(n) 内用一趟扫描做到吗？ 要求算法的空间复杂度为 O(n) 。
+    你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++
+中的 __builtin_popcount ）来执行此操作。*/
+
+vector<int> countBits(int n) {
+  vector<int> dp(n + 1);
+  for (int i = 1; i <= n; i++) {
+    dp[i] = dp[i >> 1] + (i & 1);
+  }
+  return dp;
+}
 
 // C语言有内置的函数__builtin_popcount，判断一个32位整数位1的个数
 // 传统BrianKernighan算法，对每一个数字使用i&i-1计算一比特数，时间复杂度O(n)=nlogn
@@ -51,7 +64,7 @@ vector<int> countBits3(int n) {
 }
 
 // 动态规划。最低设置位，y为i&i-1，即最后一位1消除后的数。dp[i]=dp[y]+1
-vector<int> countBits(int n) {
+vector<int> countBits4(int n) {
   vector<int> bits(n + 1, 0);
   for (int i = 1; i <= n; i++) {
     bits[i] = bits[i & (i - 1)] + 1;
@@ -62,6 +75,7 @@ vector<int> countBits(int n) {
 int main() {
   printVector(countBits(2));
   printVector(countBits(5));
-
+  printVector(countBits4(2));
+  printVector(countBits4(5));
   return 0;
 }
