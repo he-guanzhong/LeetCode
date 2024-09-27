@@ -21,31 +21,27 @@
   5 6 2
   5 7 1
   6 7 1
-输出示例：6 */
+输出示例：6
+数据范围：
+  2 <= V <= 10000;
+  1 <= E <= 100000;
+  0 <= val <= 10000; */
 
-// 基于并查集，保存边的信息
 struct Edge {
   int l, r, val;
 };
-// 并查集总数量
 int n = 10001;
 vector<int> father(n, 0);
-// 并查集初始化
 void init() {
   for (int i = 0; i < n; i++)
     father[i] = i;
 }
-// 并查集寻根，包含路径压缩
 int find(int u) {
   return father[u] == u ? u : father[u] = find(father[u]);
 }
-// 并查集相同集合
 bool isSame(int u, int v) {
-  u = find(u);
-  v = find(v);
-  return u == v;
+  return find(u) == find(v);
 }
-// 并查集加入集合。
 void join(int u, int v) {
   u = find(u);
   v = find(v);
@@ -53,21 +49,62 @@ void join(int u, int v) {
     return;
   father[v] = u;
 }
+int kruskal(vector<Edge>& edges) {
+  sort(edges.begin(), edges.end(),
+       [](const Edge& a, const Edge& b) { return a.val < b.val; });
+  init();
+  int ans = 0;
+  for (const Edge& edge : edges) {
+    if (!isSame(edge.l, edge.r)) {
+      ans += edge.val;
+      join(edge.l, edge.r);
+    }
+  }
+  return ans;
+}
+
+// 基于并查集，保存边的信息
+// 并查集总数量
+int m = 10001;
+vector<int> father1(m, 0);
+// 并查集初始化
+void init1() {
+  for (int i = 0; i < m; i++)
+    father1[i] = i;
+}
+// 并查集寻根，包含路径压缩
+int find1(int u) {
+  return father1[u] == u ? u : father1[u] = find1(father1[u]);
+}
+// 并查集相同集合
+bool isSame1(int u, int v) {
+  u = find1(u);
+  v = find1(v);
+  return u == v;
+}
+// 并查集加入集合。
+void join1(int u, int v) {
+  u = find1(u);
+  v = find1(v);
+  if (u == v)
+    return;
+  father1[v] = u;
+}
 
 // 先按照边的权重排序，权重小的先入集合。若两节点不在同一集合，则考虑其权重，并二者新入集合。若已在同一集合，直接跳过
 // 时间复杂度，快排nlog(n)快排+log(n)并查集
 // prim算法适用稠密图，边几乎完全连接结点，时间复杂度O(n^2)，n为结点数，运行速度与边数无关
 // kruskal算法使用稀疏图，边数量少于节点数，时间复杂度O(nlogn)，n为边数
-int kruskal(vector<Edge>& edges) {
+int kruskal1(vector<Edge>& edges) {
   int ans = 0;
   vector<Edge> result;  // 保存边
-  init();
+  init1();
   sort(edges.begin(), edges.end(),
        [](const Edge& a, const Edge& b) { return a.val < b.val; });
   for (const Edge& edge : edges) {
-    if (!isSame(edge.l, edge.r)) {
+    if (!isSame1(edge.l, edge.r)) {
       result.push_back(edge);
-      join(edge.l, edge.r);
+      join1(edge.l, edge.r);
       ans += edge.val;
     }
   }
@@ -82,7 +119,8 @@ int main() {
   vector<Edge> edges = {{1, 2, 1}, {1, 3, 1}, {1, 5, 2}, {2, 6, 1},
                         {2, 4, 2}, {2, 3, 2}, {3, 4, 1}, {4, 5, 1},
                         {5, 6, 2}, {5, 7, 1}, {6, 7, 1}};
-
   cout << kruskal(edges) << endl;
+  cout << kruskal1(edges) << endl;
+
   return 0;
 }

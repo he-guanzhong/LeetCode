@@ -6,15 +6,15 @@
     remove()：移除第一个待结算的商品价格，如果队列为空，则返回 -1
 注意，为保证该系统运转高效性，以上函数的均摊时间复杂度均为 O(1)
 示例 1：
-输入:
-["Checkout","add","add","get_max","remove","get_max"]
-[[],[4],[7],[],[],[]]
-输出: [null,null,null,7,4,7]
+  输入:
+    ["Checkout","add","add","get_max","remove","get_max"]
+    [[],[4],[7],[],[],[]]
+  输出: [null,null,null,7,4,7]
 示例 2：
-输入:
-["Checkout","remove","get_max"]
-[[],[],[]]
-输出: [null,-1,-1]
+  输入:
+    ["Checkout","remove","get_max"]
+    [[],[],[]]
+  输出: [null,-1,-1]
 提示：
     1 <= get_max, add, remove 的总操作数 <= 10000
     1 <= value <= 10^5 */

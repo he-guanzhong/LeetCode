@@ -24,14 +24,16 @@ nums[j] < nums[i] 。
   0 <= nums[i] <= 100 */
 
 vector<int> smallerNumbersThanCurrent(vector<int>& nums) {
+  vector<int> cnt(101, 0);
+  for (int i = 0; i < nums.size(); i++) {
+    cnt[nums[i]]++;
+  }
+  for (int i = 1; i <= 100; i++) {
+    cnt[i] += cnt[i - 1];
+  }
   vector<int> ans(nums.size(), 0);
   for (int i = 0; i < nums.size(); i++) {
-    for (int j = 0; j < nums.size(); j++) {
-      if (j == i)
-        continue;
-      if (nums[j] < nums[i])
-        ans[i]++;
-    }
+    ans[i] = nums[i] ? cnt[nums[i] - 1] : 0;
   }
   return ans;
 }
@@ -85,14 +87,15 @@ vector<int> smallerNumbersThanCurrent3(vector<int>& nums) {
 
 int main() {
   vector<int> nums1 = {8, 1, 2, 2, 3}, nums2 = {6, 5, 4, 8},
-              nums3 = {7, 7, 7, 7};
-
+              nums3 = {7, 7, 7, 7}, nums4 = {5, 0, 10, 0, 10, 6};
   printVector(smallerNumbersThanCurrent(nums1));
   printVector(smallerNumbersThanCurrent(nums2));
   printVector(smallerNumbersThanCurrent(nums3));
+  printVector(smallerNumbersThanCurrent(nums4));
   printVector(smallerNumbersThanCurrent1(nums1));
   printVector(smallerNumbersThanCurrent1(nums2));
   printVector(smallerNumbersThanCurrent1(nums3));
+  printVector(smallerNumbersThanCurrent1(nums4));
 
   return 0;
 }

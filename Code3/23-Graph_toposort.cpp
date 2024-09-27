@@ -26,6 +26,33 @@ B，则必须在处理文件 A 之前处理文件 B （0 <= A, B <= N -
   等等合法的顺序。*/
 
 vector<int> toposort(vector<vector<int>>& source, int n) {
+  vector<int> ans;
+  vector<int> inDeg(n, 0);
+  vector<vector<int>> grid(n);
+  for (vector<int>& s : source) {
+    inDeg[s[1]]++;
+    grid[s[0]].push_back(s[1]);
+  }
+  queue<int> que;
+  for (int i = 0; i < n; i++) {
+    if (inDeg[i] == 0)
+      que.push(i);
+  }
+  while (que.size()) {
+    int cur = que.front();
+    que.pop();
+    ans.push_back(cur);
+    for (int& next : grid[cur]) {
+      if (--inDeg[next] == 0)
+        que.push(next);
+    }
+  }
+  if (ans.size() != n)
+    ans = {-1};
+  return ans;
+}
+
+vector<int> toposort1(vector<vector<int>>& source, int n) {
   vector<int> ans;                       // 保存结果
   vector<int> inDegree(n, 0);            // 统计入度
   unordered_map<int, vector<int>> umap;  // 指向关系
@@ -60,5 +87,7 @@ int main() {
   int N = 5, M = 4;
   vector<vector<int>> source = {{0, 1}, {0, 2}, {1, 3}, {2, 4}};
   printVector(toposort(source, N));
+  printVector(toposort1(source, N));
+
   return 0;
 }

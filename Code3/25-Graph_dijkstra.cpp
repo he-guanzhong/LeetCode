@@ -24,21 +24,45 @@
   6 7 9
 输出示例：
   12。*/
-
-// 边数较少，使用邻接表的形式存储。小顶堆维护当前帧可到达的所有结点，及其距源点的代价
-// 时间复杂度ElogE，E为边数，其和顶点数无关，因为每个边都处理了一次，为E，处理的过程时进入或弹出优先队列，为logE。空间复杂度V+E
-// Edge记录每一条边的代价
 struct Edge {
   int to, val;
   Edge(int t, int v) : to(t), val(v) {}
 };
+
+int dijkstra(vector<list<Edge>>& edges, int n) {
+  vector<int> minDist(n + 1, INT_MAX);
+  vector<bool> visited(n + 1, 0);
+  minDist[1] = 0;
+  auto cmp = [](pair<int, int> a, pair<int, int> b) {
+    return a.second > b.second;
+  };
+  priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(cmp)> que(
+      cmp);
+  que.push({1, 0});
+  while (que.size()) {
+    pair<int, int> cur = que.top();
+    visited[cur.first] = true;
+    que.pop();
+    for (const Edge& e : edges[cur.first]) {
+      if (!visited[e.to] && minDist[cur.first] + e.val < minDist[e.to]) {
+        minDist[e.to] = minDist[cur.first] + e.val;
+        que.push({e.to, minDist[e.to]});
+      }
+    }
+  }
+  return minDist[n] == INT_MAX ? -1 : minDist[n];
+}
+
+// 边数较少，使用邻接表的形式存储。小顶堆维护当前帧可到达的所有结点，及其距源点的代价
+// 时间复杂度ElogE，E为边数，其和顶点数无关，因为每个边都处理了一次，为E，处理的过程时进入或弹出优先队列，为logE。空间复杂度V+E
+// Edge记录每一条边的代价
 class myComparison {
  public:
   bool operator()(const pair<int, int>& lhs, const pair<int, int>& rhs) {
     return lhs.second > rhs.second;
   };
 };
-int dijkstra(vector<list<Edge>>& edges, int n) {
+int dijkstra1(vector<list<Edge>>& edges, int n) {
   vector<int> minDist(n + 1, INT_MAX);
   vector<bool> visited(n + 1, false);
   // 小顶堆，维护待处理的，离原点近的结点。其为<结点，结点至源点的代价>
@@ -88,5 +112,7 @@ int main() {
   edges[6].push_back(Edge(7, 9));
 
   cout << dijkstra(edges, N) << endl;
+  cout << dijkstra1(edges, N) << endl;
+
   return 0;
 }

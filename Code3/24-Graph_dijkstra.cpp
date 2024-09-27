@@ -23,9 +23,37 @@
   5 7 4
   6 7 9
 输出示例：
-  12。*/
+  12。
+不能到达的情况：
+  如下图所示，当从起始车站不能到达终点车站时，则输出 -1。
+数据范围：
+  1 <= N <= 500; 1 <= M <= 5000; */
 
 int dijkstra(vector<vector<int>>& grid, int n) {
+  vector<int> minDist(n + 1, INT_MAX);
+  vector<bool> visited(n + 1, false);
+  minDist[1] = 0;
+  for (int i = 1; i <= n; i++) {
+    int cur = 0;
+    int minVal = INT_MAX;
+    for (int j = 1; j <= n; j++) {
+      if (!visited[j] && minDist[j] < minVal) {
+        minVal = minDist[j];
+        cur = j;
+      }
+    }
+    visited[cur] = true;
+    for (int j = 1; j <= n; j++) {
+      if (!visited[j] && grid[cur][j] != INT_MAX &&
+          minDist[cur] + grid[cur][j] < minDist[j]) {
+        minDist[j] = minDist[cur] + grid[cur][j];
+      }
+    }
+  }
+  return minDist[n] == INT_MAX ? -1 : minDist[n];
+}
+
+int dijkstra1(vector<vector<int>>& grid, int n) {
   vector<int> minDist(n + 1, INT_MAX);  // 每个点距离源点代价
   vector<bool> visited(n + 1, false);   // 每个点是否访问过
   minDist[1] = 0;                       // 起始点从1开始
@@ -52,6 +80,7 @@ int dijkstra(vector<vector<int>>& grid, int n) {
   // 最后一点代价无穷大，说明无法到达
   return minDist[n] == INT_MAX ? -1 : minDist[n];
 }
+
 int main() {
   int N = 7, M = 9;
   vector<vector<int>> grid(N + 1, vector<int>(N + 1, INT_MAX));
@@ -59,5 +88,7 @@ int main() {
   grid[3][4] = 2, grid[4][5] = 3, grid[2][6] = 4, grid[5][7] = 4,
   grid[6][7] = 9;
   cout << dijkstra(grid, N) << endl;
+  cout << dijkstra1(grid, N) << endl;
+
   return 0;
 }

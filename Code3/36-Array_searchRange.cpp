@@ -13,23 +13,23 @@ target，返回 [-1, -1]。 你必须设计并实现时间复杂度为 O(log n) 
   输入：nums = [], target = 0
   输出：[-1,-1] */
 
-int search(vector<int>& nums, int target, bool flg) {
+int search(vector<int>& nums, int target, bool swt) {
   int left = 0, right = nums.size() - 1;
   while (left <= right) {
     int mid = left + ((right - left) >> 1);
-    if (nums[mid] > target || flg && nums[mid] == target)
+    if (nums[mid] > target || swt && nums[mid] == target)
       right = mid - 1;
     else
       left = mid + 1;
   }
-  return flg ? left : right;
+  return swt ? left : right;
 }
 vector<int> searchRange(vector<int>& nums, int target) {
-  int left = search(nums, target, true);
-  int right = search(nums, target, false);
-  left = (left >= 0 && left < nums.size() && nums[left] == target ? left : -1);
+  int left = search(nums, target, 1);
+  int right = search(nums, target, 0);
+  left = left >= 0 && left < nums.size() && nums[left] == target ? left : -1;
   right =
-      (right >= 0 && right < nums.size() && nums[right] == target ? right : -1);
+      right >= 0 && right < nums.size() && nums[right] == target ? right : -1;
   return {left, right};
 }
 
@@ -76,5 +76,6 @@ int main() {
   printVector(searchRange1(nums1, 6));
   printVector(searchRange1(nums2, 0));
   printVector(searchRange1(nums3, 0));
+
   return 0;
 }

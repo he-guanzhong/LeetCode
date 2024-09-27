@@ -24,33 +24,30 @@
 输出示例：6 */
 
 int prim(vector<vector<int>>& grid, int V) {
-  vector<int> minDist(V + 1, 10001);
-  vector<bool> isInTree(V + 1, false);
-  vector<int> parent(V + 1, -1);
+  vector<int> minDist(V + 1, INT_MAX);
+  vector<bool> visited(V + 1);
+  vector<int> parent(V + 1);
+  minDist[1] = 0;
   for (int i = 1; i < V; i++) {
     int minVal = INT_MAX;
-    int cur = -1;
+    int cur = 0;
     for (int j = 1; j <= V; j++) {
-      if (!isInTree[j] && minDist[j] < minVal) {
+      if (!visited[j] && minDist[j] < minVal) {
         minVal = minDist[j];
         cur = j;
       }
     }
-    isInTree[cur] = true;
+    visited[cur] = true;
     for (int j = 1; j <= V; j++) {
-      if (!isInTree[j] && grid[cur][j] < minDist[j]) {
+      if (!visited[j] && grid[cur][j] < minDist[j]) {
         minDist[j] = grid[cur][j];
         parent[j] = cur;
       }
     }
   }
-  int ans;
+  int ans = 0;
   for (int i = 2; i <= V; i++)
     ans += minDist[i];
-
-  /*   for (int i = 1; i < parent.size(); i++)
-      std::cout << i << "->" << parent[i] << "\t";
-    std::cout << endl; */
   return ans;
 }
 

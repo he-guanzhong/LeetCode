@@ -15,7 +15,43 @@ L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
     链表的长度范围为 [1, 5 * 104]
     1 <= node.val <= 1000 */
 
-void reorderList(ListNode* head) {}
+ListNode* reverseList(ListNode* head) {
+  ListNode *pre = nullptr, *p = head, *tmp = nullptr;
+  while (p) {
+    tmp = p->next;
+    p->next = pre;
+    pre = p;
+    p = tmp;
+  }
+  return pre;
+}
+
+void reorderList(ListNode* head) {
+  if (!head || !head->next)
+    return;
+  ListNode *fast = head, *slow = head;
+  while (fast && fast->next) {
+    fast = fast->next->next;
+    slow = slow->next;
+  }
+
+  slow = reverseList(slow);
+  fast = head->next;
+
+  ListNode* p = head;
+  int cnt = 0;
+  while (fast && slow) {
+    if (cnt % 2 == 0) {
+      p->next = slow;
+      slow = slow->next;
+    } else if (cnt % 2 == 1) {
+      p->next = fast;
+      fast = fast->next;
+    }
+    p = p->next;
+    cnt++;
+  }
+}
 
 // 对半分割链表，重新排序
 ListNode* reverseList1(ListNode* head) {
@@ -41,6 +77,7 @@ void reorderList1(ListNode* head) {
   ListNode* cur1 = head->next;  // 前半队的待处理节点
   ListNode* cur2 = reverseList1(slow);
   ListNode* cur = head;
+
   int cnt = 0;
   while (cur1 && cur2) {
     if (cnt % 2 == 0) {

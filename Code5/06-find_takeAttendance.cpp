@@ -9,7 +9,7 @@ records。假定仅有一位同学缺席，请返回他的学号。
   输入: records = [0, 1, 2, 3, 4, 5, 6, 8]
   输出: 7
 提示：
-1 <= records.length <= 10000 */
+  1 <= records.length <= 10000 */
 
 int takeAttendance(vector<int>& records) {
   int l = 0, r = records.size() - 1;

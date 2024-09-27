@@ -13,11 +13,15 @@
   输出：[2,3] */
 
 vector<int> sortArrayByParityII(vector<int>& nums) {
-  sort(nums.begin(), nums.end(), [](int a, int b) { return a % 2 < b % 2; });
-  for (int i = 1, j = nums.size() - 1; i < j; i += 2, j -= 2) {
-    swap(nums[i], nums[j]);
+  int oddIndex = 1;
+  for (int i = 0; i < nums.size(); i += 2) {
+    if (nums[i] % 2 == 1) {
+      while (nums[oddIndex] % 2 == 0)
+        oddIndex += 2;
+      if (oddIndex < nums.size())
+        swap(nums[i], nums[oddIndex]);
+    }
   }
-
   return nums;
 }
 
@@ -50,11 +54,13 @@ vector<int> sortArrayByParityII2(vector<int>& nums) {
   }
   return ans;
 }
+
 int main() {
   vector<int> nums1 = {4, 2, 5, 7}, nums2 = {2, 3}, nums3 = {1, 2};
   printVector(sortArrayByParityII(nums1));
   printVector(sortArrayByParityII(nums2));
   printVector(sortArrayByParityII(nums3));
+  nums1 = {4, 2, 5, 7}, nums2 = {2, 3}, nums3 = {1, 2};
   printVector(sortArrayByParityII1(nums1));
   printVector(sortArrayByParityII1(nums2));
   printVector(sortArrayByParityII1(nums3));

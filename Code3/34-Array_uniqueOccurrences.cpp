@@ -18,17 +18,16 @@
     -1000 <= arr[i] <= 1000 */
 
 bool uniqueOccurrences(vector<int>& arr) {
-  int cnt[2002] = {0};
-  for (int i = 0; i < arr.size(); i++)
+  vector<int> cnt(2001, 0);
+  for (int i = 0; i < arr.size(); i++) {
     cnt[arr[i] + 1000]++;
-  unordered_set<int> uset;
-  for (int j = 0; j < 2002; j++) {
-    if (cnt[j]) {
-      if (uset.find(cnt[j]) != uset.end())
-        return false;
-      else
-        uset.insert(cnt[j]);
-    }
+  }
+  vector<bool> visited(1001, false);
+  for (int i = 0; i < cnt.size(); i++) {
+    if (visited[cnt[i]])
+      return false;
+    if (cnt[i])
+      visited[cnt[i]] = true;
   }
   return true;
 }

@@ -17,25 +17,17 @@
   输出：true */
 
 bool validMountainArray(vector<int>& arr) {
-  if (arr.size() < 3)
+  int n = arr.size();
+  if (n < 3)
     return false;
-  int maxHigh = arr[0];
-  int index = 0;
-  for (int i = 0; i < arr.size(); i++) {
-    if (arr[i] > maxHigh) {
-      maxHigh = arr[i];
-      index = i;
-    }
+  int i = 0, j = arr.size() - 1;
+  while (i < n - 2 && arr[i + 1] > arr[i]) {
+    i++;
   }
-  if (index == 0 || index == arr.size() - 1)
-    return false;
-  for (int i = 1; i < arr.size(); i++) {
-    if (i <= index && arr[i] <= arr[i - 1])
-      return false;
-    if (i >= index + 1 && arr[i] >= arr[i - 1])
-      return false;
+  while (j > 1 && arr[j - 1] > arr[j]) {
+    j--;
   }
-  return true;
+  return i == j;
 }
 
 // 双指针法，山峰定义是，从左到右递增，从右到左递减，双指针汇聚于一峰，且不存在单调递增或单调递减的情况
@@ -59,5 +51,6 @@ int main() {
   cout << validMountainArray1(nums1) << " " << validMountainArray1(nums2) << " "
        << validMountainArray1(nums3) << " " << validMountainArray1(nums4)
        << endl;
+
   return 0;
 }
