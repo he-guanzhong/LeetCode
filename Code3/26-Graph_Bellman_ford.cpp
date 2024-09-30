@@ -31,13 +31,28 @@
 输出示例：
   12。*/
 
+int Bellman_Ford(vector<vector<int>>& edges, int n) {
+  vector<int> minDist(n + 1, INT_MAX);
+  minDist[1] = 0;
+  for (int i = 1; i < n; i++) {
+    for (const auto& edge : edges) {
+      int from = edge[0];
+      int to = edge[1];
+      int val = edge[2];
+      if (minDist[from] != INT_MAX && minDist[from] + val < minDist[to])
+        minDist[to] = minDist[from] + val;
+    }
+  }
+  return minDist[n] == INT_MAX ? -1 : minDist[n];
+}
+
 // 时间复杂度V*E，空间复杂度V。注意空间复杂度仅包含minDist，不计算grid
-int bellman_ford(vector<vector<int>>& grid, int n) {
+int bellman_ford(vector<vector<int>>& edges, int n) {
   // 总计n个结点，需松弛n-1次。起始点1，终止点n
   vector<int> minDist(n + 1, INT_MAX);
   minDist[1] = 0;
   for (int i = 1; i < n; i++) {
-    for (const vector<int>& edge : grid) {
+    for (const vector<int>& edge : edges) {
       int from = edge[0];
       int to = edge[1];
       int price = edge[2];
@@ -48,6 +63,7 @@ int bellman_ford(vector<vector<int>>& grid, int n) {
   }
   return minDist[n];
 }
+
 int main() {
   int N = 6, M = 7;
   vector<vector<int>> grid(M + 1);

@@ -31,13 +31,32 @@
 输出示例：
   12。*/
 
-// SPFA: shortest path faster algorithm
-// 时间复杂度，图越稠密，为双向且每两个结点相连，接近Bellman_ford的V*E。越稀疏，甚至为单链，时间复杂度为N，整体看是K*N
 struct Edge {
   int to, val;
   Edge(int t, int v) : to(t), val(v) {}
 };
-int SPFA(vector<list<Edge>>& grid, int n) {
+
+int SPFA(vector<list<Edge>>& edges, int n) {
+  vector<int> minDist(n + 1, INT_MAX);
+  minDist[1] = 0;
+  queue<int> que;
+  que.push(1);
+  while (que.size()) {
+    int cur = que.front();
+    que.pop();
+    for (const Edge& e : edges[cur]) {
+      if (minDist[cur] + e.val < minDist[e.to]) {
+        minDist[e.to] = minDist[cur] + e.val;
+        que.push(e.to);
+      }
+    }
+  }
+  return minDist[n] == INT_MAX ? -1 : minDist[n];
+}
+
+// SPFA: shortest path faster algorithm
+// 时间复杂度，图越稠密，为双向且每两个结点相连，接近Bellman_ford的V*E。越稀疏，甚至为单链，时间复杂度为N，整体看是K*N
+int SPFA1(vector<list<Edge>>& grid, int n) {
   // 起点从1开始，其距源点代价为0，并压入队列
   vector<int> minDist(n + 1, INT_MAX);
   minDist[1] = 0;
@@ -68,10 +87,8 @@ int main() {
   grid[4].push_back(Edge(6, 4));
   grid[1].push_back(Edge(3, 5));
   int ans = SPFA(grid, N);
-  if (ans == INT_MAX)
-    cout << "unconnected" << endl;
-  else
-    cout << ans << endl;
-
+  cout << (ans == INT_MAX ? string("unconnected") : to_string(ans)) << endl;
+  ans = SPFA1(grid, N);
+  cout << (ans == INT_MAX ? string("unconnected") : to_string(ans)) << endl;
   return 0;
 }

@@ -15,27 +15,62 @@
     树节点的数目在 [1, 104] 范围内。
     1 <= Node.val <= 105 */
 
-// 将二叉搜索树中序遍历为有序数组，然后重新建立二叉搜索树
-void traversal(TreeNode* root, vector<int>& nums) {
+void inorder(TreeNode* root, vector<int>& path) {
   if (!root)
     return;
-  traversal(root->left, nums);
-  nums.push_back(root->val);
-  traversal(root->right, nums);
+  stack<TreeNode*> st;
+  TreeNode* cur = root;
+  while (st.size() || cur) {
+    if (cur) {
+      st.push(cur);
+      cur = cur->left;
+    } else {
+      cur = st.top();
+      st.pop();
+      path.push_back(cur->val);
+      cur = cur->right;
+    }
+  }
 }
-TreeNode* getTree(vector<int>& nums, int left, int right) {
+TreeNode* build(vector<int>& path, int left, int right) {
+  if (left > right)
+    return nullptr;
+  else if (left == right)
+    return new TreeNode(path[left]);
+  int mid = left + ((right - left) >> 1);
+  TreeNode* root = new TreeNode(path[mid]);
+  root->left = build(path, left, mid - 1);
+  root->right = build(path, mid + 1, right);
+  return root;
+}
+TreeNode* balanceBST(TreeNode* root) {
+  vector<int> path;
+  inorder(root, path);
+  // printVector(path);
+  return build(path, 0, path.size() - 1);
+}
+
+// 将二叉搜索树中序遍历为有序数组，然后重新建立二叉搜索树
+void traversal1(TreeNode* root, vector<int>& nums) {
+  if (!root)
+    return;
+  traversal1(root->left, nums);
+  nums.push_back(root->val);
+  traversal1(root->right, nums);
+}
+TreeNode* getTree1(vector<int>& nums, int left, int right) {
   if (left > right)
     return nullptr;
   int mid = left + ((right - left) >> 1);
   TreeNode* root = new TreeNode(nums[mid]);
-  root->left = getTree(nums, left, mid - 1);
-  root->right = getTree(nums, mid + 1, right);
+  root->left = getTree1(nums, left, mid - 1);
+  root->right = getTree1(nums, mid + 1, right);
   return root;
 }
-TreeNode* balanceBST(TreeNode* root) {
+TreeNode* balanceBST1(TreeNode* root) {
   vector<int> nums;
-  traversal(root, nums);
-  return getTree(nums, 0, nums.size() - 1);
+  traversal1(root, nums);
+  return getTree1(nums, 0, nums.size() - 1);
 }
 
 int main() {
@@ -44,5 +79,9 @@ int main() {
   TreeNode* t2 = construct_binary_tree({2, 1, 3});
   print_binary_tree(balanceBST(t1));
   print_binary_tree(balanceBST(t2));
+  t1 = construct_binary_tree({1, null, 2, null, 3, null, 4, null, null});
+  t2 = construct_binary_tree({2, 1, 3});
+  print_binary_tree(balanceBST1(t1));
+  print_binary_tree(balanceBST1(t2));
   return 0;
 }

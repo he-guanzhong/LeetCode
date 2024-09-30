@@ -21,36 +21,63 @@
   从根到叶子节点路径 4->0 代表数字 40
   因此，数字总和 = 495 + 491 + 40 = 1026 */
 
-// 回溯收集所有路径，遇到根节点就累加求和。使用vector保存临时路径，专门设vec转int的函数。一定是先保证有节点，压节点，再进入递归
 int vector2Int(const vector<int>& vec) {
+  int ans = 0;
+  for (int i = 0; i < vec.size(); i++) {
+    ans = ans * 10 + vec[i];
+  }
+  return ans;
+}
+int dfs(TreeNode* root, vector<int>& path) {
+  if (!root)
+    return 0;
+  if (!root->left && !root->right) {
+    path.push_back(root->val);
+    int ans = vector2Int(path);
+    path.pop_back();
+    return ans;
+  }
+  path.push_back(root->val);
+  int ans = dfs(root->left, path) + dfs(root->right, path);
+  path.pop_back();
+  return ans;
+}
+int sumNumbers(TreeNode* root) {
+  vector<int> path;
+  int ans = dfs(root, path);
+  return ans;
+}
+
+// 回溯收集所有路径，遇到根节点就累加求和。使用vector保存临时路径，专门设vec转int的函数。一定是先保证有节点，压节点，再进入递归
+int vector2Int1(const vector<int>& vec) {
   int sum = 0;
   for (int i = 0; i < vec.size(); i++)
     sum = sum * 10 + vec[i];
   return sum;
 }
-void dfs(TreeNode* root, int& ans, vector<int>& vec) {
+void dfs1(TreeNode* root, int& ans, vector<int>& vec) {
   if (!root->left && !root->right) {
-    ans += vector2Int(vec);
+    ans += vector2Int1(vec);
     return;
   }
   if (root->left) {
     vec.push_back(root->left->val);
-    dfs(root->left, ans, vec);
+    dfs1(root->left, ans, vec);
     vec.pop_back();
   }
   if (root->right) {
     vec.push_back(root->right->val);
-    dfs(root->right, ans, vec);
+    dfs1(root->right, ans, vec);
     vec.pop_back();
   }
 }
-int sumNumbers(TreeNode* root) {
+int sumNumbers1(TreeNode* root) {
   if (!root)
     return 0;
   int ans = 0;
   vector<int> vec;
   vec.push_back(root->val);
-  dfs(root, ans, vec);
+  dfs1(root, ans, vec);
   return ans;
 }
 
@@ -58,5 +85,7 @@ int main() {
   TreeNode* t1 = construct_binary_tree({1, 2, 3});
   TreeNode* t2 = construct_binary_tree({4, 9, 0, 5, 1});
   cout << sumNumbers(t1) << " " << sumNumbers(t2) << endl;
+  cout << sumNumbers1(t1) << " " << sumNumbers1(t2) << endl;
+
   return 0;
 }

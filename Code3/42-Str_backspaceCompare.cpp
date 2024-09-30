@@ -21,9 +21,26 @@ true 。# 代表退格字符。
 进阶：
     你可以用 O(n) 的时间复杂度和 O(1) 的空间复杂度解决该问题吗？*/
 
+string helper(string s) {
+  int i = 0, j = 0;
+  while (i < s.size()) {
+    if (s[i] >= 'a' && s[i] <= 'z')
+      s[j++] = s[i];
+    else
+      j = max(0, --j);
+    i++;
+  }
+  return s.substr(0, j);
+}
+bool backspaceCompare(string s, string t) {
+  s = helper(s);
+  t = helper(t);
+  return s == t;
+}
+
 // 双指针，从后向前遍历，空间复杂度O(1)。遇到#，跳步计数加一，指针前移，跳步计数不为0，指针前移。直至找到无需跳步的元素停止
 // 比较双指针位置。二者都有值且不相等，为假。两方之一已经超限，为假。如双方共同一起超限，则为真
-bool backspaceCompare(string s, string t) {
+bool backspaceCompare1(string s, string t) {
   int i = s.size() - 1, j = t.size() - 1;
   int skipS = 0, skipT = 0;
   while (i >= 0 || j >= 0) {  // 注意此处是或，不是与
@@ -83,5 +100,8 @@ int main() {
   cout << backspaceCompare(s1, t1) << " " << backspaceCompare(s2, t2) << " "
        << backspaceCompare(s3, t3) << " " << backspaceCompare(s4, t4) << " "
        << backspaceCompare(s5, t5) << endl;
+  cout << backspaceCompare1(s1, t1) << " " << backspaceCompare1(s2, t2) << " "
+       << backspaceCompare1(s3, t3) << " " << backspaceCompare1(s4, t4) << " "
+       << backspaceCompare1(s5, t5) << endl;
   return 0;
 }

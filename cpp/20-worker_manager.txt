@@ -1,0 +1,10 @@
+10	li	3
+50	zhang	2
+12	gao	1
+1	shi	1
+39	zhangs	1
+2	shang	3
+49	zhang	3
+123	sdhng	3
+45	lish	2
+11	isha	1

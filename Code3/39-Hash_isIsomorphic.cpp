@@ -17,9 +17,23 @@
     t.length == s.length
     s 和 t 由任意有效的 ASCII 字符组成 */
 
+bool isIsomorphic(string s, string t) {
+  unordered_map<char, char> umap1, umap2;
+  for (int i = 0; i < s.size(); i++) {
+    umap1[s[i]] = t[i];
+    umap2[t[i]] = s[i];
+  }
+  string s1 = s, t1 = t;
+  for (int i = 0; i < s.size(); i++) {
+    s1[i] = umap1[s[i]];
+    t1[i] = umap2[t[i]];
+  }
+  return s1 == t && s == t1;
+}
+
 // 每个字符都得映射另一字符，说明满射。不同字符不能映射到同一字符，说明单射。同时满足二者条件，双射代表一一对应。
 // 两个哈希表，维护t和s之间映射关系。如发现映射关系不匹配，即返回false。全部通过，返回true
-bool isIsomorphic(string s, string t) {
+bool isIsomorphic1(string s, string t) {
   unordered_map<char, char> s2t;
   unordered_map<char, char> t2s;
   for (int i = 0; i < s.size(); i++) {
@@ -34,7 +48,7 @@ bool isIsomorphic(string s, string t) {
 }
 
 // 自做法
-bool isIsomorphic1(string s, string t) {
+bool isIsomorphic2(string s, string t) {
   string tmp = s;
   unordered_map<char, char> umap;
   unordered_set<char> uset;

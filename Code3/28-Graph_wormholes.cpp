@@ -32,8 +32,28 @@
 输出示例：
   circle  */
 
+string wormholes(vector<vector<int>>& grid, int n) {
+  vector<int> minDist(n + 1, INT_MAX);
+  minDist[1] = 0;
+  int last = INT_MAX;
+  for (int i = 1; i <= n; i++) {
+    for (int j = 0; j < grid.size(); j++) {
+      int from = grid[j][0];
+      int to = grid[j][1];
+      int val = grid[j][2];
+      if (minDist[from] != INT_MAX && minDist[from] + val < minDist[to]) {
+        minDist[to] = minDist[from] + val;
+      }
+    }
+    if (i == n && last != minDist[n])
+      return "circle";
+    last = minDist[n];
+  }
+  return minDist[n] == INT_MAX ? "unconnected" : to_string(minDist[n]);
+}
+
 // 原理是松弛n次，即多松弛一次，观察是minDist否有变化
-int wormholes(const vector<vector<int>>& grid, int n) {
+string wormholes1(const vector<vector<int>>& grid, int n) {
   vector<int> minDist(n + 1, INT_MAX);
   minDist[1] = 0;
   bool flag = false;
@@ -51,7 +71,8 @@ int wormholes(const vector<vector<int>>& grid, int n) {
       }
     }
   }
-  return flag ? -2 : minDist[n];
+  string ans = minDist[n] == INT_MAX ? "unconnected" : to_string(minDist[n]);
+  return flag ? "circle" : ans;
 }
 
 // SPFA算法也可以判断是否负权回路，某个结点如果入度大于n-1，则说明存在
@@ -59,12 +80,35 @@ struct Edge {
   int to, val;
   Edge(int t, int v) : to(t), val(v) {}
 };
-int SPFA(vector<list<Edge>>& edges, int n) {
+
+string SPFA(vector<list<Edge>>& edges, int n) {
+  vector<int> minDist(n + 1, INT_MAX);
+  minDist[1] = 0;
+  queue<int> que;
+  que.push(1);
+  vector<int> inDeg(n + 1, 0);
+  while (!que.empty()) {
+    int cur = que.front();
+    que.pop();
+    for (const Edge& e : edges[cur]) {
+      if (minDist[cur] != INT_MAX && minDist[cur] + e.val < minDist[e.to]) {
+        minDist[e.to] = minDist[cur] + e.val;
+        que.push(e.to);
+        if (++inDeg[e.to] >= n)
+          return "circle";
+      }
+    }
+  }
+  return minDist[n] == INT_MAX ? "unconnected" : to_string(minDist[n]);
+}
+
+string SPFA1(vector<list<Edge>>& edges, int n) {
   vector<int> minDist(n + 1, INT_MAX);
   minDist[1] = 0;
   queue<int> que;
   que.push(1);
   vector<int> inDegree(n + 1, 0);  // 统计每点入度
+  inDegree[1] = 1;
   int flag = false;
   while (que.size()) {
     int cur = que.front();
@@ -75,12 +119,12 @@ int SPFA(vector<list<Edge>>& edges, int n) {
         que.push(edge.to);
         if (++inDegree[edge.to] >= n) {
           flag = true;
-          return -2;  // 直接返回，或者清空que在退出
+          return "circle";  // 直接返回，或者清空que在退出
         }
       }
     }
   }
-  return minDist[n];
+  return minDist[n] == INT_MAX ? "unconnected" : to_string(minDist[n]);
 }
 
 int main() {
@@ -90,19 +134,15 @@ int main() {
   grid[2] = {2, 3, 1};
   grid[3] = {3, 1, -1};
   grid[4] = {3, 4, 1};
-  int ans = wormholes(grid, N);
+  cout << wormholes(grid, N) << endl;
+  cout << wormholes1(grid, N) << endl;
   vector<list<Edge>> edges(N + 1);
   edges[1].push_back(Edge(2, -1));
   edges[2].push_back(Edge(3, 1));
   edges[3].push_back(Edge(1, -1));
   edges[3].push_back(Edge(4, 1));
-  ans = SPFA(edges, N);
+  cout << SPFA(edges, N) << endl;
+  cout << SPFA1(edges, N) << endl;
 
-  if (ans == INT_MAX)
-    cout << "unconnected" << endl;
-  else if (ans == -2)
-    cout << "circle" << endl;
-  else
-    cout << ans << endl;
   return 0;
 }

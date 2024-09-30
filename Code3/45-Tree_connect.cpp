@@ -26,15 +26,27 @@ next 指针设置为 NULL。 初始状态下，所有 next 指针都被设置为
 进阶：
     你只能使用常量级额外空间。
     使用递归解题也符合要求，本题中递归程序占用的栈空间不算做额外的空间复杂度。*/
+
 struct Node {
   int val;
   Node *left, *right, *next;
 };
+Node* connect(Node* root) {
+  if (!root || !root->left && !root->right)
+    return root;
+  root->left->next = root->right;
+  if (root->next) {
+    root->right->next = root->next->left;
+  }
+  connect(root->left);
+  connect(root->right);
+  return root;
+}
 
 // 本题要求常量级空间，只能使用递归法，关键是前序遍历，利用上一层节点以做好的next搭桥
 // 若有左孩子，则左孩子next直接指右孩子。若有右孩子，看当前next是否有值，有则使cur->right的next指向和cur->next->left。没有则说明已为最右节点，next赋空
 // 空间复杂度O(1)，因为不算递归程序占用栈空间
-void traversal(Node* root) {
+void traversal1(Node* root) {
   if (!root)
     return;
   if (root->left) {
@@ -46,11 +58,11 @@ void traversal(Node* root) {
     else
       root->right->next = nullptr;
   }
-  traversal(root->left);
-  traversal(root->right);
+  traversal1(root->left);
+  traversal1(root->right);
 }
-Node* connect(Node* root) {
-  traversal(root);
+Node* connect1(Node* root) {
+  traversal1(root);
   return root;
 }
 

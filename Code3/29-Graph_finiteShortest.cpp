@@ -30,13 +30,32 @@
 输出示例：
   0  */
 
+string finiteShortestV(vector<vector<int>>& grid,
+                       int n,
+                       int src,
+                       int dst,
+                       int k) {
+  vector<int> minDist(n + 1, INT_MAX);
+  vector<int> last(n + 1, INT_MAX);
+  minDist[src] = last[src] = 0;
+  for (int i = 0; i <= k; i++) {
+    for (int j = 0; j < grid.size(); j++) {
+      int from = grid[j][0], to = grid[j][1], val = grid[j][2];
+      if (last[from] != INT_MAX && last[from] + val < minDist[to])
+        minDist[to] = last[from] + val;
+    }
+    last = minDist;
+  }
+  return minDist[dst] == INT_MAX ? "unreachable" : to_string(minDist[dst]);
+}
+
 // 经过k个结点，及最多通过k+1条边。即多松弛k+1次。由于有负权回路，且给出的边顺序不定，故要保存上一周期的minDist，作为本周期计算依据
 // 判断是否有负权回路，仅看minDist[dst]是否变化，而不关心其数值是否正确。但本题关心
-int finiteShortestV(const vector<vector<int>>& grid,
-                    int n,
-                    int src,
-                    int dst,
-                    int k) {
+string finiteShortestV1(const vector<vector<int>>& grid,
+                        int n,
+                        int src,
+                        int dst,
+                        int k) {
   vector<int> minDist(n + 1, INT_MAX);
   vector<int> last_minDist(n + 1, INT_MAX);
   minDist[src] = 0;
@@ -52,7 +71,7 @@ int finiteShortestV(const vector<vector<int>>& grid,
       }
     }
   }
-  return minDist[dst];
+  return minDist[dst] == INT_MAX ? "unreachable" : to_string(minDist[dst]);
 }
 
 // SPFA算法，使用queSize控制松弛次数。入队出队有消耗，避免同一结点重复压入使用visited数组。但对稠密图，还是不如普通算法
@@ -61,7 +80,41 @@ struct Edge {
   Edge(int t, int v) : to(t), val(v) {}
 };
 
-int finiteShortestE(vector<list<Edge>>& edges, int n, int src, int dst, int k) {
+string finiteShortestE(vector<list<Edge>>& edges,
+                       int n,
+                       int src,
+                       int dst,
+                       int k) {
+  vector<int> minDist(n + 1, INT_MAX);
+  minDist[src] = 0;
+  queue<int> que;
+  que.push(src);
+  k++;
+  while (que.size() && k--) {
+    int size = que.size();
+    vector<bool> visited(n + 1);
+    vector<int> last = minDist;
+    while (size--) {
+      int cur = que.front();
+      que.pop();
+      for (const auto& e : edges[cur]) {
+        if (last[cur] != INT_MAX && last[cur] + e.val < minDist[e.to]) {
+          minDist[e.to] = last[cur] + e.val;
+          if (visited[e.to])
+            continue;
+          que.push(e.to);
+          visited[e.to] = true;
+        }
+      }
+    }
+  }
+  return minDist[dst] == INT_MAX ? "unreachable" : to_string(minDist[dst]);
+}
+string finiteShortestE1(vector<list<Edge>>& edges,
+                        int n,
+                        int src,
+                        int dst,
+                        int k) {
   vector<int> minDist(n + 1, INT_MAX);
   vector<int> last_minDist(n + 1, INT_MAX);
   minDist[src] = 0;
@@ -86,7 +139,7 @@ int finiteShortestE(vector<list<Edge>>& edges, int n, int src, int dst, int k) {
       }
     }
   }
-  return minDist[dst];
+  return minDist[dst] == INT_MAX ? "unreachable" : to_string(minDist[dst]);
 }
 
 int main() {
@@ -101,7 +154,8 @@ int main() {
   grid[5] = {3, 5, 1};
   grid[6] = {4, 6, 4};
   grid[7] = {5, 6, -2};
-  ans = finiteShortestV(grid, N, src, dst, k);
+  cout << finiteShortestV(grid, N, src, dst, k) << endl;
+  cout << finiteShortestV1(grid, N, src, dst, k) << endl;
 
   vector<list<Edge>> edges(N + 1);
   edges[1].push_back(Edge(2, 1));
@@ -111,11 +165,8 @@ int main() {
   edges[3].push_back(Edge(5, 1));
   edges[4].push_back(Edge(6, 4));
   edges[5].push_back(Edge(6, -2));
-  ans = finiteShortestE(edges, N, src, dst, k);
+  cout << finiteShortestE(edges, N, src, dst, k) << endl;
+  cout << finiteShortestE1(edges, N, src, dst, k) << endl;
 
-  if (ans == INT_MAX)
-    cout << "unreachable" << endl;
-  else
-    cout << ans << endl;
   return 0;
 }
