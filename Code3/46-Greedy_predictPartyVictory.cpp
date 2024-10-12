@@ -29,9 +29,33 @@ Dire 阵营的参议员会将被跳过，因为他的权利被禁止了。 这�
     阵营的参议员可以使用他的第一项权利禁止第一个参议员的权利。
     因此在第二轮只剩下第三个参议员拥有投票的权利,于是他可以宣布胜利 */
 
+string predictPartyVictory(string senate) {
+  int flag = 0;
+  bool R = true, D = true;
+  while (R && D) {
+    R = false, D = false;
+    for (int i = 0; i < senate.size(); i++) {
+      if (senate[i] == 'R') {
+        if (flag < 0)
+          senate[i] = 0;
+        else
+          R = true;
+        flag++;
+      } else if (senate[i] == 'D') {
+        if (flag > 0)
+          senate[i] = 0;
+        else
+          D = true;
+        flag--;
+      }
+    }
+  }
+  return R ? "Radiant" : "Dire";
+}
+
 // 贪心策略。当前位置尽量消灭后方的对方投票者。模拟操作，R/D表征此轮R和D是否存在，直至其中任意一方不存在，即可宣布结果。
 // flg外置，表征从起始时间到当前时刻，该位置上，R和D的相对大小关系。为正，标识R>D，flg为负，标识R<D
-string predictPartyVictory(string senate) {
+string predictPartyVictory1(string senate) {
   bool R = true, D = true;
   int flag = 0;
   while (R && D) {
@@ -60,5 +84,9 @@ int main() {
   cout << predictPartyVictory(senate1) << " " << predictPartyVictory(senate2)
        << " " << predictPartyVictory(senate3) << " "
        << predictPartyVictory(senate4) << endl;
+  senate1 = "RD", senate2 = "RDD", senate3 = "DR", senate4 = "RRDDD";
+  cout << predictPartyVictory1(senate1) << " " << predictPartyVictory1(senate2)
+       << " " << predictPartyVictory1(senate3) << " "
+       << predictPartyVictory1(senate4) << endl;
   return 0;
 }

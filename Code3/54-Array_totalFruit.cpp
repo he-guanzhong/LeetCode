@@ -28,16 +28,16 @@
   解释：可以采摘 [1,2,1,1,2] 这五棵树。
 提示：
   1 <= fruits.length <= 105
-  0 <= fruits[i] < fruits.length*/
+  0 <= fruits[i] < fruits.length */
 
 int totalFruit(vector<int>& fruits) {
+  int ans = 0;
   unordered_map<int, int> umap;
-  int j = 0, ans = 0;
+  int j = 0;
   for (int i = 0; i < fruits.size(); i++) {
     umap[fruits[i]]++;
     while (umap.size() > 2) {
-      umap[fruits[j]]--;
-      if (umap[fruits[j]] == 0)
+      if (--umap[fruits[j]] == 0)
         umap.erase(fruits[j]);
       j++;
     }

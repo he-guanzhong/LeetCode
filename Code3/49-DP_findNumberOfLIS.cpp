@@ -11,12 +11,37 @@
   输出: 5
   解释: 最长递增子序列的长度是1，并且存在5个子序列的长度为1，因此输出5。 */
 
-// dp[i]表示到i位置最长递增子序列长度,cnt[i]表示以i为结尾最长递增子序列个数。显然，考虑全等数列，初始化长度、个数初始化均为1
+int findNumberOfLIS(vector<int>& nums) {
+  int n = nums.size();
+  vector<int> dp(n, 1);
+  vector<int> cnt(n, 1);
+  int maxLen = 1;
+  for (int i = 1; i < n; i++) {
+    for (int j = 0; j < i; j++) {
+      if (nums[j] < nums[i]) {
+        if (dp[i] < dp[j] + 1) {
+          dp[i] = dp[j] + 1;
+          cnt[i] = cnt[j];
+        } else if (dp[j] + 1 == dp[i])
+          cnt[i] += cnt[j];
+      }
+    }
+    maxLen = max(dp[i], maxLen);
+  }
+  int ans = 0;
+  for (int i = 0; i < n; i++) {
+    if (dp[i] == maxLen)
+      ans += cnt[i];
+  }
+  return ans;
+}
+
+// dp[i]表示以i结尾递增子序列长度,cnt[i]表示以i为结尾最长递增子序列个数。显然，考虑全等数列，初始化长度、个数初始化均为1
 // 使用j切割[0,i]区间，如果nums[i]>nums[j]时，递增长度加一，dp[i]=dp[j]+1。同时由于子序列保持递增，故数量不变cnt[i]=cnt[j]
 // 若发现j切割出两个相同长度子序列dp[i]==dp[j]+1，说明递增子序列的数量要增加了，其为cnt[i]+=cnt[j]
 // 考虑[3,4,5,5,1,2]数组，后两个数字由于小于前两位，递增子序列长度依然为[1,2]，数量依然为[1,1]。最长子序列不一定包含最后一位数字。
 // 因此要额外记录最长子序列长度maxlen，其初始值是1，而非0。二次遍历dp[i]，找到以i结尾的各个递增序列点，统计其数量cnt[i]之和
-int findNumberOfLIS(vector<int>& nums) {
+int findNumberOfLIS1(vector<int>& nums) {
   vector<int> dp(nums.size(), 1);
   vector<int> cnt(nums.size(), 1);
   int maxLen = 1;
@@ -46,5 +71,7 @@ int main() {
               nums3 = {1, 2, 4, 3, 5, 4, 7, 2};
   cout << findNumberOfLIS(nums1) << " " << findNumberOfLIS(nums2) << " "
        << findNumberOfLIS(nums3) << endl;
+  cout << findNumberOfLIS1(nums1) << " " << findNumberOfLIS1(nums2) << " "
+       << findNumberOfLIS1(nums3) << endl;
   return 0;
 }

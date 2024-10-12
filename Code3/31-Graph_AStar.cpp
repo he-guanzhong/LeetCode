@@ -26,8 +26,6 @@
   1
   0 */
 
-int moveStep[1001][1001];
-int dir[8][2] = {-2, -1, -1, -2, 2, -1, 1, -2, 1, 2, 2, 1, -2, 1, -1, 2};
 // 总代价F = 距离起点代价G + 到终点代价H
 struct Knight {
   int x, y;
@@ -36,12 +34,48 @@ struct Knight {
   bool operator<(const Knight& k) const { return k.f < f; }
 };
 
-// 启发函数，求当前点距离终点的代价，欧式距离，但不开方，以提高精度
+int grid[1001][1001];
+int dir[8][2] = {{1, 2},  {2, 1},  {-1, 2},  {2, -1},
+                 {1, -2}, {-2, 1}, {-1, -2}, {-2, -1}};
 int heuristic(const Knight& k, int endx, int endy) {
   return (k.x - endx) * (k.x - endx) + (k.y - endy) * (k.y - endy);
 }
-int astar(const Knight& start, int endx, int endy) {
-  memset(moveStep, 0, sizeof(moveStep));
+int AStar(const Knight& start, int endx, int endy) {
+  Knight cur;
+  Knight next;
+  priority_queue<Knight> que;
+  memset(grid, 0, sizeof(grid));
+  que.push(start);
+  while (que.size()) {
+    cur = que.top();
+    que.pop();
+    if (cur.x == endx && cur.y == endy)
+      break;
+    for (int i = 0; i < 8; i++) {
+      next.x = cur.x + dir[i][0];
+      next.y = cur.y + dir[i][1];
+      if (next.x < 1 || next.x > 1000 || next.y < 1 || next.y > 1000 ||
+          grid[next.x][next.y])
+        continue;
+      next.g = cur.g + 5;
+      next.h = heuristic(next, endx, endy);
+      next.f = next.g + next.h;
+      grid[next.x][next.y] = grid[cur.x][cur.y] + 1;
+      que.push(next);
+    }
+  }
+  return grid[endx][endy];
+}
+
+int moveStep1[1001][1001];
+int direct[8][2] = {-2, -1, -1, -2, 2, -1, 1, -2, 1, 2, 2, 1, -2, 1, -1, 2};
+
+// 启发函数，求当前点距离终点的代价，欧式距离，但不开方，以提高精度
+int heuristic1(const Knight& k, int endx, int endy) {
+  return (k.x - endx) * (k.x - endx) + (k.y - endy) * (k.y - endy);
+}
+int AStar1(const Knight& start, int endx, int endy) {
+  memset(moveStep1, 0, sizeof(moveStep1));
   Knight cur, next;            // 提前申请内存
   priority_queue<Knight> que;  // 默认小顶堆
   que.push(start);
@@ -51,21 +85,21 @@ int astar(const Knight& start, int endx, int endy) {
     if (cur.x == endx && cur.y == endy)  // 必须是取的时候处理
       break;
     for (int i = 0; i < 8; i++) {
-      next.x = cur.x + dir[i][0];
-      next.y = cur.y + dir[i][1];
+      next.x = cur.x + direct[i][0];
+      next.y = cur.y + direct[i][1];
 
       if (next.x < 1 || next.x > 1000 || next.y < 1 || next.y > 1000)
         continue;
-      if (moveStep[next.x][next.y])  // 只走没走过的地方
+      if (moveStep1[next.x][next.y])  // 只走没走过的地方
         continue;
-      moveStep[next.x][next.y] = moveStep[cur.x][cur.y] + 1;
+      moveStep1[next.x][next.y] = moveStep1[cur.x][cur.y] + 1;
       next.g = cur.g + 5;  // 日字形，距离加1*1+2*2
-      next.h = heuristic(next, endx, endy);
+      next.h = heuristic1(next, endx, endy);
       next.f = next.g + next.h;
       que.push(next);
     }
   }
-  return moveStep[endx][endy];
+  return moveStep1[endx][endy];
 }
 
 int main() {
@@ -76,9 +110,10 @@ int main() {
         endy = test[i][3];
     Knight start;
     start.x = startx, start.y = starty;
-    start.g = 0, start.h = heuristic(start, endx, endy);
+    start.g = 0, start.h = heuristic1(start, endx, endy);
     start.f = start.g + start.h;
-    cout << astar(start, endx, endy) << endl;
+    cout << AStar(start, endx, endy) << endl;
+    cout << AStar1(start, endx, endy) << endl;
   }
 
   return 0;

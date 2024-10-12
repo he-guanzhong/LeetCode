@@ -26,8 +26,8 @@ void dfs(vector<vector<int>>& graph,
   }
 }
 vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
-  vector<int> path;
   vector<vector<int>> ans;
+  vector<int> path;
   path.push_back(0);
   dfs(graph, 0, path, ans);
   return ans;

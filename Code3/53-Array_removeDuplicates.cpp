@@ -31,11 +31,11 @@ for (int i = 0; i < k; i++) {
 
 int removeDuplicates(vector<int>& nums) {
   int j = 0;
-  for (int i = 1; i < nums.size(); i++) {
-    if (nums[i] != nums[j]) {
+  for (int i = 0; i < nums.size(); i++) {
+    if (nums[i] != nums[j])
       nums[++j] = nums[i];
-    }
   }
+  nums.resize(j + 1);
   return j + 1;
 }
 
@@ -53,39 +53,11 @@ int removeDuplicates1(vector<int>& nums) {
   return slow;
 }
 
-int* findPoints(int* nums, int numsSize, int* returnSize) {
-  *returnSize = 15;
-  int* ans = (int*)malloc(sizeof(int) * 15);
-  float ratio = numsSize / 15.0f;
-  for (int i = 0; i < 15; ++i) {
-    int index = ratio * i;
-    ans[i] = nums[index];
-  }
-  return ans;
-}
 int main() {
-  /*   vector<int> nums1 = {1, 1, 2}, nums2 = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
-    cout << removeDuplicates(nums1) << " " << removeDuplicates(nums2) << endl;
-    nums1 = {1, 1, 2}, nums2 = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
-    cout << removeDuplicates1(nums1) << " " << removeDuplicates1(nums2) << endl;
-  */
+  vector<int> nums1 = {1, 1, 2}, nums2 = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
+  cout << removeDuplicates(nums1) << " " << removeDuplicates(nums2) << endl;
+  nums1 = {1, 1, 2}, nums2 = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
+  cout << removeDuplicates1(nums1) << " " << removeDuplicates1(nums2) << endl;
 
-  int nums1[20];
-  for (int i = 0; i < 20; i++)
-    nums1[i] = i + 1;
-  int nums2[25];
-  for (int i = 0; i < 25; i++)
-    nums2[i] = i + 1;
-
-  int returnSize = 15;
-  int* ans1 = findPoints(nums1, 20, &returnSize);
-  int* ans2 = findPoints(nums2, 25, &returnSize);
-
-  for (int i = 0; i < returnSize; i++)
-    cout << ans1[i] << ", " << endl;
-  cout << endl;
-  for (int i = 0; i < returnSize; i++)
-    cout << ans2[i] << ", " << endl;
-  cout << endl;
   return 0;
 }

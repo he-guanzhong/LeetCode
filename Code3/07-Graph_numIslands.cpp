@@ -28,23 +28,24 @@ int dfs(vector<vector<char>>& grid, int x, int y) {
     int nextx = x + dir[k];
     int nexty = y + dir[k + 1];
     if (nextx < 0 || nextx >= grid.size() || nexty < 0 ||
-        nexty >= grid[0].size() || grid[nextx][nexty] == '0')
+        nexty >= grid[0].size() || grid[nextx][nexty] != '1')
       continue;
     area += dfs(grid, nextx, nexty);
   }
   return area;
 }
 int numIslands(vector<vector<char>>& grid) {
-  int cnt = 0;
+  int ans = 0, area = 0;
   for (int i = 0; i < grid.size(); i++) {
     for (int j = 0; j < grid[0].size(); j++) {
-      if (grid[i][j] == '1') {
-        dfs(grid, i, j);
-        cnt++;
-      }
+      area = 0;
+      if (grid[i][j] == '1')
+        area = dfs(grid, i, j);
+      if (area)
+        ans++;
     }
   }
-  return cnt;
+  return ans;
 }
 
 // 深度搜索版，官方推荐写法。使用visited矩阵，记录是否访问过。

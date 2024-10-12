@@ -18,8 +18,31 @@ R（右），L（左），U（上）和 D（下）。
   解释：机器人向左移动两次。它最终位于原点的左侧，距原点有两次 “移动”
     的距离。我们返回 false，因为它在移动结束时没有返回原点。*/
 
-// 直接模拟即可，记原始坐标为(x,y)，遍历字符串，根据置零移动坐标位置
 bool judgeCircle(string moves) {
+  int horizontal = 0, vertical = 0;
+  for (const char& c : moves) {
+    switch (c) {
+      case 'U':
+        vertical++;
+        break;
+      case 'D':
+        vertical--;
+        break;
+      case 'L':
+        horizontal--;
+        break;
+      case 'R':
+        horizontal++;
+        break;
+      default:
+        break;
+    }
+  }
+  return vertical == 0 && horizontal == 0;
+}
+
+// 直接模拟即可，记原始坐标为(x,y)，遍历字符串，根据置零移动坐标位置
+bool judgeCircle1(string moves) {
   int horizontal = 0, vertical = 0;
   for (int i = 0; i < moves.size(); i++) {
     if (moves[i] == 'U')
@@ -38,6 +61,8 @@ int main() {
   string moves1 = "UD", moves2 = "LL", moves3 = "LL";
   cout << judgeCircle(moves1) << " " << judgeCircle(moves2) << " "
        << judgeCircle(moves3) << endl;
+  cout << judgeCircle1(moves1) << " " << judgeCircle1(moves2) << " "
+       << judgeCircle1(moves3) << endl;
 
   return 0;
 }

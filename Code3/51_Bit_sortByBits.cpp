@@ -27,6 +27,17 @@
   输出：[10,100,10000,1000] */
 
 vector<int> sortByBits(vector<int>& arr) {
+  sort(arr.begin(), arr.end(), [](const int& a, const int& b) {
+    int a_cnt = __builtin_popcount(a), b_cnt = __builtin_popcount(b);
+    if (a_cnt == b_cnt)
+      return a < b;
+    else
+      return a_cnt < b_cnt;
+  });
+  return arr;
+}
+
+vector<int> sortByBits2(vector<int>& arr) {
   vector<pair<int, int>> tmp(arr.size());
   for (int i = 0; i < arr.size(); i++) {
     tmp[i].first = arr[i];

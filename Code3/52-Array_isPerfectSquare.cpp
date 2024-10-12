@@ -16,16 +16,21 @@
     1 <= num <= 2^31 - 1 */
 
 bool isPerfectSquare(int num) {
-  double x_n0 = 0, x_n1 = num / 2.0;
-  double eps = 1e-3f;
-  while (abs(x_n0 - x_n1) > eps) {
-    x_n0 = x_n1;
-    x_n1 = x_n0 - (x_n0 * x_n0 - num) / 2.0 / x_n0;
+  long r = num, l = 1;
+  while (l <= r) {
+    long m = l + ((r - l) >> 1);
+    if (m * m > num)
+      r = m - 1;
+    else if (m * m < num)
+      l = m + 1;
+    else
+      return true;
   }
-  return (x_n1 - (int)x_n1) < 1e-6;
+  return false;
 }
 
-// 二分查找。注意涉及中间值m*m，可能会超限，要使用long类型保存数据。时间复杂度O(logN)
+// 二分查找。注意涉及中间值m*m，可能会超限，要使用long类型保存数据。右边界不可以初始化为num/2，考虑[1]特殊情况
+// 时间复杂度O(logN)
 bool isPerfectSquare1(int num) {
   int l = 0, r = num;
   while (l <= r) {
@@ -69,9 +74,9 @@ bool isPerfectSquare3(int num) {
 int main() {
   cout << isPerfectSquare(16) << " " << isPerfectSquare(14) << " "
        << isPerfectSquare(2000105819) << " " << isPerfectSquare(100000001)
-       << endl;
+       << " " << isPerfectSquare(1) << endl;
   cout << isPerfectSquare3(16) << " " << isPerfectSquare3(14) << " "
        << isPerfectSquare3(2000105819) << " " << isPerfectSquare3(100000001)
-       << endl;
+       << " " << isPerfectSquare3(1) << endl;
   return 0;
 }

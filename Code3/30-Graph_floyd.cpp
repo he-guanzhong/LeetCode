@@ -27,6 +27,17 @@
 提示信息
   从 1 到 2 的路径长度为 4，2 到 3 之间并没有道路。1 <= N, M, Q <= 1000. */
 
+int floyd(vector<vector<int>>& grid, int n, int src, int dst) {
+  for (int k = 1; k <= n; k++) {
+    for (int i = 1; i <= n; i++) {
+      for (int j = 1; j <= n; j++) {
+        grid[i][j] = min(grid[i][j], grid[i][k] + grid[k][j]);
+      }
+    }
+  }
+  return grid[src][dst] == 10005 ? -1 : grid[src][dst];
+}
+
 // 三维数组dp[i][j][k]记录从i到j，经过[1,k]的代价。初始化所有代价最大（以10005为例）。有双向路的，不经过任何点k==0，grid矩阵初始化为确定值。
 // 遍历主顺序是是否必须以此经过[1,k]点，故其在最外。递推公式，grid[i][j]代价，分必然经过[1,k]和不经过[1,k]两种情况最小值
 int floyd1(vector<vector<vector<int>>>& grid, int n, int src, int dst) {
@@ -66,6 +77,7 @@ int main() {
   grid2[2][3] = grid2[3][2] = 4;
   grid2[3][6] = grid2[6][3] = 6;
   grid2[4][7] = grid2[7][4] = 8;
+  cout << floyd(grid2, N, 2, 3) << ", " << floyd(grid2, N, 3, 4) << endl;
   cout << floyd2(grid2, N, 2, 3) << ", " << floyd2(grid2, N, 3, 4) << endl;
 
   return 0;

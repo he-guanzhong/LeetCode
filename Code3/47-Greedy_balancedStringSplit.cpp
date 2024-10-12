@@ -20,8 +20,23 @@
   输出：1
   解释：s 只能保持原样 "LLLLRRRR" 。 */
 
-// 贪心，局部最优为发现平衡字符串，就统计加一。
 int balancedStringSplit(string s) {
+  int cntL = 0, cntR = 0;
+  int ans = 0;
+  for (const char& c : s) {
+    if (c == 'L') {
+      cntL++;
+    } else {
+      cntR++;
+    }
+    if (cntL == cntR)
+      ans++;
+  }
+  return ans;
+}
+
+// 贪心，局部最优为发现平衡字符串，就统计加一。
+int balancedStringSplit1(string s) {
   int cnt = 0, ans = 0;
   for (int i = 0; i < s.size(); i++) {
     if (s[i] == 'L')
@@ -38,5 +53,7 @@ int main() {
   string s1 = "RLRRLLRLRL", s2 = "RLRRRLLRLL", s3 = "LLLLRRRR";
   cout << balancedStringSplit(s1) << " " << balancedStringSplit(s2) << " "
        << balancedStringSplit(s3) << endl;
+  cout << balancedStringSplit1(s1) << " " << balancedStringSplit1(s2) << " "
+       << balancedStringSplit1(s3) << endl;
   return 0;
 }

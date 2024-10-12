@@ -95,10 +95,142 @@ void VariableParamTemplate() {
   VariableFunc(4, 5.0, 'b', "de");               // 隐式类型推导
 }
 
+// 递归展开模板参数包
+// 递归终止函数，当参数包内无数据时终止
+void Debug() {
+  cout << "empty" << endl;
+}
+// 可选地，递归在仅剩一个参数时终止
+/* template <class T>
+void Debug(T t) {
+  cout << "last = " << t << " ";
+} */
+template <class T1, class... T2>
+void Debug(T1 t1, T2... t2) {
+  cout << t1 << " ";
+  Debug(t2...);  // t2...每调用一次减少一个数据，直至为空，调用终止函数
+}
+
+void TraversalTerminateTemplate() {
+  cout << "Traversal Terminate Template:" << endl;
+  Debug(1, 2, 3, 4);          // 递归进入
+  Debug(1, 'a', 3.0, "Tom");  // 可以使用不同类型
+}
+
+// 非递归展开模板参数包
+template <class T>
+void print(T t) {
+  cout << t << " ";
+}
+template <class... T>
+void expand(T... t) {
+  int a[] = {(print(t), 0)...};
+  cout << endl;
+}
+void NonTraversalExpandTemplate() {
+  cout << "NonTraversal Terminate Template:" << endl;
+  expand(1, 2, 3, 4);
+  expand(1, 'a', 3.0, "Tom");
+}
+
+// 继承方式展开模板参数包
+// 必须提前声明
+template <class... T>
+class Car {};
+// 递归终止函数
+template <>
+class Car<> {
+ public:
+  Car() { cout << "end" << endl; }
+};
+template <class head, class... tail>
+class Car<head, tail...> : public Car<tail...> {
+ public:
+  Car() { cout << typeid(head).name() << " "; }
+};
+
+void InheritExpandTemplate() {
+  cout << "Inherit Expand Template:" << endl;
+  Car<int, float, double, char> cars;
+  cout << endl;
+}
+
+// 模板类递归与特化方式展开参数包
+// 1. 模板类提前声明
+template <int... i>
+class Test {};
+// 2. 终止递归函数
+template <>
+class Test<> {
+ public:
+  static const int val = 1;
+  static const int sum = 0;
+};
+// 3. 边长模板类定义
+template <int first, int... nums>
+class Test<first, nums...> {
+ public:
+  static const int val = first * Test<nums...>::val;
+  static const int sum = first + Test<nums...>::sum;
+};
+void SpecialExpandTemplate() {
+  cout << "val: " << Test<1, 2, 3, 4>::val << endl;
+  cout << "sum: " << Test<1, 2, 3, 4>::sum << endl;
+}
+
+// 变参模板的应用
+// 1.打印。递归终止函数
+void printX() {
+  cout << endl;
+}
+template <class T, class... Types>
+void printX(const T& arg, const Types&... args) {
+  cout << arg << " ";
+  printX(args...);
+}
+
+// 2. max函数。
+int maxinum(int n) {
+  return n;
+}
+template <class... T>
+int maxinum(int n, T... args) {
+  return max(n, maxinum(args...));
+}
+
+// 3. sum函数
+template <class T>
+int summary(T n) {
+  return n;
+}
+template <class T1, class... T2>
+int summary(T1 n, T2... args) {
+  return n + summary(args...);
+}
+void ApplicationTemplate() {
+  printX(1, 'c', 3.1, "Jerry");
+  cout << "MaxVal: " << maxinum(1, 2, 3.1, 4) << endl;
+  cout << "Summary: " << summary(1, 2, 3.1, 4) << endl;
+}
+
+// C++14支持别名模板
+template <class U, class T>
+struct OriginalTemplate {
+  U u;
+  T t;
+};
+template <class T>
+using Alias = OriginalTemplate<int, T>;
+
 int main() {
   RightAngleBracket();
   TemplateAlias();
   DefaultTemplateParam();
   VariableParamTemplate();
+  TraversalTerminateTemplate();
+  NonTraversalExpandTemplate();
+  InheritExpandTemplate();
+  SpecialExpandTemplate();
+  ApplicationTemplate();
   return 0;
 }
