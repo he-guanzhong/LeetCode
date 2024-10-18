@@ -21,44 +21,42 @@ ci) 流动 既可流向太平洋也可流向大西洋 。
   输出: [[0,0],[0,1],[1,0],[1,1]] */
 
 void dfs(vector<vector<int>>& heights,
+         vector<vector<int>>& ocean,
          int x,
          int y,
-         vector<vector<int>>& ocean,
-         vector<vector<int>>& ans,
-         int index) {
-  if (ocean[x][y] == index)
-    return;
-  if (ocean[x][y] == 1 && index == 2)
-    ans.push_back({x, y});
-
-  ocean[x][y] = index;
+         int flg) {
   int dir[] = {1, 0, -1, 0, 1};
+  ocean[x][y] = flg;
   for (int k = 0; k < 4; k++) {
     int nextx = x + dir[k];
     int nexty = y + dir[k + 1];
     if (nextx < 0 || nextx >= heights.size() || nexty < 0 ||
         nexty >= heights[0].size())
       continue;
-    if (heights[nextx][nexty] < heights[x][y] || ocean[nextx][nexty] == index ||
-        ocean[nextx][nexty] == 3)
+    if (heights[nextx][nexty] < heights[x][y] || ocean[nextx][nexty] == flg)
       continue;
-    dfs(heights, nextx, nexty, ocean, ans, index);
+    dfs(heights, ocean, nextx, nexty, flg);
   }
 }
 vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
-  int m = heights.size(), n = heights[0].size();
-  vector<vector<int>> ocean(m, vector<int>(n, 0));
+  vector<vector<int>> ocean1(heights.size(), vector<int>(heights[0].size(), 0));
+  vector<vector<int>> ocean2 = ocean1;
+  for (int i = 0; i < heights.size(); i++) {
+    for (int j = 0; j < heights[0].size(); j++) {
+      if ((i == 0 || j == 0) && ocean1[i][j] == 0)
+        dfs(heights, ocean1, i, j, 1);
+      if ((i == heights.size() - 1 || j == heights[0].size() - 1) &&
+          ocean2[i][j] == 0)
+        dfs(heights, ocean2, i, j, 2);
+    }
+  }
   vector<vector<int>> ans;
-  for (int i = 0; i < m; i++) {
-    dfs(heights, i, 0, ocean, ans, 1);
+  for (int i = 0; i < heights.size(); i++) {
+    for (int j = 0; j < heights[0].size(); j++) {
+      if (ocean1[i][j] == 1 && ocean2[i][j] == 2)
+        ans.push_back({i, j});
+    }
   }
-  for (int j = 1; j < n; j++) {
-    dfs(heights, 0, j, ocean, ans, 1);
-  }
-  for (int i = 0; i < m; i++)
-    dfs(heights, i, n - 1, ocean, ans, 2);
-  for (int j = 0; j < n; j++)
-    dfs(heights, m - 1, j, ocean, ans, 2);
   return ans;
 }
 

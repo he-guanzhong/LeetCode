@@ -21,40 +21,26 @@
   输入：grid = {{0,0,0,0,0,0,0,0}}
   输出：0 */
 
-int bfs(vector<vector<int>>& grid,
-        vector<vector<bool>>& visited,
-        int x,
-        int y) {
+int dfs(vector<vector<int>>& grid, int x, int y) {
   int area = 1;
-  visited[x][y] = true;
+  grid[x][y] = 0;
   int dir[] = {1, 0, -1, 0, 1};
-  queue<pair<int, int>> que;
-  que.push({x, y});
-  while (!que.empty()) {
-    int curx = que.front().first;
-    int cury = que.front().second;
-    que.pop();
-    for (int k = 0; k < 4; k++) {
-      int nextx = curx + dir[k];
-      int nexty = cury + dir[k + 1];
-      if (nextx < 0 || nextx >= grid.size() || nexty < 0 ||
-          nexty >= grid[0].size() || grid[nextx][nexty] == 0 ||
-          visited[nextx][nexty] == true)
-        continue;
-      area++;
-      que.push({nextx, nexty});
-      visited[nextx][nexty] = true;
-    }
+  for (int k = 0; k < 4; k++) {
+    int nextx = x + dir[k];
+    int nexty = y + dir[k + 1];
+    if (nextx < 0 || nextx >= grid.size() || nexty < 0 ||
+        nexty >= grid[0].size() || grid[nextx][nexty] != 1)
+      continue;
+    area += dfs(grid, nextx, nexty);
   }
   return area;
 }
 int maxAreaOfIsland(vector<vector<int>>& grid) {
-  int m = grid.size(), n = grid[0].size(), ans = 0;
-  vector<vector<bool>> visited(m, vector<bool>(n, false));
-  for (int i = 0; i < m; i++) {
-    for (int j = 0; j < n; j++) {
-      if (grid[i][j] == 1 && visited[i][j] == false) {
-        int area = bfs(grid, visited, i, j);
+  int ans = 0;
+  for (int i = 0; i < grid.size(); i++) {
+    for (int j = 0; j < grid[0].size(); j++) {
+      if (grid[i][j] == 1) {
+        int area = dfs(grid, i, j);
         ans = max(ans, area);
       }
     }
@@ -189,8 +175,10 @@ int main() {
                                {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0},
                                {0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0}};
   vector<vector<int>> grid2 = {{0, 0, 0, 0, 0, 0, 0, 0}};
+  vector<vector<int>> grid3 = grid1, grid4 = grid2;
+
   cout << maxAreaOfIsland(grid1) << " " << maxAreaOfIsland(grid2) << endl;
-  cout << maxAreaOfIsland1(grid1) << " " << maxAreaOfIsland1(grid2) << endl;
+  cout << maxAreaOfIsland1(grid3) << " " << maxAreaOfIsland1(grid4) << endl;
 
   return 0;
 }

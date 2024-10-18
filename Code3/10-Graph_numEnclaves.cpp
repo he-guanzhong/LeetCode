@@ -12,43 +12,35 @@
   输入：grid = [[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]]
   输出：0
   解释：所有 1 都在边界上或可以到达边界。 */
-void bfs(vector<vector<int>>& grid, int x, int y) {
-  grid[x][y] = 0;
+
+void dfs(vector<vector<int>>& grid, int x, int y) {
   int dir[] = {1, 0, -1, 0, 1};
-  queue<pair<int, int>> que;
-  que.push({x, y});
-  while (que.size()) {
-    int curx = que.front().first;
-    int cury = que.front().second;
-    que.pop();
-    for (int k = 0; k < 4; k++) {
-      int nextx = curx + dir[k];
-      int nexty = cury + dir[k + 1];
-      if (nextx < 0 || nextx >= grid.size() || nexty < 0 ||
-          nexty >= grid[0].size() || grid[nextx][nexty] == 0)
-        continue;
-      que.push({nextx, nexty});
-      grid[nextx][nexty] = 0;
-    }
+  grid[x][y] = 0;
+  for (int k = 0; k < 4; k++) {
+    int nextx = x + dir[k];
+    int nexty = y + dir[k + 1];
+    if (nextx < 0 || nextx >= grid.size() || nexty < 0 ||
+        nexty >= grid[0].size() || grid[nextx][nexty] != 1)
+      continue;
+    dfs(grid, nextx, nexty);
   }
 }
-
 int numEnclaves(vector<vector<int>>& grid) {
   for (int i = 0; i < grid.size(); i++) {
     for (int j = 0; j < grid[0].size(); j++) {
       if (grid[i][j] == 1 &&
           (i == 0 || i == grid.size() - 1 || j == 0 || j == grid[0].size() - 1))
-        bfs(grid, i, j);
+        dfs(grid, i, j);
     }
   }
-  int cnt = 0;
+  int ans = 0;
   for (int i = 0; i < grid.size(); i++) {
     for (int j = 0; j < grid[0].size(); j++) {
       if (grid[i][j] == 1)
-        cnt++;
+        ans++;
     }
   }
-  return cnt;
+  return ans;
 }
 
 // DFS，遍历四周围边界，且岛屿‘1’的节点，将其相邻变为水‘0’。入dfs之后，再标记0。剩下岛屿即为飞地数量
@@ -148,13 +140,10 @@ int main() {
       {0, 1, 1, 1, 1, 1, 0, 0, 1, 0}, {0, 0, 1, 0, 1, 1, 1, 1, 0, 1},
       {0, 1, 1, 0, 0, 0, 1, 1, 1, 1}, {0, 0, 1, 0, 0, 1, 0, 1, 0, 1},
       {1, 0, 1, 0, 1, 1, 0, 0, 0, 0}, {0, 0, 0, 0, 1, 1, 0, 0, 0, 1}};
-  vector<vector<int>> grid4 = grid1;
-  vector<vector<int>> grid5 = grid2;
-  vector<vector<int>> grid6 = grid3;
+  vector<vector<int>> grid4 = grid1, grid5 = grid2, grid6 = grid3;
   cout << numEnclaves(grid1) << " " << numEnclaves(grid2) << " "
        << numEnclaves(grid3) << endl;
   cout << numEnclaves1(grid4) << " " << numEnclaves1(grid5) << " "
        << numEnclaves1(grid6) << endl;
-
   return 0;
 }

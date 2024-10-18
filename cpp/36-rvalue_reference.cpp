@@ -54,6 +54,18 @@ void valueOverload() {
 }
 
 // 2. 返回值优化技术与移动语义
+// 右值引用用于实现移动语义，可以将资源（堆、系统资源）从一个对象转移到另一对象中。
+// 避免临时对象无意义地创建、析构、拷贝、赋值。移动语义与拷贝语义相对，可以提高程序运行效率。
+// 临时对象的资源可以转移到另一对象中
+// 移动语义定义：
+// 原C++已有拷贝构造和赋值操作符重载，移动语义需新增转移构造函数，和转移赋值操作符
+// 对于右值的拷贝和赋值，会调用转移构造函数，和转移赋值操作符
+// 普通函数也可以使用右值引用实现移动语义。及时没有系统优化选项，移动语义依然可以减少临时对象的创建、析构
+// 移动构造和移动赋值注意：
+// 1. 参数均为&&右值，且不带const，因为要修改原对象。
+// 2. 参数不能为常量
+// 3. 资源转移后，原参数链接和标记必须修改。例如指针要置空，避免浅拷贝产生的问题
+
 class MyString {
  public:
   // 默认有参构造
@@ -115,12 +127,13 @@ class MyString {
 
   ~MyString() {
     len = 0;
-    cout << "析构函数" << endl;
+    cout << "析构函数";
     if (str) {
       delete[] str;
       str = nullptr;
-      cout << "析构调用delete" << endl;
+      cout << "调用 delete";
     }
+    cout << endl;
   }
 
  private:
@@ -129,19 +142,35 @@ class MyString {
 };
 
 // 返回普通函数对象，右值
-MyString func() {
-  MyString obj("abcd");
-  cout << "orignal obj addr:\t" << &obj << endl;
+MyString func(const char* s) {
+  MyString obj(s);
+  // 打印指针类型时，推荐强制转为无类型指针，避免类似char*
+  // s将字符串本身打印出来的问题
+  cout << "orignal obj addr:\t" << (void*)&obj << endl;
   return obj;  // 返回的是临时对象的地址，不是obj
 }
 void normalObj() {
-  MyString s = func();
-  cout << "returned obj addr:\t" << &s << endl;
+  // 此处系统默认做一次优化，把临时对象直接给了s，故地址相等
+  // 如果没优化，再调用一遍构造、析构函数
+  MyString s = func("normal obj");
+  cout << "normal return obj addr:\t" << (void*)&s << endl;
 }
+void rValueConstructObj() {
+  MyString&& s = func("construct obj");  // 右值引用，调用移动构造函数
+  cout << "rvalue construct obj addr:\t" << (void*)&s << endl;
+}
+void rValueAssignObj() {
+  MyString s("origin");    // 实例化对象
+  s = func("assign obj");  // 调用赋值运算符重载
+  cout << "rvalue assign obj addr:\t" << &s << endl;
+}
+
 int main() {
   lValueReference();
   rValueReference();
   valueOverload();
   normalObj();
+  rValueConstructObj();
+  rValueAssignObj();
   return 0;
 }

@@ -19,42 +19,33 @@
 示例 2：
   输入：board = [["X"]]
   输出：[["X"]] */
-int bfs(vector<vector<char>>& board, int x, int y) {
-  int area = 0;
-  board[x][y] = 'T';
+
+void dfs(vector<vector<char>>& board, int x, int y) {
+  board[x][y] = 'A';
   int dir[] = {1, 0, -1, 0, 1};
-  queue<pair<int, int>> que;
-  que.push({x, y});
-  while (que.size()) {
-    int curx = que.front().first;
-    int cury = que.front().second;
-    que.pop();
-    area++;
-    for (int k = 0; k < 4; k++) {
-      int nextx = curx + dir[k];
-      int nexty = cury + dir[k + 1];
-      if (nextx < 0 || nextx >= board.size() || nexty < 0 ||
-          nexty >= board[0].size() || board[nextx][nexty] != 'O')
-        continue;
-      board[nextx][nexty] = 'T';
-      que.push({nextx, nexty});
-    }
+  for (int k = 0; k < 4; k++) {
+    int nextx = x + dir[k];
+    int nexty = y + dir[k + 1];
+    if (nextx < 0 || nextx >= board.size() || nexty < 0 ||
+        nexty >= board[0].size() || board[nextx][nexty] != 'O')
+      continue;
+    dfs(board, nextx, nexty);
   }
-  return area;
 }
 void solve(vector<vector<char>>& board) {
   for (int i = 0; i < board.size(); i++) {
     for (int j = 0; j < board[0].size(); j++) {
-      if (board[i][j] == 'O' && (i == 0 || i == board.size() - 1 || j == 0 ||
-                                 j == board[0].size() - 1))
-        bfs(board, i, j);
+      if ((i == 0 || i == board.size() - 1 || j == 0 ||
+           j == board[0].size() - 1) &&
+          board[i][j] == 'O')
+        dfs(board, i, j);
     }
   }
   for (int i = 0; i < board.size(); i++) {
     for (int j = 0; j < board[0].size(); j++) {
       if (board[i][j] == 'O')
         board[i][j] = 'X';
-      if (board[i][j] == 'T')
+      else if (board[i][j] == 'A')
         board[i][j] = 'O';
     }
   }
