@@ -165,6 +165,74 @@ void rValueAssignObj() {
   cout << "rvalue assign obj addr:\t" << &s << endl;
 }
 
+// move和完美转发forward
+// 适用于将一组数据原封不动地转移到另一对象。在泛型编程中常见
+void moveFunc() {
+  int a = 9;
+  int& b = a;  // 左值引用
+  // int&& b = a; // 右值引用不可引用左值
+  int&& c = move(a);  // 使用move()函数，将变量从左值转化为右值
+  cout << "after move, c = " << c << endl;
+}
+
+// 传统写法，需要重载。
+template <class T>
+void printArgsFormat(T&) {
+  cout << "T& " << endl;
+}
+template <class T>
+void printArgsFormat(const T&) {
+  cout << "const T& " << endl;
+}
+template <class T>
+void printArgsFormat(T&&) {
+  cout << "T&& " << endl;  // 此处引用折叠
+}
+
+template <class T>
+void forwardOriginal(T& a) {
+  printArgsFormat(a);
+}
+
+// 为了避免右值传入错误，必须重写一个入参带const的版本
+template <class T>
+void forwardOriginal(const T& a) {
+  printArgsFormat(a);
+}
+
+// C++ 11中使用引用折叠
+typedef const int T;
+typedef T& TR;
+TR& v = 1;  // 等价于const int&& v = 1
+// 一旦出现了左叠引用，则直接优先使用左值
+/* TR定义       v声明类型     实际v类型
+    T&          TR            T&
+    T&          TR&           T&
+    T&          TR&&          T&
+    T&&         TR            T&&
+    T&&         TR&           T&
+    T&&         TR&&          T&&
+*/
+
+// 完美转发右值引用，无需重载
+template <class T>
+void forwardPerfect(T&& a) {
+  printArgsFormat(forward<T>(a));  // 保持原参数左右值属性
+}
+
+void forwardTest() {
+  int a = 1;
+  const int& b = 2;
+  cout << "Original Template: " << endl;
+  forwardOriginal(a);  // 左值
+  forwardOriginal(b);  // 右值
+  forwardOriginal(3);  // 右值
+  cout << "Perfect Forward: " << endl;
+  forwardPerfect(a);
+  forwardPerfect(b);
+  forwardPerfect(3);
+}
+
 int main() {
   lValueReference();
   rValueReference();
@@ -172,5 +240,7 @@ int main() {
   normalObj();
   rValueConstructObj();
   rValueAssignObj();
+  moveFunc();
+  forwardTest();
   return 0;
 }

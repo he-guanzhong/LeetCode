@@ -23,31 +23,34 @@
   6 7 1
 输出示例：6 */
 
-int prim(vector<vector<int>>& grid, int V) {
-  vector<int> minDist(V + 1, INT_MAX);
-  vector<bool> visited(V + 1);
-  vector<int> parent(V + 1);
+int prim(vector<vector<int>>& grid, int n) {
+  vector<int> minDist(n + 1, INT_MAX);
+  vector<bool> visited(n + 1, false);
+  vector<int> parent(n + 1, -1);
   minDist[1] = 0;
-  for (int i = 1; i < V; i++) {
-    int minVal = INT_MAX;
-    int cur = 0;
-    for (int j = 1; j <= V; j++) {
+  for (int i = 1; i < n; i++) {
+    int minVal = INT_MAX, index = 0;
+    for (int j = 1; j <= n; j++) {
       if (!visited[j] && minDist[j] < minVal) {
         minVal = minDist[j];
-        cur = j;
+        index = j;
       }
     }
-    visited[cur] = true;
-    for (int j = 1; j <= V; j++) {
-      if (!visited[j] && grid[cur][j] < minDist[j]) {
-        minDist[j] = grid[cur][j];
-        parent[j] = cur;
+    visited[index] = true;
+    for (int j = 1; j <= n; j++) {
+      if (grid[index][j] != INT_MAX && !visited[j] &&
+          grid[index][j] < minDist[j]) {
+        minDist[j] = grid[index][j];
+        parent[j] = index;
       }
     }
   }
   int ans = 0;
-  for (int i = 2; i <= V; i++)
+  for (int i = 1; i < minDist.size(); i++) {
     ans += minDist[i];
+    cout << parent[i] << "->" << i << "\t";
+  }
+  cout << endl;
   return ans;
 }
 
@@ -98,6 +101,5 @@ int main() {
   grid[6][7] = grid[7][6] = 1;
   cout << prim(grid, V) << endl;
   cout << prim1(grid, V) << endl;
-
   return 0;
 }

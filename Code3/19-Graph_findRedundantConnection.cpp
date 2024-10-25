@@ -2,11 +2,11 @@
 #include "head.h"
 /* 684. 冗余连接
 树可以看成是一个连通且 无环 的 无向 图。
-给定往一棵 n 个节点 (节点值 1～n)
-的树中添加一条边后的图。添加的边的两个顶点包含在 1 到 n
-中间，且这条附加的边不属于树中已存在的边。图的信息记录于长度为 n 的二维数组
+给定往一棵 n1 个节点 (节点值 1～n)
+的树中添加一条边后的图。添加的边的两个顶点包含在 1 到 n1
+中间，且这条附加的边不属于树中已存在的边。图的信息记录于长度为 n1 的二维数组
 edges ，edges[i] = [ai, bi] 表示图中在 ai 和 bi 之间存在一条边。
-请找出一条可以删去的边，删除后可使得剩余部分是一个有着 n
+请找出一条可以删去的边，删除后可使得剩余部分是一个有着 n1
 个节点的树。如果有多个答案，则返回数组 edges 中最后出现的那个。
 示例 1：
   输入: edges = [[1,2], [1,3], [2,3]]
@@ -18,19 +18,17 @@ edges ，edges[i] = [ai, bi] 表示图中在 ai 和 bi 之间存在一条边。
   n == edges.length
   3 <= n <= 1000 */
 
-int m = 1005;
-int father[1005];
+static const int N = 1005;
+int father[N];
 void init() {
-  for (int i = 0; i < 1005; i++)
+  for (int i = 0; i < N; i++)
     father[i] = i;
 }
 int find(int u) {
   return father[u] == u ? u : father[u] = find(father[u]);
 }
 bool isSame(int u, int v) {
-  u = find(u);
-  v = find(v);
-  return u == v;
+  return find(u) == find(v);
 }
 void join(int u, int v) {
   u = find(u);
@@ -40,11 +38,10 @@ void join(int u, int v) {
   father[v] = u;
 }
 vector<int> findRedundantConnection(vector<vector<int>>& edges) {
-  memset(father, 0, sizeof(father));
   init();
   for (int i = 0; i < edges.size(); i++) {
     if (isSame(edges[i][0], edges[i][1]))
-      return {edges[i][0], edges[i][1]};
+      return edges[i];
     join(edges[i][0], edges[i][1]);
   }
   return {};
@@ -52,10 +49,10 @@ vector<int> findRedundantConnection(vector<vector<int>>& edges) {
 
 // 遍历每一条边，如果已经在同一并查集内，直接返回，否则相连接。
 // 判断每一条边，如果不是同一集合就链接。如果是，则当即返回该边信息。注意，最终需要返回空集合，作为默认情况
-int n = 1003;
-vector<int> father1 = vector<int>(n, 0);  // 必须如此写
+int n1 = 1003;
+vector<int> father1 = vector<int>(n1, 0);  // 必须如此写
 void init1() {
-  for (int i = 0; i < n; i++)
+  for (int i = 0; i < n1; i++)
     father1[i] = i;
 }
 int find1(int u) {

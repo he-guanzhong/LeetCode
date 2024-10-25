@@ -19,18 +19,18 @@
   输出：false
   解释：我们不能进入 2 号房间。 */
 
-void dfs(vector<vector<int>>& rooms, int index, vector<bool>& visited) {
-  visited[index] = true;
-  for (int room : rooms[index]) {
-    if (!visited[room])
-      dfs(rooms, room, visited);
+void dfs(vector<vector<int>>& rooms, int cur, vector<bool>& visited) {
+  visited[cur] = true;
+  for (int i = 0; i < rooms[cur].size(); i++) {
+    if (!visited[rooms[cur][i]])
+      dfs(rooms, rooms[cur][i], visited);
   }
 }
 bool canVisitAllRooms(vector<vector<int>>& rooms) {
   vector<bool> visited(rooms.size(), false);
   dfs(rooms, 0, visited);
-  for (bool room : visited) {
-    if (!room)
+  for (const bool& i : visited) {
+    if (!i)
       return false;
   }
   return true;
@@ -54,6 +54,7 @@ bool canVisitAllRooms2(vector<vector<int>>& rooms) {
   }
   return true;
 }
+
 // 深度优先搜索，在循环内部即判断，不满足不进入下一层。该方法要求，必须在函数本体内
 void dfs1(vector<vector<int>>& rooms, int key, vector<bool>& visited) {
   for (int i : rooms[key]) {
@@ -73,6 +74,7 @@ bool canVisitAllRooms1(vector<vector<int>>& rooms) {
   }
   return true;
 }
+
 // 自制，广度优先搜索方法
 bool canVisitAllRooms3(vector<vector<int>>& rooms) {
   int m = rooms.size();

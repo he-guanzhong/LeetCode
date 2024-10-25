@@ -20,30 +20,29 @@
   输出：false
   解释：不存在由顶点 0 到顶点 5 的路径.
 提示：
-    1 <= n <= 2 * 105
-    0 <= edges.length <= 2 * 105*/
-int father[20005];
+    1 <= n <= 2 * 10^5
+    0 <= edges.length <= 2 * 10^5*/
+
+const static int N = 200005;
+int father[N];
 void init() {
-  for (int i = 0; i < 20005; i++)
+  for (int i = 0; i < N; i++)
     father[i] = i;
 }
 int find(int u) {
-  return father[u] == u ? u : father[u] = find(father[u]);
+  return u == father[u] ? u : father[u] = find(father[u]);
 }
 bool isSame(int u, int v) {
-  u = find(u);
-  v = find(v);
-  return u == v;
+  return find(u) == find(v);
 }
 void join(int u, int v) {
   u = find(u);
   v = find(v);
   if (u == v)
     return;
-  father[v] = u;
+  father[u] = v;
 }
 bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
-  memset(father, 0, sizeof(father));
   init();
   for (int i = 0; i < edges.size(); i++) {
     join(edges[i][0], edges[i][1]);

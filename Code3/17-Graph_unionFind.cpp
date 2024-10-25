@@ -1,36 +1,34 @@
 #include "head.h"
-// 查并集
+// 并查集
 // 作用：1. 将两个元素放在同一集合之内。2. 查询两个元素是否在同一集合。
 
-// 总计四个函数。初始化。寻根（路径压缩）。是否同一集合。v->u加入集合
-int m = 1000;
-int father[1000];
+const int n = 1000;
+int father[n];
 void init() {
-  for (int i = 0; i < m; i++)
+  for (int i = 0; i < n; i++)
     father[i] = i;
 }
 int find(int u) {
-  return father[u] == u ? u : father[u] = find(father[u]);
+  return u == father[u] ? u : father[u] = find(father[u]);
 }
 bool isSame(int u, int v) {
-  u = find(u);
-  v = find(v);
-  return u == v;
+  return find(u) == find(v);
 }
 void join(int u, int v) {
   u = find(u);
   v = find(v);
   if (u == v)
     return;
-  father[v] = u;
+  father[u] = v;
 }
 
-int n = 1000;  // 结点数量
-vector<int> father1(n, 0);
+// 总计四个函数。初始化。寻根（路径压缩）。是否同一集合。v->u加入集合
+int n1 = 1000;  // 结点数量
+vector<int> father1(n1, 0);
 
 // 初始化，所有元素一开始要指向自己
 void init1() {
-  for (int i = 0; i < n; i++)
+  for (int i = 0; i < n1; i++)
     father1[i] = i;
 }
 // 寻根。如果找到自己，就结束。如果没找到，就递归
@@ -77,8 +75,8 @@ void join_wrong1(int u, int v) {
 }
 // join函数还可以按秩排序，将秩小的u，指向秩大的v。否则二者相反
 // 如果二者秩相等
-// 查询的时间复杂度O(n)=logn,随着数据量越来越大，越趋近于O(n)=1。因为最一开始时logN，经历过一次路径压缩后，得到1
-vector<int> ranking(n, 1);
+// 查询的时间复杂度O(n1)=logn,随着数据量越来越大，越趋近于O(n1)=1。因为最一开始时logN，经历过一次路径压缩后，得到1
+vector<int> ranking(n1, 1);
 void join_rank1(int u, int v) {
   u = find1(u);
   v = find1(v);
@@ -109,5 +107,5 @@ int main() {
   join1(6, 2);
   cout << isSame(8, 7) << " " << isSame(7, 2) << endl;
   cout << isSame1(8, 7) << " " << isSame1(7, 2) << endl;
-  return;
+  return 0;
 }

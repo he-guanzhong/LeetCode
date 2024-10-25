@@ -21,22 +21,25 @@ grid[i][j] = 0 表示水域。
   输出：4 */
 
 int islandPerimeter(vector<vector<int>>& grid) {
-  int cnt = 0;
   int dir[] = {1, 0, -1, 0, 1};
+  int cnt = 0, edge = 0;
   for (int i = 0; i < grid.size(); i++) {
     for (int j = 0; j < grid[0].size(); j++) {
-      if (grid[i][j] == 1) {
-        for (int k = 0; k < 4; k++) {
-          int nextx = i + dir[k];
-          int nexty = j + dir[k + 1];
-          if (nextx < 0 || nextx >= grid.size() || nexty < 0 ||
-              nexty >= grid[0].size() || grid[nextx][nexty] == 0)
-            cnt++;
-        }
+      if (grid[i][j] == 0)
+        continue;
+      cnt++;
+      grid[i][j] = 0;
+      for (int k = 0; k < 4; k++) {
+        int nextx = i + dir[k];
+        int nexty = j + dir[k + 1];
+        if (nextx < 0 || nextx >= grid.size() || nexty < 0 ||
+            nexty >= grid[0].size() || grid[nextx][nexty] == 0)
+          continue;
+        edge++;
       }
     }
   }
-  return cnt;
+  return 4 * cnt - 2 * edge;
 }
 
 // 方法一，不必求岛屿数量，边定义为1对0，或1对边界的跨越。故对每一个岛屿点四周搜索，遇到海水或者边界，周长直接加一。

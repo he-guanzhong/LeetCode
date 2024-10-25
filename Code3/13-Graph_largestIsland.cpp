@@ -1,3 +1,4 @@
+#include <string.h>
 #include "head.h"
 /* 827. 最大人工岛
 给你一个大小为 n x n 二进制矩阵 grid 。最多 只能将一格 0 变成 1 。
@@ -14,57 +15,62 @@
 示例 3:
   输入: grid = [[1, 1], [1, 1]]
   输出: 4
-  解释: 没有0可以让我们变成1，面积依然为 4。 */
+  解释: 没有0可以让我们变成1，面积依然为 4。
+提示：
+    n == grid.length
+    n == grid[i].length
+    1 <= n <= 500
+    grid[i][j] 为 0 或 1  */
 
-int direction[] = {1, 0, -1, 0, 1};
-int dfs(vector<vector<int>>& grid, int x, int y, int mark) {
-  grid[x][y] = mark;
+int dir[] = {1, 0, -1, 0, 1};
+int dfs(vector<vector<int>>& grid, int x, int y, int flg) {
   int area = 1;
+  grid[x][y] = flg;
   for (int k = 0; k < 4; k++) {
-    int nextx = x + direction[k];
-    int nexty = y + direction[k + 1];
+    int nextx = x + dir[k];
+    int nexty = y + dir[k + 1];
     if (nextx < 0 || nextx >= grid.size() || nexty < 0 ||
         nexty >= grid[0].size() || grid[nextx][nexty] != 1)
       continue;
-    area += dfs(grid, nextx, nexty, mark);
+    area += dfs(grid, nextx, nexty, flg);
   }
   return area;
 }
 int largestIsland(vector<vector<int>>& grid) {
-  int m = grid.size(), n = grid[0].size();
-  int mark = 2;
-  unordered_map<int, int> mapInfo;
+  int flg = 2, m = grid.size(), n = grid[0].size();
+  int sum = 0;
+  int umap[130000] = {0};
   for (int i = 0; i < m; i++) {
     for (int j = 0; j < n; j++) {
       if (grid[i][j] == 1) {
-        int area = dfs(grid, i, j, mark);
-        mapInfo[mark] = area;
-        if (mapInfo[mark] == m * n)
-          return m * n;
-        mark++;
+        int area = dfs(grid, i, j, flg);
+        umap[flg++] = area;
+        sum += area;
       }
     }
   }
+  if (sum == m * n)
+    return sum;
   int ans = 1;
+  bool uset[130000] = {0};
   for (int i = 0; i < m; i++) {
     for (int j = 0; j < n; j++) {
       if (grid[i][j] != 0)
         continue;
-      int tmpArea = 1;
-      vector<bool> visited(mark, false);
+      int area = 1;
+      memset(uset, 0, sizeof(uset));
       for (int k = 0; k < 4; k++) {
-        int nextx = i + direction[k];
-        int nexty = j + direction[k + 1];
-        if (nextx < 0 || nextx >= grid.size() || nexty < 0 ||
-            nexty >= grid[0].size() || grid[nextx][nexty] == 0)
+        int nextx = i + dir[k];
+        int nexty = j + dir[k + 1];
+        if (nextx < 0 || nextx >= m || nexty < 0 || nexty >= n ||
+            grid[nextx][nexty] == 0)
           continue;
-        int tmp_mark = grid[nextx][nexty];
-        if (visited[tmp_mark])
+        if (uset[grid[nextx][nexty]])
           continue;
-        visited[tmp_mark] = true;
-        tmpArea += mapInfo[tmp_mark];
-        ans = max(tmpArea, ans);
+        area += umap[grid[nextx][nexty]];
+        uset[grid[nextx][nexty]] = true;
       }
+      ans = max(ans, area);
     }
   }
   return ans;

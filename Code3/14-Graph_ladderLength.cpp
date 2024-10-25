@@ -21,33 +21,27 @@ endWord 的 最短转换序列 中的 单词数目 。如果不存在这样的�
 
 int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
   unordered_set<string> uset(wordList.begin(), wordList.end());
-  if (uset.find(endWord) == uset.end())
-    return 0;
   queue<string> que;
   que.push(beginWord);
-  int cnt = 0;
-  unordered_set<string> visited;
+  int ans = 0;
   while (que.size()) {
-    int size = que.size();
-    cnt++;
-    while (size--) {
+    int n = que.size();
+    ans++;
+    while (n--) {
       string cur = que.front();
       que.pop();
+      if (cur == endWord)
+        return ans;
       for (int i = 0; i < cur.size(); i++) {
-        string ori = cur;
-        for (char j = 'a'; j <= 'z'; j++) {
-          cur[i] = j;
-          // cout << cur << "\t";
-          if (cur == ori || visited.find(cur) != visited.end())
+        string tmp = cur;
+        for (char c = 'a'; c <= 'z'; c++) {
+          if (cur[i] == c)
             continue;
-          if (cur == endWord)
-            return cnt + 1;
-          if (uset.find(cur) != uset.end()) {
-            que.push(cur);
-            visited.insert(cur);
-          }
+          tmp[i] = c;
+          if (uset.count(tmp))
+            que.push(tmp);
+          uset.erase(tmp);
         }
-        cur = ori;
       }
     }
   }
