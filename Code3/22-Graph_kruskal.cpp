@@ -30,14 +30,14 @@
 struct Edge {
   int l, r, val;
 };
-int n = 10001;
-vector<int> father(n, 0);
+const static int n = 10001;
+int father[n];
 void init() {
   for (int i = 0; i < n; i++)
     father[i] = i;
 }
 int find(int u) {
-  return father[u] == u ? u : father[u] = find(father[u]);
+  return u == father[u] ? u : father[u] = find(father[u]);
 }
 bool isSame(int u, int v) {
   return find(u) == find(v);
@@ -52,12 +52,12 @@ void join(int u, int v) {
 int kruskal(vector<Edge>& edges) {
   sort(edges.begin(), edges.end(),
        [](const Edge& a, const Edge& b) { return a.val < b.val; });
-  init();
   int ans = 0;
-  for (const Edge& edge : edges) {
-    if (!isSame(edge.l, edge.r)) {
-      ans += edge.val;
-      join(edge.l, edge.r);
+  init();
+  for (const auto& e : edges) {
+    if (!isSame(e.l, e.r)) {
+      ans += e.val;
+      join(e.l, e.r);
     }
   }
   return ans;
