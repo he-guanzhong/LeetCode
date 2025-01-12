@@ -10,55 +10,58 @@ true（即，在检索之前已经插入）；否则，返回 false 。 boolean 
 prefix) 如果之前已经插入的字符串 word 的前缀之一为 prefix ，返回 true
 ；否则，返回 false 。
 示例：
-输入
-["Trie", "insert", "search", "search", "startsWith", "insert", "search"]
-[[], ["apple"], ["apple"], ["app"], ["app"], ["app"], ["app"]]
-输出
-[null, null, true, false, true, null, true]
-解释
-Trie trie = new Trie();
-trie.insert("apple");
-trie.search("apple");   // 返回 True
-trie.search("app");     // 返回 False
-trie.startsWith("app"); // 返回 True
-trie.insert("app");
-trie.search("app");     // 返回 True */
+  输入
+    ["Trie", "insert", "search", "search", "startsWith", "insert", "search"]
+    [[], ["apple"], ["apple"], ["app"], ["app"], ["app"], ["app"]]
+  输出
+    [null, null, true, false, true, null, true]
+  解释
+    Trie trie = new Trie();
+    trie.insert("apple");
+    trie.search("apple");   // 返回 True
+    trie.search("app");     // 返回 False
+    trie.startsWith("app"); // 返回 True
+    trie.insert("app");
+    trie.search("app");     // 返回 True */
 
 class Trie {
  public:
-  bool isEnd;
-  vector<Trie*> children;
-
   Trie() {
-    children.resize(26);
     isEnd = false;
+    next.resize(26);
   }
 
   void insert(string word) {
-    Trie* node = this;
-    for (char c : word) {
-      if (node->children[c - 'a'] == nullptr)
-        node->children[c - 'a'] = new Trie();
-      node = node->children[c - 'a'];
+    Trie* p = this;
+    for (const char& i : word) {
+      int ch = i - 'a';
+      if (p->next[ch] == nullptr) {
+        p->next[ch] = new Trie();
+      }
+      p = p->next[ch];
     }
-    node->isEnd = true;
+    p->isEnd = true;
   }
 
   bool search(string word) {
-    Trie* node = this->searchPrefix(word);
-    return node && node->isEnd;
+    Trie* p = find(word);
+    return p && p->isEnd;
   }
 
-  bool startsWith(string prefix) { return this->searchPrefix(prefix); };
+  bool startsWith(string prefix) { return find(prefix); }
 
-  Trie* searchPrefix(string prefix) {
-    Trie* node = this;
-    for (char c : prefix) {
-      if (node->children[c - 'a'] == nullptr)
+ private:
+  bool isEnd;
+  vector<Trie*> next;
+  Trie* find(string prefix) {
+    Trie* p = this;
+    for (const char& c : prefix) {
+      int ch = c - 'a';
+      if (p->next[ch] == nullptr)
         return nullptr;
-      node = node->children[c - 'a'];
+      p = p->next[ch];
     }
-    return node;
+    return p;
   }
 };
 
