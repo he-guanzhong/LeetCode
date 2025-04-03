@@ -80,7 +80,7 @@ class Codec {
         cur->right = new TreeNode(vec[i]);
         que.push(cur->right);
       }
-      i++;
+      i++; 
     }
     return root;
   }
