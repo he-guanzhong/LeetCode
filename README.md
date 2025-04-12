@@ -9,5 +9,11 @@ Listing a portion of LeetCode problems I have solved.
 * Code6: 《剑指Offer专项突破版》。我愿称之为“再指Offer”，如果到这一步最后仍然没有Offer，可谓名副其实的“虚指针”
 * 以上总计298道，较符合网上一般学习路径下的200~300道题目水平。
 * 单《代码随想录》共计193道，但这是必须将“额外题目”也全部完成的结果。侧面证明一些言论，如“做完《代码随想录》就题目200+”等，实属荒谬
+* 即便题目做到500+，尚无Offer，数有如此，情何以堪？如此，不禁改编一首汉乐府：  
+  ```
+  剑指offer，再指offer
+  offer无有，其奈公何？
+  ```  
+
 # Profile
 * [Personal LeetCode Profile](https://leetcode.cn/u/buhunle/)
