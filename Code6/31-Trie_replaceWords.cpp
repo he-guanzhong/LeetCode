@@ -26,14 +26,67 @@ the battery"
     sentence 中单词之间由一个空格隔开。
     sentence 没有前导或尾随空格。 */
 
+// 字典树经典题。辅助函数一，双指针将sentence转化为vector。左指针永远停在单词首字母，右指针永远停在单词后的第一空格
+// 辅助函数二、根据字典树查单词前缀。从首节点依次看起对应孩子节点是否存在。若发现终止符，说明该层节点已经为前缀末尾，直接返回前缀
+// 若发现某字符节点不存在，则所有前缀均不满足条件，返回该单词。剩余情况，将该轮字符暂存，移动至下一下标。
+// 主函数。首先创建前缀树根节点，对字典内每个元素依次加入前缀树。注意到最后一个字符后，人为添加#作为终止标记
+// 对vector的每一个单词，寻找前缀，并添加单词间空格，作为最终答案
+// 时间复杂度O(d+s)，d和s分别为dict和sentence字符数。因为每个字符都要入树，每个字符都要被检索。空间复杂度O(d+s)，因为临时变量储存
+struct Trie {
+  unordered_map<char, Trie*> children;
+};
+vector<string> split(const string& s, char ch) {
+  vector<string> ans;
+  for (int i = 0, j = 0; i < s.size() && j < s.size();) {
+    while (j < s.size() && s[j] == ch)
+      j++;
+    i = j;
+    while (j < s.size() && s[j] != ch)
+      j++;
+    if (i < s.size())
+      ans.push_back(s.substr(i, j - i));
+  }
+  return ans;
+}
+string searchPrefix(const string& word, Trie* trie) {
+  string ans;
+  Trie* root = trie;
+  for (const auto& c : word) {
+    if (root->children['#'])  // 必须先判终止符，再判不存在
+      return ans;
+    if (!root->children[c])
+      return word;
+    ans.push_back(c);
+    root = root->children[c];
+  }
+  return ans;
+}
 string replaceWords(vector<string>& dictionary, string sentence) {
-  
+  Trie* trie = new Trie();
+  for (const string& prefix : dictionary) {
+    Trie* cur = trie;
+    for (const char& c : prefix) {
+      if (!cur->children.count(c))
+        cur->children[c] = new Trie();
+      cur = cur->children[c];
+    }
+    cur->children['#'] = new Trie();  // 终止标记
+  }
+  vector<string> words = split(sentence, ' ');
+  string ans;
+  for (const auto& word : words) {
+    string tmp = searchPrefix(word, trie);
+    ans += tmp + " ";
+  }
+  if (!ans.empty())
+    ans.pop_back();
+  return ans;
 }
 
 int main() {
   vector<string> dic1 = {"cat", "bat", "rat"}, dic2 = {"a", "b", "c"};
   string sen1 = "the cattle was rattled by the battery ",
          sen2 = "aadsfasf absbs bbab cadsfafs";
-  cout << replaceWords(dic1, sen1) << " " << replaceWords(dic2, sen2) << endl;
+  cout << replaceWords(dic1, sen1) << "\t" << replaceWords(dic2, sen2) << endl;
   return 0;
 }
