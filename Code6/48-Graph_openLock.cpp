@@ -1,6 +1,5 @@
 #include "head.h"
-/*
-752. 打开转盘锁
+/* 752. 打开转盘锁
 你有一个带有四个圆形拨轮的转盘锁。每个拨轮都有10个数字： '0', '1', '2', '3',
 '4', '5', '6', '7', '8', '9' 。每个拨轮可以自由旋转：例如把 '9' 变为 '0'，'0'
 变为 '9' 。每次旋转都只能旋转一个拨轮的一位数字。
@@ -33,10 +32,68 @@ target代表可以解锁的数字，你需要给出解锁需要的最小旋转�
   target 不在 deadends 之中
   target 和 deadends[i] 仅由若干位数字组成 */
 
+// A星算法典例。成员变量不仅要包括此结点的字符串status_，总代价f_，距离起点代价g_，距离终点代价h_
+// 启发函数heuristic对应代价h_，含义为两个字符串，4位中每一位的相距距离。其必不可能大于5，故距离为四个min(dis,10-dis)之和
+// 另外优先队列默认调用less<>，生成最大堆。故重载小于号<，本类代价大于其他代价。可生成最小堆
+// 主函数中，首先排除目标就是起点，和终点或起点不可达的情况。注意设置哈希集合visit，保存所有访问过的结点，以防被后续重复访问
+struct AStar {
+  AStar(const string& status, const string& target, int g)
+      : status_(status), h_(Heuristic(status, target)), g_(g), f_(g_ + h_) {}
+  int Heuristic(const string& status, const string& target) {
+    int ans = 0;
+    for (int i = 0; i < 4; i++) {
+      int dis = abs(status[i] - '0' - target[i] + '0');
+      dis = min(dis, 10 - dis);
+      ans += dis;
+    }
+    return ans;
+  }
+  // 比较函数必须加const
+  bool operator<(const AStar& other) const { return this->f_ > other.f_; }
+  string status_;
+  int f_, g_, h_;
+};
+
+int openLock(vector<string>& deadends, string target) {
+  if (target == "0000")
+    return 0;
+  unordered_set<string> uset(deadends.begin(), deadends.end());
+  if (uset.count(target) || uset.count("0000"))
+    return -1;
+  unordered_map<string, int> visit;
+  visit["0000"] = 0;
+  AStar start("0000", target, 0);
+  priority_queue<AStar> pri_que;
+  pri_que.push(start);
+  while (!pri_que.empty()) {
+    AStar cur = pri_que.top();
+    pri_que.pop();
+    if (cur.status_ == target)
+      return cur.g_;
+
+    for (int i = 0; i < 4; i++) {
+      string add = cur.status_;
+      add[i] = (add[i] == '9' ? '0' : add[i] + 1);
+      if (!uset.count(add) && (!visit.count(add) || cur.g_ + 1 < visit[add])) {
+        pri_que.push(AStar(add, target, cur.g_ + 1));
+        visit[add] = cur.g_ + 1;
+      }
+      string minus = cur.status_;
+      minus[i] = (minus[i] == '0' ? '9' : minus[i] - 1);
+      if (!uset.count(minus) &&
+          (!visit.count(minus) || cur.g_ + 1 < visit[minus])) {
+        pri_que.push(AStar(minus, target, cur.g_ + 1));
+        visit[minus] = cur.g_ + 1;
+      }
+    }
+  }
+  return -1;
+}
+
 // BFS解法，时间和空间复杂度均容易超时。故要做特殊处理，target就是起点，直接返回步数0。target或者起点不可达，直接返回-1
 // 对string的4位中每一位分别+1和-1，注意设置哈希集合，避免上一周期判断过的元素，第二次被压入栈中
 // 返回的步数就是BFS搜索圈数
-int openLock(vector<string>& deadends, string target) {
+int openLock1(vector<string>& deadends, string target) {
   if (target == "0000")
     return 0;
   unordered_set<string> uset(deadends.begin(), deadends.end());
@@ -79,5 +136,15 @@ int openLock(vector<string>& deadends, string target) {
 }
 
 int main() {
+  vector<string> deadends1 = {"0201", "0101", "0102", "1212", "2002"},
+                 deadends2 = {"8888"},
+                 deadends3 = {"8887", "8889", "8878", "8898",
+                              "8788", "8988", "7888", "9888"},
+                 deadends4 = {"2321", "1231", "2011", "2333", "0300",
+                              "3331", "3111", "3021", "0100", "1333"};
+  string target1 = "0202", target2 = "0009", target3 = "8888", target4 = "2022";
+  cout << openLock(deadends1, target1) << " " << openLock(deadends2, target2)
+       << " " << openLock(deadends3, target3) << " "
+       << openLock(deadends4, target4) << endl;
   return 0;
 }
