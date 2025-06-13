@@ -17,9 +17,22 @@
   1 <= nums[i] <= 1000
   0 <= k <= 106 */
 
+int numSubarrayProductLessThanK(vector<int>& nums, int k) {
+  int ans = 0;
+  int product = 1;
+  for (int i = 0, j = 0; i < nums.size(); i++) {
+    product *= nums[i];
+    while (j <= i && product >= k) {
+      product /= nums[j++];
+    }
+    ans += i - j + 1;
+  }
+  return ans;
+}
+
 // 滑动窗口左右边界[j,i]，窗口内积要时刻保持小于k，此时以i为结尾的连续数组，均满足条件。数量为i-j+1个
 // 乘积prod最大可能是k*max{nums[i]}，即1e9，不超过INT_MAX，所以不会产生越界问题
-int numSubarrayProductLessThanK(vector<int>& nums, int k) {
+int numSubarrayProductLessThanK1(vector<int>& nums, int k) {
   int prod = 1;
   int ans = 0;
   int j = 0;
@@ -37,5 +50,7 @@ int main() {
   vector<int> nums1({10, 5, 2, 6}), nums2({1, 2, 3});
   cout << numSubarrayProductLessThanK(nums1, 100) << " "
        << numSubarrayProductLessThanK(nums2, 0) << endl;
+  cout << numSubarrayProductLessThanK1(nums1, 100) << " "
+       << numSubarrayProductLessThanK1(nums2, 0) << endl;
   return 0;
 }

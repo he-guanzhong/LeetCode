@@ -21,10 +21,26 @@
     1 <= s.length <= 2 * 105
     s 仅由可打印的 ASCII 字符组成 */
 
+bool isPalindrome(string s) {
+  for (int i = 0; i < s.size(); i++) {
+    s[i] = tolower(s[i]);
+  }
+  for (int i = 0, j = s.size() - 1; i < j;) {
+    while (i < j && !isalnum(s[i]))
+      i++;
+    while (i < j && !isalnum(s[j]))
+      j--;
+    if (s[i] != s[j])
+      return false;
+    i++, j--;
+  }
+  return true;
+}
+
 // 考察内部API调用。islower()/isupper()判断是否大小写字母。tolower()和toupper()字符转换。
 // isdigit()判断数字，isalptha()判断字母，isalnum()判断是否字母或数字
 // ASCII码，数字0从48开始，A从65开始，a从97开始
-bool isPalindrome(string s) {
+bool isPalindrome1(string s) {
   for (int i = 0; i < s.size(); i++) {
     if (isupper(s[i]))
       s[i] = tolower(s[i]);
@@ -45,5 +61,7 @@ int main() {
          s4 = "0P";
   cout << isPalindrome(s1) << " " << isPalindrome(s2) << " " << isPalindrome(s3)
        << " " << isPalindrome(s4) << endl;
+  cout << isPalindrome1(s1) << " " << isPalindrome1(s2) << " "
+       << isPalindrome1(s3) << " " << isPalindrome1(s4) << endl;
   return 0;
 }

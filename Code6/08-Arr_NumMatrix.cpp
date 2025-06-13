@@ -9,7 +9,12 @@ int sumRegion(int row1, int col1, int row2, int col2) 返回 左上角 (row1, co
 示例 1：
   输入:
     ["NumMatrix","sumRegion","sumRegion","sumRegion"]
-    [[[[3,0,1,4,2],[5,6,3,2,1],[1,2,0,1,5],[4,1,0,1,7],[1,0,3,0,5]]],[2,1,4,3],[1,1,2,2],[1,2,2,4]]
+    [[[[3,0,1,4,2],
+    [5,6,3,2,1],
+    [1,2,0,1,5],
+    [4,1,0,1,7],
+    [1,0,3,0,5]]],
+    [2,1,4,3],[1,1,2,2],[1,2,2,4]]
   输出:
     [null, 8, 11, 12]
 解释:
@@ -27,10 +32,30 @@ int sumRegion(int row1, int col1, int row2, int col2) 返回 左上角 (row1, co
   0 <= col1 <= col2 < n
   最多调用 104 次 sumRegion 方法 */
 
-// 二维数组前缀和，求前缀和矩阵式，已经使用了公式
 class NumMatrix {
  public:
   NumMatrix(vector<vector<int>>& matrix) {
+    sum = vector<vector<int>>(matrix.size() + 1,
+                              vector<int>(matrix[0].size() + 1, 0));
+    for (int i = 0; i < matrix.size(); i++) {
+      for (int j = 0; j < matrix[0].size(); j++) {
+        sum[i + 1][j + 1] =
+            sum[i][j + 1] + sum[i + 1][j] - sum[i][j] + matrix[i][j];
+      }
+    }
+  }
+
+  int sumRegion(int row1, int col1, int row2, int col2) {
+    return sum[row2 + 1][col2 + 1] - sum[row2 + 1][col1] - sum[row1][col2 + 1] +
+           sum[row1][col1];
+  }
+  vector<vector<int>> sum;
+};
+
+// 二维数组前缀和，求前缀和矩阵式，已经使用了公式
+class NumMatrix1 {
+ public:
+  NumMatrix1(vector<vector<int>>& matrix) {
     int m = matrix.size();
     if (m == 0)
       return;
@@ -62,5 +87,8 @@ int main() {
   NumMatrix numMat(matrix);
   cout << numMat.sumRegion(2, 1, 4, 3) << " " << numMat.sumRegion(1, 1, 2, 2)
        << " " << numMat.sumRegion(1, 2, 2, 4) << endl;
+  NumMatrix1 numMat1(matrix);
+  cout << numMat1.sumRegion(2, 1, 4, 3) << " " << numMat1.sumRegion(1, 1, 2, 2)
+       << " " << numMat1.sumRegion(1, 2, 2, 4) << endl;
   return 0;
 }

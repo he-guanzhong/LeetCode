@@ -14,9 +14,29 @@ true ；否则，返回 false 。
   1 <= s1.length, s2.length <= 104
   s1 和 s2 仅包含小写字母 */
 
+bool checkInclusion(string s1, string s2) {
+  vector<int> ori(26, 0);
+  vector<int> win(26, 0);
+  if (s1.size() > s2.size())
+    return false;
+  for (const auto& c : s1)
+    ori[c - 'a']++;
+  for (int i = 0; i < s1.size(); i++)
+    win[s2[i] - 'a']++;
+  if (ori == win)
+    return true;
+  for (int i = s1.size(); i < s2.size(); i++) {
+    win[s2[i - s1.size()] - 'a']--;
+    win[s2[i] - 'a']++;
+    if (ori == win)
+      return true;
+  }
+  return false;
+}
+
 // 优化思路。双指针，使用一个数组记录26个字母出现次数，s1为负，s2为正。需保证窗口内部不得有正数，即不得有s2出现，但s1没有的字符
 // 一旦出现正数，则向右移动左指针j，直至[j,i]区间内有负有0。此时区间长度i-j+1若恰好等与s1长度n，说明窗口匹配
-bool checkInclusion(string s1, string s2) {
+bool checkInclusion1(string s1, string s2) {
   int m = s1.size(), n = s2.size();
   if (m > n)
     return false;
@@ -63,6 +83,10 @@ bool checkInclusion2(string s1, string s2) {
 
 int main() {
   cout << checkInclusion("ab", "eidbaooo") << " "
-       << checkInclusion("ab", "eidboaoo") << endl;
+       << checkInclusion("ab", "eidboaoo") << " " << checkInclusion("ab", "a")
+       << endl;
+  cout << checkInclusion1("ab", "eidbaooo") << " "
+       << checkInclusion1("ab", "eidboaoo") << " " << checkInclusion1("ab", "a")
+       << endl;
   return 0;
 }

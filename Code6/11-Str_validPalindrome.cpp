@@ -16,6 +16,25 @@
     1 <= s.length <= 105
     s 由小写英文字母组成 */
 
+bool isPalin(string& s, int index) {
+  for (int i = 0, j = s.size() - 1; i < j; i++, j--) {
+    if (i < j && i == index)
+      i++;
+    if (i < j && j == index)
+      j--;
+    if (s[i] != s[j])
+      return false;
+  }
+  return true;
+}
+bool validPalindrome(string s) {
+  for (int i = 0, j = s.size() - 1; i < j; i++, j--) {
+    if (s[i] != s[j])
+      return isPalin(s, i) || isPalin(s, j);
+  }
+  return true;
+}
+
 // 贪心算法。只有一次跳过字符的机会。双指针向中央收敛，主函数一旦发现不回文，左指针或右指针进一，任意一个满足剩下向中央的子串回文即可
 bool check(const string& s, int left, int right) {
   for (int i = left, j = right; i < j; i++, j--) {
@@ -24,8 +43,7 @@ bool check(const string& s, int left, int right) {
   }
   return true;
 }
-
-bool validPalindrome(string s) {
+bool validPalindrome1(string s) {
   for (int i = 0, j = s.size() - 1; i < j; i++, j--) {
     if (s[i] != s[j]) {
       return check(s, i + 1, j) || check(s, i, j - 1);
@@ -38,5 +56,7 @@ int main() {
   string s1 = "aba", s2 = "abca", s3 = "abc", s4 = "zryxeededexyz";
   cout << validPalindrome(s1) << " " << validPalindrome(s2) << " "
        << validPalindrome(s3) << " " << validPalindrome(s4) << endl;
+  cout << validPalindrome1(s1) << " " << validPalindrome1(s2) << " "
+       << validPalindrome1(s3) << " " << validPalindrome1(s4) << endl;
   return 0;
 }

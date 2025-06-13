@@ -26,8 +26,21 @@ index2。
     -1000 <= target <= 1000
     仅存在一个有效答案 */
 
-// 双指针向内收敛。时间复杂度O(n)，空间复杂度O(1)
 vector<int> twoSum(vector<int>& numbers, int target) {
+  for (int i = 0, j = numbers.size() - 1; i < j;) {
+    int sum = numbers[i] + numbers[j];
+    if (sum > target)
+      j--;
+    else if (sum < target)
+      i++;
+    else
+      return {i, j};
+  }
+  return {};
+}
+
+// 双指针向内收敛。时间复杂度O(n)，空间复杂度O(1)
+vector<int> twoSum1(vector<int>& numbers, int target) {
   int left = 0, right = numbers.size() - 1;
   while (left < right) {
     int sum = numbers[left] + numbers[right];
@@ -47,5 +60,8 @@ int main() {
   printVector(twoSum(numbers1, 9));
   printVector(twoSum(numbers2, 6));
   printVector(twoSum(numbers3, -1));
+  printVector(twoSum1(numbers1, 9));
+  printVector(twoSum1(numbers2, 6));
+  printVector(twoSum1(numbers3, -1));
   return 0;
 }
