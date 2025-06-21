@@ -24,9 +24,31 @@
   解释：-2 和 -1 向左移动，而 1 和 2 向右移动。
 由于移动方向相同的行星不会发生碰撞，所以最终没有行星发生碰撞。 */
 
+vector<int> asteroidCollision(vector<int>& asteroids) {
+  vector<int> ans;
+  for (const int& i : asteroids) {
+    bool exist = true;
+    while (!ans.empty() && i < 0 && ans.back() > 0) {
+      if (-i > ans.back())
+        ans.pop_back();
+      else if (-i < ans.back()) {
+        exist = false;
+        break;
+      } else {
+        exist = false;
+        ans.pop_back();
+        break;
+      }
+    }
+    if (exist)
+      ans.push_back(i);
+  }
+  return ans;
+}
+
 // 数组模拟栈。碰撞消除只发生在，栈非空+栈顶为正+新元素为负的情况下。栈顶元素绝对值小于等于新元素，不断弹出。
 // 一旦栈顶元素绝对值大于新元素，新元素被销毁，无法入栈，该轮结束。
-vector<int> asteroidCollision(vector<int>& asteroids) {
+vector<int> asteroidCollision1(vector<int>& asteroids) {
   vector<int> st;
   for (int i = 0; i < asteroids.size(); i++) {
     bool alive = true;
@@ -50,5 +72,10 @@ int main() {
   printVector(asteroidCollision(vec3));
   printVector(asteroidCollision(vec4));
   printVector(asteroidCollision(vec5));
+  printVector(asteroidCollision1(vec1));
+  printVector(asteroidCollision1(vec2));
+  printVector(asteroidCollision1(vec3));
+  printVector(asteroidCollision1(vec4));
+  printVector(asteroidCollision1(vec5));
   return 0;
 }

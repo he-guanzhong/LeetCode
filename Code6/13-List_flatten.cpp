@@ -52,12 +52,47 @@ class Node2 {
 };
 
 Node2* dfs(Node2* head) {
+  if (!head)
+    return head;
+  Node2 *p = head, *pre = p;
+  while (p) {
+    pre = p;
+    if (!p->child) {
+      p = p->next;
+      continue;
+    }
+    Node2* newHead = p->next;
+    Node2* subChild = p->child;
+    p->child = nullptr;
+    subChild->prev = p;
+    p->next = subChild;
+    Node2* subEnd = dfs(subChild);
+    subEnd->next = newHead;
+    if (newHead)
+      newHead->prev = subEnd;
+    p = subEnd;
+  }
+  return pre;
+}
+Node2* flatten(Node2* head) {
+  dfs(head);
+  return head;
+}
+
+// 原函数入参、返回值要求均是首结点。与递归函数dfs要求入参为子串首节点，返回值是子串末节点不同。故单独设立函数
+// 由于辅助函数要求返回的是child串最后一个有值的结点，故除设置遍历结点p，仍需保存其上一结点pre，作为有值的返回值
+// 对无child的结点，直接更新pre，并p后移一步。对有child结点，先保存本层级下一待拼接头结点realNext。
+// 对当前p及其p->child做三个操作。p后值child，child前指p，p的child指针置空
+// child节点作为递归函数入参，新值接收返回子串的最末节点childLast。
+// childLast后指realNext，但此时realNext可能以为空，必须其有值时，才设置其前指prev为childLast
+// 此时要更新p的位置到childLast，以便下一轮赋值pre。或者p直接跳到realNext，但pre记得赋值childLast
+Node2* dfs1(Node2* head) {
   Node2* cur = head;
   Node2* last = nullptr;
   while (cur) {
     Node2* realNext = cur->next;
     if (cur->child) {
-      Node2* childLast = dfs(cur->child);
+      Node2* childLast = dfs1(cur->child);
       cur->next = cur->child;
       cur->child->prev = cur;
       if (realNext) {
@@ -74,8 +109,8 @@ Node2* dfs(Node2* head) {
   return last;
 }
 
-Node2* flatten(Node2* head) {
-  dfs(head);
+Node2* flatten1(Node2* head) {
+  dfs1(head);
   return head;
 }
 

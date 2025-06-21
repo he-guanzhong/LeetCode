@@ -18,9 +18,35 @@
     输入数据保证链表代表的数字无前导 0
 进阶：如果输入链表不能翻转该如何解决？ */
 
+ListNode* reverseList(ListNode* head) {
+  if (!head || !head->next)
+    return head;
+  ListNode* newHead = reverseList(head->next);
+  head->next->next = head;
+  head->next = nullptr;
+  return newHead;
+}
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+  ListNode *p = reverseList(l1), *q = reverseList(l2);
+  ListNode* dummy = new ListNode(-1);
+  ListNode* k = dummy;
+  int carry = 0;
+  while (p || q || carry) {
+    int val1 = p ? p->val : 0;
+    int val2 = q ? q->val : 0;
+    carry += val1 + val2;
+    k->next = new ListNode(carry % 10);
+    carry /= 10;
+    k = k->next;
+    p = p ? p->next : p;
+    q = q ? q->next : q;
+  }
+  return reverseList(dummy->next);
+}
+
 // 不反转，就要利用栈，或数组将结点数据保存，如此空间复杂度O(m+n)
 // 注意st.pop()弹栈前，一定要判断栈是否为空。否则会报错
-ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+ListNode* addTwoNumbers1(ListNode* l1, ListNode* l2) {
   ListNode* p = l1;
   stack<int> st1, st2;
   while (p) {
@@ -58,5 +84,11 @@ int main() {
   printList(addTwoNumbers(p1, q1));
   printList(addTwoNumbers(p2, q2));
   printList(addTwoNumbers(p3, q3));
+  p1 = createList({7, 2, 4, 3}), q1 = createList({5, 6, 4});
+  p2 = createList({2, 4, 3}), q2 = createList({5, 6, 4});
+  p3 = createList({0}), q3 = createList({0});
+  printList(addTwoNumbers1(p1, q1));
+  printList(addTwoNumbers1(p2, q2));
+  printList(addTwoNumbers1(p3, q3));
   return 0;
 }

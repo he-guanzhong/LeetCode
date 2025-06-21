@@ -20,10 +20,38 @@ false。
   输出：false
   解释：当前三个字符 "app" 匹配时，第二个字符串相对短一些，然后根据词典编纂规则
     "apple" > "app"，因为 'l' > '∅'，其中 '∅'
-    是空白字符，定义为比任何其他字符都小（更多信息）。*/
+    是空白字符，定义为比任何其他字符都小（更多信息）。
+提示：
+  1 <= words.length <= 100
+  1 <= words[i].length <= 20
+  order.length == 26
+  在 words[i] 和 order 中的所有字符都是英文小写字母。*/
 
-// 使用数组替代哈希表，记录order每个字符出现的优先级顺序，
 bool isAlienSorted(vector<string>& words, string order) {
+  vector<int> alpha(26, 0);
+  for (int i = 0; i < order.size(); i++) {
+    alpha[order[i] - 'a'] = i;
+  }
+  for (int i = 1; i < words.size(); i++) {
+    string pre = words[i - 1], cur = words[i];
+    int j = 0;
+    for (; j < pre.size() && j < cur.size(); j++) {
+      if (alpha[pre[j] - 'a'] > alpha[cur[j] - 'a'])
+        return false;
+      else if (alpha[pre[j] - 'a'] < alpha[cur[j] - 'a'])
+        break;
+    }
+    if (j == min(pre.size(), cur.size()) && pre.size() > cur.size())
+      return false;
+  }
+  return true;
+}
+
+// 使用数组替代哈希表，记录order每个字符出现的优先级顺序。
+// 遍历words每两个相邻字符串。字符依次比较，只要出现pre[j]>cur[j]即次序相反，直接返回假
+// 若字符相等，则无需任何操作，直接继续比较。若pre[j]<cur[j]，说明顺序已对，无继续比较下去意义。直接退出该轮比较
+// 单独设置一个长度比较标志位，对apple和app这种情况。默认为真，即默认比较长度。但只要是顺序对过一次而退出的，无需进行比较
+bool isAlienSorted1(vector<string>& words, string order) {
   int alpha[26] = {0};
   for (int i = 0; i < order.size(); i++)
     alpha[order[i] - 'a'] = i;
@@ -57,5 +85,9 @@ int main() {
   cout << isAlienSorted(words1, order1) << " " << isAlienSorted(words2, order2)
        << " " << isAlienSorted(words3, order3) << " "
        << isAlienSorted(words4, order4) << endl;
+  cout << isAlienSorted1(words1, order1) << " "
+       << isAlienSorted1(words2, order2) << " "
+       << isAlienSorted1(words3, order3) << " "
+       << isAlienSorted1(words4, order4) << endl;
   return 0;
 }

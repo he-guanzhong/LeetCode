@@ -19,12 +19,43 @@
   -2^31 <= dividend, divisor <= 2^31 - 1
   divisor != 0 */
 
+int myDiv(int a, int b) {
+  int quotient = 0;
+  while (a <= b) {
+    int val = b;
+    int tmp = -1;
+    while (val >= INT_MIN - val && a <= val + val) {
+      tmp += tmp;
+      val += val;
+    }
+    a -= val;
+    quotient += tmp;
+  }
+  return quotient;
+}
+
+int divide(int a, int b) {
+  if (a == INT_MIN && b == -1)
+    return INT_MAX;
+  bool sign = true;
+  if (a > 0) {
+    sign = !sign;
+    a = -a;
+  }
+  if (b > 0) {
+    sign = !sign;
+    b = -b;
+  }
+  int ans = myDiv(a, b);
+  return sign ? -ans : ans;
+}
+
 // 只能存储有符号32位整型int，因此INT_MIN如果再乘以-1，则会越界INT_MAX。必须首先特殊处理
 // 负数范围大于正数，故将所有元素均转换为负数，对除数、被除数符号反转记录，由于记录cnt也是负数，故默认反转，反转要返回的答案要有负号
 // 自制除法函数，原理是利用减法模拟除法，不得使用div()名，会和系统冲突。只要被除数绝对值大于除数，就要不停减下去，一层循环
 // 每层循环内，除数记为tmp，二轮循环，不断翻倍膨胀，临时计数cnt也翻倍，直至tmp2倍值大于被除数，且其2倍值仍在INT_MIN范围内。
 // 临时计数cnt累加至答案，被除数减去本轮消弭除数翻倍值。最终返回的计数是一个负值，即默认取反后的结果
-int myDiv(int dividend, int divisor) {
+int myDiv1(int dividend, int divisor) {
   int ans = 0;
   while (dividend <= divisor) {
     int cnt = -1;
@@ -39,7 +70,7 @@ int myDiv(int dividend, int divisor) {
   return ans;
 }
 
-int divide(int dividend, int divisor) {
+int divide1(int dividend, int divisor) {
   if (dividend == INT_MIN && divisor == -1)
     return INT_MAX;
   bool sign_switch = true;
@@ -51,12 +82,14 @@ int divide(int dividend, int divisor) {
     sign_switch = !sign_switch;
     divisor = -divisor;
   }
-  int ans = myDiv(dividend, divisor);
+  int ans = myDiv1(dividend, divisor);
   return sign_switch ? -ans : ans;
 }
 
 int main() {
   cout << divide(10, 3) << " " << divide(7, -3) << " " << divide(INT_MIN, -1)
        << " " << divide(INT_MIN, 1) << endl;
+  cout << divide1(10, 3) << " " << divide1(7, -3) << " " << divide1(INT_MIN, -1)
+       << " " << divide1(INT_MIN, 1) << endl;
   return 0;
 }

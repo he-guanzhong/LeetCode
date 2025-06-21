@@ -25,10 +25,32 @@ null），需要创建一个循环有序列表并返回这个节点。否则。�
      -10^6 <= Node.val <= 10^6
      -10^6 <= insertVal <= 10^6 */
 
+Node* insert(Node* head, int insertVal) {
+  if (!head) {
+    Node* node = new Node(insertVal);
+    node->next = node;
+    return node;
+  }
+  Node *p = head, *q = head->next;
+  while (q != head) {
+    if (p->val <= insertVal && insertVal <= q->val ||
+        p->val > q->val && (insertVal > p->val || insertVal < q->val)) {
+      break;
+    } else {
+      p = q;
+      q = q->next;
+    }
+  }
+  Node* node = new Node(insertVal);
+  node->next = q;
+  p->next = node;
+  return head;
+}
+
 // 首先处理空链表，新增一个结点的特殊情况。提前创建好结点，因为以后必创建。若只有一个结点，则自己指向自己，返回即可
 // 其余情况，设置两个指针a,b，只有两种情况可以插入，一、正常顺位a<=val<=b。二、最大值向最小值跳a>b，且此时比最小值小val<=b，或比最大值大val>=a
 // 注意，循环只能遍历链表一次，故b回到head位置就退出。因此，1->2->3案例中，如果插入4时，不能在while循环中处理，一定是break之后，在外单独处理
-Node* insert(Node* head, int insertVal) {
+Node* insert1(Node* head, int insertVal) {
   Node* node = new Node(insertVal);
   if (!head) {
     node->next = node;
@@ -52,6 +74,27 @@ Node* insert(Node* head, int insertVal) {
   return head;
 }
 
+Node* createNode(vector<int>& vec) {
+  if (vec.empty())
+    return nullptr;
+  Node* head = new Node(vec[0]);
+  Node* p = head;
+  for (int i = 1; i < vec.size(); i++) {
+    p->next = new Node(vec[i]);
+    p = p->next;
+  }
+  p->next = head;
+  return head;
+}
+void printNode(Node* head) {
+  Node* p = head;
+  do {
+    cout << p->val << " ";
+    p = p->next;
+  } while (p != head);
+  cout << endl;
+}
+
 int main() {
   Node* node1 = new Node(3);
   Node* node2 = new Node(4);
@@ -60,11 +103,20 @@ int main() {
   node2->next = node3;
   node3->next = node1;
   Node* head = insert(node1, 2);
-  Node* p = head;
-  do {
-    cout << p->val << " ";
-    p = p->next;
-  } while (p != head);
-  cout << endl;
+  vector<int> vec1{3, 4, 1}, vec2{}, vec3{1}, vec4{3, 5, 1};
+  Node *p1 = createNode(vec1), *p2 = createNode(vec2), *p3 = createNode(vec3);
+  p1 = insert(p1, 2);
+  printNode(p1);
+  p2 = insert(p2, 1);
+  printNode(p2);
+  p3 = insert(p3, 0);
+  printNode(p3);
+  p1 = createNode(vec1), p2 = createNode(vec2), p3 = createNode(vec3);
+  p1 = insert1(p1, 2);
+  printNode(p1);
+  p2 = insert1(p2, 1);
+  printNode(p2);
+  p3 = insert1(p3, 0);
+  printNode(p3);
   return 0;
 }
