@@ -13,7 +13,7 @@ targetSum 的 路径 的数目。
   输出：3
 提示:
     二叉树的节点个数的范围是 [0,1000]
-    -109 <= Node.val <= 109
+    -10^9 <= Node.val <= 10^9
     -1000 <= targetSum <= 1000  */
 
 int dfs(TreeNode* root,
@@ -68,9 +68,12 @@ int main() {
   TreeNode* t2 =
       construct_binary_tree({5, 4, 8, 11, null, 13, 4, 7, 2, null, null, 5, 1});
   TreeNode* t3 = construct_binary_tree({0});
+  TreeNode* t4 = construct_binary_tree({715827882, 715827882, null, 715827882,
+                                        null, 1, null, 715827882, null,
+                                        715827882, null, 715827882, null});
   cout << pathSum(t1, 8) << " " << pathSum(t2, 22) << " " << pathSum(t3, 0)
-       << endl;
+       << " " << pathSum(t4, -3) << endl;
   cout << pathSum1(t1, 8) << " " << pathSum1(t2, 22) << " " << pathSum1(t3, 0)
-       << endl;
+       << " " << pathSum1(t4, -3) << endl;
   return 0;
 }

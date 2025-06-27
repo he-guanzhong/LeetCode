@@ -27,10 +27,24 @@
   1 <= t <= 109 保证每次对 ping 调用所使用的t 值都 严格递增 至多调用 ping 方法
 104 次 */
 
-// 注意容器适配器 stack和queue，没有clear()函数
 class RecentCounter {
  public:
   RecentCounter() {}
+
+  int ping(int t) {
+    que.push(t);
+    while (!que.empty() && que.front() < t - 3000) {
+      que.pop();
+    }
+    return que.size();
+  }
+  queue<int> que;
+};
+
+// 注意容器适配器 stack和queue，没有clear()函数
+class RecentCounter1 {
+ public:
+  RecentCounter1() {}
 
   int ping(int t) {
     que.push(t);
@@ -47,5 +61,9 @@ int main() {
   RecentCounter* recentCounter = new RecentCounter();
   cout << recentCounter->ping(1) << " " << recentCounter->ping(100) << " "
        << recentCounter->ping(3001) << " " << recentCounter->ping(3002) << endl;
+  RecentCounter1* recentCounter1 = new RecentCounter1();
+  cout << recentCounter1->ping(1) << " " << recentCounter1->ping(100) << " "
+       << recentCounter1->ping(3001) << " " << recentCounter1->ping(3002)
+       << endl;
   return 0;
 }

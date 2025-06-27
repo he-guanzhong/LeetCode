@@ -48,36 +48,57 @@ int sumNumbers(TreeNode* root) {
   return ans;
 }
 
+// 完全可以不用vector存储临时路径，深度优先搜索，保证无空结点进入递归。入参path表示当前结点前，总路径和
+// 鉴于进入递归的必不为空。故第一件事就是将path更新为至本层路径总和。如此发现是叶子结点，更新ans
+// 对左、右孩子存在的情况，依次进入下一层递归
+void dfs1(TreeNode* root, int path, int& ans) {
+  path = path * 10 + root->val;
+  if (!root->left && !root->right) {
+    ans += path;
+    return;
+  }
+  if (root->left)
+    dfs1(root->left, path, ans);
+  if (root->right)
+    dfs1(root->right, path, ans);
+}
+int sumNumbers1(TreeNode* root) {
+  int ans = 0;
+  if (root)
+    dfs1(root, 0, ans);
+  return ans;
+}
+
 // 回溯收集所有路径，遇到根节点就累加求和。使用vector保存临时路径，专门设vec转int的函数。一定是先保证有节点，压节点，再进入递归
-int vector2Int1(const vector<int>& vec) {
+int vector2Int2(const vector<int>& vec) {
   int sum = 0;
   for (int i = 0; i < vec.size(); i++)
     sum = sum * 10 + vec[i];
   return sum;
 }
-void dfs1(TreeNode* root, int& ans, vector<int>& vec) {
+void dfs2(TreeNode* root, int& ans, vector<int>& vec) {
   if (!root->left && !root->right) {
-    ans += vector2Int1(vec);
+    ans += vector2Int2(vec);
     return;
   }
   if (root->left) {
     vec.push_back(root->left->val);
-    dfs1(root->left, ans, vec);
+    dfs2(root->left, ans, vec);
     vec.pop_back();
   }
   if (root->right) {
     vec.push_back(root->right->val);
-    dfs1(root->right, ans, vec);
+    dfs2(root->right, ans, vec);
     vec.pop_back();
   }
 }
-int sumNumbers1(TreeNode* root) {
+int sumNumbers2(TreeNode* root) {
   if (!root)
     return 0;
   int ans = 0;
   vector<int> vec;
   vec.push_back(root->val);
-  dfs1(root, ans, vec);
+  dfs2(root, ans, vec);
   return ans;
 }
 
@@ -86,6 +107,5 @@ int main() {
   TreeNode* t2 = construct_binary_tree({4, 9, 0, 5, 1});
   cout << sumNumbers(t1) << " " << sumNumbers(t2) << endl;
   cout << sumNumbers1(t1) << " " << sumNumbers1(t2) << endl;
-
   return 0;
 }

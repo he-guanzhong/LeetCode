@@ -12,7 +12,33 @@
   树中节点数的取值范围是 [1, 100]
   0 <= Node.val <= 1000 */
 
+TreeNode* increasingBST(TreeNode* root) {
+  TreeNode *cur = root, *pre = nullptr, *ans = nullptr;
+  stack<TreeNode*> st;
+  while (cur || !st.empty()) {
+    if (cur) {
+      st.push(cur);
+      cur = cur->left;
+    } else {
+      cur = st.top();
+      st.pop();
+      if (pre == nullptr)
+        ans = cur;
+      else {
+        pre->right = cur;
+        pre->left = nullptr;
+      }
+      pre = cur;
+      cur->left = nullptr;
+      cur = cur->right;
+    }
+  }
+  return ans;
+}
+
 // 迭代法中序遍历。pre保存前一节点。注意，最后cur为空，而pre停在最后一个节点。其左指针必须再次人工指向空
+// 由于中序遍历，cur的左子树必然已经访问过了，甚至是直接就是pre结点。
+// 因此必须cur的同一层级，即刻将cur->left置空。而不是在pre的时候再pre->left置空
 TreeNode* increasingBST1(TreeNode* root) {
   TreeNode* cur = root;
   stack<TreeNode*> st;
@@ -29,7 +55,7 @@ TreeNode* increasingBST1(TreeNode* root) {
       } else {
         root = cur;
       }
-      cur->left = nullptr;  // 一定要置空
+      cur->left = nullptr;  // 关键，一定要置空
       pre = cur;
       cur = cur->right;
     }
@@ -39,19 +65,19 @@ TreeNode* increasingBST1(TreeNode* root) {
 
 // 递归法。使用虚拟头结点。注意先pre与root链接，之后root左指针要及时置空
 TreeNode* pre = nullptr;
-void inorder(TreeNode* root) {
+void inorder2(TreeNode* root) {
   if (!root)
     return;
-  inorder(root->left);
+  inorder2(root->left);
   pre->right = root;     // 先连接
   root->left = nullptr;  // 左子树已无用，必须置空
   pre = root;
-  inorder(root->right);
+  inorder2(root->right);
 }
-TreeNode* increasingBST(TreeNode* root) {
+TreeNode* increasingBST2(TreeNode* root) {
   TreeNode* dummy = new TreeNode(-1);
   pre = dummy;
-  inorder(root);
+  inorder2(root);
   return dummy->right;
 }
 
@@ -63,6 +89,12 @@ int main() {
   print_binary_tree(increasingBST(t1));
   print_binary_tree(increasingBST(t2));
   print_binary_tree(increasingBST(t3));
-
+  t1 = construct_binary_tree(
+      {5, 3, 6, 2, 4, null, 8, 1, null, null, null, 7, 9});
+  t2 = construct_binary_tree({5, 1, 7});
+  t3 = construct_binary_tree({2, 1, 4, null, null, 3});
+  print_binary_tree(increasingBST1(t1));
+  print_binary_tree(increasingBST1(t2));
+  print_binary_tree(increasingBST1(t3));
   return 0;
 }

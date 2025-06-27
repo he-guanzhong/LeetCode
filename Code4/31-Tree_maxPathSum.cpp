@@ -54,10 +54,11 @@ int main() {
   TreeNode* t3 = construct_binary_tree({0});
   TreeNode* t4 = construct_binary_tree(
       {5, 4, 8, 11, null, 13, 4, 7, 2, null, null, null, 1});
+  TreeNode* t5 = construct_binary_tree({-3});
   cout << maxPathSum(t1) << " " << maxPathSum(t2) << " " << maxPathSum(t3)
-       << " " << maxPathSum(t4) << endl;
+       << " " << maxPathSum(t4) << " " << maxPathSum(t5) << endl;
   cout << maxPathSum1(t1) << " " << maxPathSum1(t2) << " " << maxPathSum1(t3)
-       << " " << maxPathSum1(t4) << endl;
+       << " " << maxPathSum1(t4) << " " << maxPathSum1(t5) << endl;
 
   return 0;
 }

@@ -20,11 +20,32 @@
   movingAverage.next(3); // 返回 4.66667 = (1 + 10 + 3) / 3
   movingAverage.next(5); // 返回 6.0 = (10 + 3 + 5) / 3 */
 
-// 内置三个成员变量，队列本身，队列指定大小size。求队列平均数，需要知道队列总和sum。
-// 压入新元素时，首先看当前队列是否已满，若时，则弹出队首元素，总和sum减去相应值。然后再压入队尾元素。
 class MovingAverage {
  public:
   MovingAverage(int size) {
+    m = size;
+    sum = 0;
+  }
+
+  double next(int val) {
+    que.push(val);
+    sum += val;
+    if (que.size() > m) {
+      sum -= que.front();
+      que.pop();
+    }
+    return sum / double(que.size());
+  }
+  queue<int> que;
+  double sum;
+  int m;
+};
+
+// 内置三个成员变量，队列本身，队列指定大小size。求队列平均数，需要知道队列总和sum。
+// 压入新元素时，首先看当前队列是否已满，若时，则弹出队首元素，总和sum减去相应值。然后再压入队尾元素。
+class MovingAverage1 {
+ public:
+  MovingAverage1(int size) {
     this->size = size;
     this->sum = 0.0;
   }
@@ -48,6 +69,10 @@ class MovingAverage {
 int main() {
   MovingAverage* movingAverage = new MovingAverage(3);
   cout << movingAverage->next(1) << " " << movingAverage->next(10) << " "
-       << movingAverage->next(3) << " " << movingAverage->next(5);
+       << movingAverage->next(3) << " " << movingAverage->next(5) << endl;
+
+  MovingAverage1* movingAverage1 = new MovingAverage1(3);
+  cout << movingAverage1->next(1) << " " << movingAverage1->next(10) << " "
+       << movingAverage1->next(3) << " " << movingAverage1->next(5) << endl;
   return 0;
 }

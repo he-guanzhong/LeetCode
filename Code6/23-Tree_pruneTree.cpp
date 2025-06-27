@@ -19,9 +19,17 @@
     树中节点的数目在范围 [1, 200] 内
     Node.val 为 0 或 1 */
 
+TreeNode* pruneTree(TreeNode* root) {
+  if (!root)
+    return nullptr;
+  root->left = pruneTree(root->left);
+  root->right = pruneTree(root->right);
+  return root->val == 0 && !root->left && !root->right ? nullptr : root;
+}
+
 // 后序遍历典型问题。删除一个结点的必要条件是，该结点值为0，且其左右孩子均为空指针
 // 由于是后续遍历，所以到指定结点root时，其孩子必定已经被删减过，不存在孩子有值但本层为0需要删减的情况
-TreeNode* pruneTree(TreeNode* root) {
+TreeNode* pruneTree1(TreeNode* root) {
   if (!root)
     return root;
   root->left = pruneTree(root->left);
@@ -38,5 +46,11 @@ int main() {
   print_binary_tree(pruneTree(t1));
   print_binary_tree(pruneTree(t2));
   print_binary_tree(pruneTree(t3));
+  t1 = construct_binary_tree({1, null, 0, 0, 1});
+  t2 = construct_binary_tree({1, 0, 1, 0, 0, 0, 1});
+  t3 = construct_binary_tree({1, 1, 0, 1, 1, 0, 1, 0});
+  print_binary_tree(pruneTree1(t1));
+  print_binary_tree(pruneTree1(t2));
+  print_binary_tree(pruneTree1(t3));
   return 0;
 }

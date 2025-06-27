@@ -30,64 +30,57 @@ class Codec {
     queue<TreeNode*> que;
     if (root)
       que.push(root);
-    while (que.size()) {
+    while (!que.empty()) {
       TreeNode* cur = que.front();
       que.pop();
-      if (cur) {
+      if (!cur) {
+        ans += "null,";
+        continue;
+      } else {
         ans += to_string(cur->val) + ",";
         que.push(cur->left);
         que.push(cur->right);
-      } else {
-        ans += "null,";
       }
     }
-    if (ans.size())
+    if (!ans.empty())
       ans.pop_back();
     return ans;
   }
 
   // Decodes your encoded data to tree.
   TreeNode* deserialize(string data) {
-    if (data.empty() || data == "null")
+    if (data.empty())
       return nullptr;
-    int i = 0, j = 0;
-    vector<int> vec;
-    while (j < data.size()) {
-      while (data[j] != ',' && j < data.size())
-        j++;
-      string tmp = data.substr(i, j - i);
-      if (tmp == "null")
-        vec.push_back(INT_MIN);
-      else
-        vec.push_back(stoi(tmp));
-      j++;
-      i = j;
-    }
-
-    queue<TreeNode*> que;
-    TreeNode* root = new TreeNode(vec[0]);
-    que.push(root);
-    i = 1;
-    while (que.size()) {
-      TreeNode* cur = que.front();
-      que.pop();
-      if (vec[i] != INT_MIN && i < vec.size()) {
-        cur->left = new TreeNode(vec[i]);
-        que.push(cur->left);
+    vector<TreeNode*> vec;
+    int j = 0;
+    for (int i = 0; i <= data.size(); i++) {
+      if (i == data.size() || data[i] == ',') {
+        string tmp = data.substr(j, i - j);
+        j = i + 1;
+        TreeNode* node = nullptr;
+        if (!tmp.empty() && tmp != "null") {
+          int val = stoi(tmp);
+          node = new TreeNode(val);
+        }
+        vec.push_back(node);
       }
-      i++;
-      if (vec[i] != INT_MIN && i < vec.size()) {
-        cur->right = new TreeNode(vec[i]);
-        que.push(cur->right);
-      }
-      i++; 
     }
-    return root;
+    if (vec.empty())
+      return nullptr;
+    j = 1;
+    for (int i = 0; i < vec.size(); i++) {
+      if (vec[i]) {
+        vec[i]->left = vec[j++];
+        vec[i]->right = vec[j++];
+      }
+    }
+    return vec[0];
   }
 };
 
-// 序列化二叉树，无论是否空指针，都压队列。如此最后一行全为空指针不可避免。
-// 反序列化。要先将字符串切割为vector形式。注意先排除空字符串情况。依旧要使用辅助队列构造树，不得直接使用公式2k+1,2K+2
+// 序列化二叉树。实质上是利用队列BFS，无论是否空指针，都压队列。如此最后一行全为空指针不可避免。打印函数中没有，是因为故意不打印最后一行
+// 反序列化。要先将字符串切割为vector形式，其中可以直接存储TreeNode。注意先排除空字符串情况。否则无法利用stoi()函数
+// 若不希望利用辅助队列构造树，也可以直接在vector上双下标，i记录当前结点，j记录孩子结点操作。不得直接使用公式2k+1,2K+2
 
 // 序列化二叉树。队列层序遍历，先排除空字符串，直接返回空结点（不得最后操作）。压队列后，队列首元素如为空指针，直接字符串+null
 // 如不为空指针，则添加to_string，并加“,”（注意分号）。并直接压入左右结点，即允许空结点入队列。最终，弹出字符串末尾‘,’，返回
