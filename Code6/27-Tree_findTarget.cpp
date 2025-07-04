@@ -15,9 +15,48 @@ k，如果二叉搜索树中存在两个元素且它们的和等于给定的目�
     题目数据保证，输入的 root 是一棵 有效 的二叉搜索树
     -105 <= k <= 105 */
 
+TreeNode* getNextLeft(stack<TreeNode*>& st, TreeNode* cur, int& val) {
+  while (cur) {
+    st.push(cur);
+    cur = cur->left;
+  }
+  cur = st.top();
+  val = cur->val;
+  st.pop();
+  return cur->right;
+}
+TreeNode* getNextRight(stack<TreeNode*>& st, TreeNode* cur, int& val) {
+  while (cur) {
+    st.push(cur);
+    cur = cur->right;
+  }
+  cur = st.top();
+  val = cur->val;
+  st.pop();
+  return cur->left;
+}
+bool findTarget(TreeNode* root, int k) {
+  stack<TreeNode*> leftSt, rightSt;
+  int val1 = 0, val2 = 0;
+  TreeNode* l = getNextLeft(leftSt, root, val1);
+  TreeNode* r = getNextRight(rightSt, root, val2);
+
+  while (val1 < val2) {
+    int sum = val1 + val2;
+    if (sum == k)
+      return true;
+    else if (sum < k) {
+      l = getNextLeft(leftSt, l, val1);
+    } else {
+      r = getNextRight(rightSt, r, val2);
+    }
+  }
+  return false;
+}
+
 // 双指针法在二叉搜索树中的应用。左、右指针分别建立两个栈。指针左移、右移分别设置独立函数。
 // 取元素是从栈顶取，然后当前结点node左移，或右移
-TreeNode* getNextLeft(stack<TreeNode*>& st) {
+TreeNode* getNextLeft1(stack<TreeNode*>& st) {
   TreeNode* cur = st.top();
   st.pop();
   TreeNode* node = cur->right;
@@ -27,7 +66,7 @@ TreeNode* getNextLeft(stack<TreeNode*>& st) {
   }
   return cur;
 }
-TreeNode* getNextRight(stack<TreeNode*>& st) {
+TreeNode* getNextRight1(stack<TreeNode*>& st) {
   TreeNode* cur = st.top();
   st.pop();
   TreeNode* node = cur->left;
@@ -37,7 +76,7 @@ TreeNode* getNextRight(stack<TreeNode*>& st) {
   }
   return cur;
 }
-bool findTarget(TreeNode* root, int k) {
+bool findTarget1(TreeNode* root, int k) {
   TreeNode *nodeLeft = root, *nodeRight = root;
   stack<TreeNode*> stLeft, stRight;
   stLeft.push(nodeLeft);
@@ -55,14 +94,14 @@ bool findTarget(TreeNode* root, int k) {
     if (sum == k)
       return true;
     else if (sum < k)
-      nodeLeft = getNextLeft(stLeft);
+      nodeLeft = getNextLeft1(stLeft);
     else
-      nodeRight = getNextRight(stRight);
+      nodeRight = getNextRight1(stRight);
   }
   return false;
 }
 
-bool findTarget1(TreeNode* root, int k) {
+bool findTarget2(TreeNode* root, int k) {
   unordered_set<int> uset;
   TreeNode* cur = root;
   stack<TreeNode*> st;
@@ -87,5 +126,7 @@ int main() {
   TreeNode* t2 = construct_binary_tree({0, -3, 2, -4, null, 1});
   cout << findTarget(t1, 9) << " " << findTarget(t1, 28) << " "
        << findTarget(t2, 1) << endl;
+  cout << findTarget1(t1, 9) << " " << findTarget1(t1, 28) << " "
+       << findTarget1(t2, 1) << endl;
   return 0;
 }

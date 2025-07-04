@@ -30,14 +30,31 @@ false 并且不要将该日程安排添加到日历中。
     0 <= start < end <= 109
     每个测试用例，调用 book 方法的次数最多不超过 1000 次。 */
 
+class MyCalendar {
+ public:
+  MyCalendar() {}
+
+  bool book(int start, int end) {
+    auto it = umap.lower_bound(start);
+    if (it != umap.end() && it->first < end)
+      return false;
+    if (it != umap.begin() && (--it)->second > start) {
+      return false;
+    }
+    umap.insert({start, end});
+    return true;
+  }
+  map<int, int> umap;
+};
+
 // map红黑树经典问题。插入和查询时间复杂度均为logn，自带lower_bound二分查找函数，不得使用通用形式
 // lower_bound()返回第一个大于等于元素的下标，upper_bound()返回第一个大于元素的下标
 // 即将插入元素[start,end]，首先要根据start查到第一个大于等于其的区间it。若此时end超过了it->left，说明有冲突
 // 同理，it区间的前一区间，若start小于it->right，说明亦有冲突。
 // 无冲突则将左右区间，作为键值对存入map。并返回真
-class MyCalendar {
+class MyCalendar1 {
  public:
-  MyCalendar() {}
+  MyCalendar1() {}
 
   bool book(int startTime, int endTime) {
     auto it = events.lower_bound(startTime);
@@ -55,5 +72,8 @@ int main() {
   MyCalendar* myCalendar = new MyCalendar();
   cout << myCalendar->book(10, 20) << " " << myCalendar->book(15, 25) << " "
        << myCalendar->book(20, 30) << endl;
+  MyCalendar1* myCalendar1 = new MyCalendar1();
+  cout << myCalendar1->book(10, 20) << " " << myCalendar1->book(15, 25) << " "
+       << myCalendar1->book(20, 30) << endl;
   return 0;
 }

@@ -34,25 +34,50 @@ next()将指针向右移动，然后返回指针处的数字。 注意，指针�
   0 <= Node.val <= 106
   最多调用 105 次 hasNext 和 next 操作 */
 
-// 直接使用栈。注意每次弹栈都代表元素取出成功一次，直接break
 class BSTIterator {
  public:
-  BSTIterator(TreeNode* root) { cur = root; }
+  BSTIterator(TreeNode* root) {
+    cur = root;
+    while (cur) {
+      st.push(cur);
+      cur = cur->left;
+    }
+  }
+
+  int next() {
+    cur = st.top();
+    st.pop();
+    int ans = cur->val;
+    cur = cur->right;
+    while (cur) {
+      st.push(cur);
+      cur = cur->left;
+    }
+    return ans;
+  }
+
+  bool hasNext() { return cur || !st.empty(); }
+  TreeNode* cur;
+  stack<TreeNode*> st;
+};
+
+// 直接使用栈。仍然利用迭代法中序遍历，成员函数仅保存栈和cur结点。向左遍历所有左孩子入栈，可以不在构造函数中
+// 而是next()中，因为题目已经说明，next()调用必有效。故无需保存pre结点。
+// 直接再next()函数中序遍历。特殊点在于，每次弹栈代表访问某个结点时，直接要退出循环break。
+class BSTIterator1 {
+ public:
+  BSTIterator1(TreeNode* root) { cur = root; }
 
   int next() {
     int ans = 0;
-    while (cur || !st.empty()) {
-      if (cur) {
-        st.push(cur);
-        cur = cur->left;
-      } else {
-        cur = st.top();
-        st.pop();
-        ans = cur->val;
-        cur = cur->right;
-        break;
-      }
+    while (cur) {
+      st.push(cur);
+      cur = cur->left;
     }
+    cur = st.top();
+    st.pop();
+    ans = cur->val;
+    cur = cur->right;
     return ans;
   }
 
@@ -64,9 +89,9 @@ class BSTIterator {
 };
 
 // 中序遍历保存在数组中，设置下标表示下一个可访问的元素
-class BSTIterator1 {
+class BSTIterator2 {
  public:
-  BSTIterator1(TreeNode* root) {
+  BSTIterator2(TreeNode* root) {
     index = 0;
     TreeNode* cur = root;
     stack<TreeNode*> st;
@@ -101,5 +126,11 @@ int main() {
        << bSTIterator->hasNext() << " " << bSTIterator->next() << " "
        << bSTIterator->hasNext() << endl;
 
+  BSTIterator1* bSTIterator1 = new BSTIterator1(t1);
+  cout << bSTIterator1->next() << " " << bSTIterator1->next() << " "
+       << bSTIterator1->hasNext() << " " << bSTIterator1->next() << " "
+       << bSTIterator1->hasNext() << " " << bSTIterator1->next() << " "
+       << bSTIterator1->hasNext() << " " << bSTIterator1->next() << " "
+       << bSTIterator1->hasNext() << endl;
   return 0;
 }

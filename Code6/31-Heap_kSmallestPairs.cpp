@@ -15,15 +15,37 @@
   解释: 返回序列中的前 2 对数：
      [1,1],[1,1],[1,2],[2,1],[1,2],[2,2],[1,3],[1,3],[2,3] */
 
+vector<vector<int>> kSmallestPairs(vector<int>& nums1,
+                                   vector<int>& nums2,
+                                   int k) {
+  vector<vector<int>> ans;
+  auto cmp = [&](pair<int, int>& a, pair<int, int>& b) {
+    return nums1[a.first] + nums2[a.second] > nums1[b.first] + nums2[b.second];
+  };
+  priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(cmp)> pq(cmp);
+  for (int i = 0; i < nums1.size() && i < k; i++) {
+    pq.push({i, 0});
+  }
+  while (k-- && !pq.empty()) {
+    int a = pq.top().first, b = pq.top().second;
+    pq.pop();
+    ans.push_back({nums1[a], nums2[b]});
+    if (b + 1 < nums2.size()) {
+      pq.push({a, b + 1});
+    }
+  }
+  return ans;
+}
+
 // 假定数组一内元素是[1,2,3..]，数组二内元素是[a,b,c..]，那么可能都数组组合为1a,2a,3a...1b,2b,3b..总计m*n个
 // 优先队列建立最小堆，元素为数组一、二的下标对组。使用引用捕获[&]数组一二。
 // 固定数组二的首元素a，将数组一内所有元素压入优先队列，即堆内元素1a,2a,3a...
 // 从堆顶依次取值，即为最小的对组结果，C++17新增了结构化绑定
 // 取1a后，随即要将1b压入。取2a后，要将2b压入。因为数组二所对应的各个组合，一定是某元素a使用过了，在顺延一位
 // 时间复杂度klogk，因为优先队列插入需要logk，总计操作了2k次。空间复杂度k，因为堆内最多只保存k个元素
-vector<vector<int>> kSmallestPairs(vector<int>& nums1,
-                                   vector<int>& nums2,
-                                   int k) {
+vector<vector<int>> kSmallestPairs1(vector<int>& nums1,
+                                    vector<int>& nums2,
+                                    int k) {
   auto cmp = [&nums1, &nums2](const pair<int, int>& a,
                               const pair<int, int>& b) {
     return nums1[a.first] + nums2[a.second] > nums1[b.first] + nums2[b.second];
@@ -52,6 +74,8 @@ int main() {
   printMat(kSmallestPairs(nums1, nums2, 3));
   printMat(kSmallestPairs(nums3, nums4, 2));
   printMat(kSmallestPairs(nums5, nums6, 3));
-
+  printMat(kSmallestPairs1(nums1, nums2, 3));
+  printMat(kSmallestPairs1(nums3, nums4, 2));
+  printMat(kSmallestPairs1(nums5, nums6, 3));
   return 0;
 }

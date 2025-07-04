@@ -27,15 +27,55 @@ TreeNode。使树保持完全二叉树的状态，并返回插入节点 TreeNode
     0 <= val <= 5000
     每个测试用例最多调用 insert 和 get_root 操作 104 次 */
 
+class CBTInserter {
+ public:
+  CBTInserter(TreeNode* root) {
+    root_ = root;
+    queue<TreeNode*> que;
+    if (root)
+      que.push(root);
+    while (!que.empty()) {
+      TreeNode* cur = que.front();
+      que.pop();
+      if (cur->left)
+        que.push(cur->left);
+      if (cur->right)
+        que.push(cur->right);
+      if (!cur->left || !cur->right)
+        candidate.push(cur);
+    }
+  }
+
+  int insert(int v) {
+    int ans = 0;
+    TreeNode* cur = candidate.front();
+    TreeNode* node = new TreeNode(v);
+    if (!cur->left) {
+      cur->left = node;
+      ans = cur->val;
+    } else if (!cur->right) {
+      cur->right = node;
+      ans = cur->val;
+      candidate.pop();
+    }
+    candidate.push(node);
+    return ans;
+  }
+
+  TreeNode* get_root() { return root_; }
+  queue<TreeNode*> candidate;
+  TreeNode* root_;
+};
+
 // 二进制做法。输入已经是满二叉树，每一行起始元素均为2的幂次，2^(i-1)，1/2/4/8...
 // 首先使用BFS遍历，得到树结点总数量。记录即将插入新元素序号n，其最高位1后，有多少个0
 // 32位有符号整数，前导零函数__builtin_clz(),leading。后导零__builtin_ctz(),tailing
 // 例如，(8)1000，最高位1后是3个0，计算方式是highBit=31-builtin_clz()。
 // 将n分别对(1<<i)按位与，移位从highBit-1开始，最少移位1次，按位与为1是，结点右移，否则，结点左移
 // 最终查看n&1结果，此时结果为1，则结点cur右孩子即为新序号位置，否则cur左孩子为新序号位置。
-class CBTInserter {
+class CBTInserter1 {
  public:
-  CBTInserter(TreeNode* root) {
+  CBTInserter1(TreeNode* root) {
     this->root = root;
     this->cnt = 0;
     queue<TreeNode*> que;
@@ -81,9 +121,9 @@ class CBTInserter {
 };
 
 // 传统做法，使用BFS或DFS遍历全树，额外一个candidate队列保存所有可以插入的结点
-class CBTInserter1 {
+class CBTInserter2 {
  public:
-  CBTInserter1(TreeNode* root) {
+  CBTInserter2(TreeNode* root) {
     this->root = root;
     queue<TreeNode*> que;
     if (root)
@@ -122,9 +162,15 @@ class CBTInserter1 {
 
 int main() {
   TreeNode* root = new TreeNode(1);
-  root->left = new TreeNode(2);
   CBTInserter* cBTInserter = new CBTInserter(root);
-  cout << cBTInserter->insert(3) << " " << cBTInserter->insert(4) << endl;
+  cout << cBTInserter->insert(2) << " " << cBTInserter->insert(3) << " "
+       << cBTInserter->insert(4) << endl;
   print_binary_tree(cBTInserter->get_root());
+
+  TreeNode* root1 = new TreeNode(1);
+  CBTInserter1* cBTInserter1 = new CBTInserter1(root1);
+  cout << cBTInserter1->insert(2) << " " << cBTInserter1->insert(3) << " "
+       << cBTInserter1->insert(4) << endl;
+  print_binary_tree(cBTInserter1->get_root());
   return 0;
 }

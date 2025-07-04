@@ -36,11 +36,31 @@ int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 
   -104 <= val <= 104
   最多调用 add 方法 104 次 */
 
-// 优先队列。最小堆，先压k个。如此对堆顶为最小元素。再压入其余元素。如果队列长度大于k，弹出队首
-// 注意，构造函数中，可以调用成员函数。成员变量n，不得与局部变量同名
 class KthLargest {
  public:
   KthLargest(int k, vector<int>& nums) {
+    size = k;
+    for (int& num : nums) {
+      add(num);
+    }
+  }
+
+  int add(int val) {
+    pq.push(val);
+    while (pq.size() > size) {
+      pq.pop();
+    }
+    return pq.top();
+  }
+  priority_queue<int, vector<int>, greater<>> pq;
+  int size;
+};
+
+// 优先队列。最小堆，先压k个。如此对堆顶为最小元素。再压入其余元素。如果队列长度大于k，弹出队首
+// 注意，构造函数中，可以调用成员函数。成员变量n，不得与局部变量同名
+class KthLargest1 {
+ public:
+  KthLargest1(int k, vector<int>& nums) {
     n = k;
     for (int i = 0; i < nums.size(); i++) {
       add(nums[i]);
@@ -67,5 +87,12 @@ int main() {
   cout << kthLargest2->add(2) << " " << kthLargest2->add(10) << " "
        << kthLargest2->add(9) << " " << kthLargest2->add(9) << endl;
 
+  KthLargest1* kthLargest3 = new KthLargest1(3, nums1);
+  cout << kthLargest3->add(3) << " " << kthLargest3->add(5) << " "
+       << kthLargest3->add(10) << " " << kthLargest3->add(9) << " "
+       << kthLargest3->add(4) << endl;
+  KthLargest1* kthLargest4 = new KthLargest1(4, nums2);
+  cout << kthLargest4->add(2) << " " << kthLargest4->add(10) << " "
+       << kthLargest4->add(9) << " " << kthLargest4->add(9) << endl;
   return 0;
 }
