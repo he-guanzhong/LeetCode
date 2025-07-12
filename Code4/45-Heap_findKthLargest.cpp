@@ -10,29 +10,27 @@
 示例 2:
   输入: [3,2,3,1,2,4,5,5,6], k = 4
   输出: 4 */
-void quickSort(vector<int>& nums, int k, int start, int end) {
-  if (start > end)
+
+void quickSort(vector<int>& nums, int start, int end, int k) {
+  if (start >= end)
     return;
-  srand(time(nullptr));
-  int random = rand() % (end - start + 1) + start;
-  swap(nums[random], nums[start]);
-  int j = start;
+  int index = rand() % (end - start + 1) + start;
+  swap(nums[index], nums[start]);
+  int j = start + 1;
   for (int i = start + 1; i <= end; i++) {
-    if (nums[i] >= nums[start]) {
-      swap(nums[i], nums[j + 1]);
-      j++;
-    }
+    if (nums[i] > nums[start])
+      swap(nums[i], nums[j++]);
   }
+  j--;
   swap(nums[start], nums[j]);
-  /*   cout << "j: " << j << " \t";
-    printVector(nums); */
-  if (j > k - 1)
-    quickSort(nums, k, start, j - 1);
-  else if (j < k - 1)
-    quickSort(nums, k, j + 1, end);
+  if (j > k)
+    quickSort(nums, start, j - 1, k);
+  else if (j < k)
+    quickSort(nums, j + 1, end, k);
 }
 int findKthLargest(vector<int>& nums, int k) {
-  quickSort(nums, k, 0, nums.size() - 1);
+  srand(time(nullptr));
+  quickSort(nums, 0, nums.size() - 1, k - 1);
   return nums[k - 1];
 }
 
@@ -45,12 +43,11 @@ int findKthLargest(vector<int>& nums, int k) {
 void quickSort1(vector<int>& nums, int start, int end, int target) {
   if (start > end)
     return;
-  srand(time(nullptr));
   int random = rand() % (end - start + 1) + start;
   int base = nums[random];
   swap(nums[start], nums[random]);
-  int index =
-      start;  // 此处是核心，index初始化为已经完成排序的最后一位。不可以写成start+1，因为后面有强制交换
+  // 此处是核心，index初始化为已经完成排序的最后一位。不可以写成start+1，因为后面有强制交换
+  int index = start;
   for (int i = start + 1; i <= end; i++) {
     if (nums[i] >= base) {
       swap(nums[index + 1], nums[i]);
@@ -61,15 +58,18 @@ void quickSort1(vector<int>& nums, int start, int end, int target) {
   if (index < target) {
     while (index < target && nums[index] == nums[index + 1])
       index++;
+    // index已排除了可能性，故边界应是index+1
     quickSort1(nums, index + 1, end, target);
   } else if (index > target) {
     while (index > target && nums[index] == nums[index - 1])
       index--;
     quickSort1(nums, start, index - 1, target);
-  } else
+  } else {
     return;
+  }
 }
 int findKthLargest1(vector<int>& nums, int k) {
+  srand(time(nullptr));
   quickSort1(nums, 0, nums.size() - 1, k - 1);
   return nums[k - 1];
 }
@@ -85,10 +85,13 @@ int findKthLargest2(vector<int>& nums, int k) {
 }
 
 int main() {
-  vector<int> nums1 = {3, 2, 1, 5, 6, 4}, nums2 = {3, 2, 3, 1, 2, 4, 5, 5, 6};
+  vector<int> nums1 = {3, 2, 1, 5, 6, 4}, nums2 = {3, 2, 3, 1, 2, 4, 5, 5, 6},
+              nums3 = {-1, -1}, nums4 = {99, 99};
   cout << findKthLargest(nums1, 2) << " " << findKthLargest(nums2, 4) << " "
-       << findKthLargest(nums1, 2) << " " << findKthLargest(nums2, 4) << endl;
+       << findKthLargest(nums1, 2) << " " << findKthLargest(nums2, 4) << " "
+       << findKthLargest(nums3, 2) << " " << findKthLargest(nums4, 1) << endl;
   cout << findKthLargest1(nums1, 2) << " " << findKthLargest1(nums2, 4) << " "
-       << findKthLargest1(nums1, 2) << " " << findKthLargest1(nums2, 4) << endl;
+       << findKthLargest1(nums1, 2) << " " << findKthLargest1(nums2, 4) << " "
+       << findKthLargest1(nums3, 2) << " " << findKthLargest1(nums4, 1) << endl;
   return 0;
 }

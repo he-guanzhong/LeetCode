@@ -13,29 +13,82 @@
   1 <= nums.length <= 2 * 105
   0 <= nums[i] <= 231 - 1 */
 
-// 前缀树，31位正整数可以看作一棵深度31的二叉树，左、右节点分别代表从高到底其每一位为0或1
-// addElem辅助函数将数组每一位分别加入树中。checkElem辅助函数，将待求元素x
 struct Trie {
-  Trie* left;
-  Trie* right;
+  Trie *left, *right;
 };
 
-void addElem(int num, Trie* root) {
-  Trie* cur = root;
+void addElem(int x, Trie* root) {
+  Trie* node = root;
+  for (int i = 30; i >= 0; i--) {
+    if (x >> i & 1) {
+      if (!node->right)
+        node->right = new Trie();
+      node = node->right;
+    } else {
+      if (!node->left)
+        node->left = new Trie();
+      node = node->left;
+    }
+  }
+}
+
+int check(int num, Trie* root) {
+  Trie* node = root;
+  int x = 0;
+  for (int i = 30; i >= 0; i--) {
+    if (num >> i & 1) {
+      if (node->left) {
+        x = 2 * x + 1;
+        node = node->left;
+      } else {
+        x = 2 * x;
+        node = node->right;
+      }
+    } else {
+      if (node->right) {
+        x = 2 * x + 1;
+        node = node->right;
+      } else {
+        x = 2 * x;
+        node = node->left;
+      }
+    }
+  }
+  return x;
+}
+int findMaximumXOR(vector<int>& nums) {
+  Trie* root = new Trie();
+  int ans = 0;
+  for (int i = 1; i < nums.size(); i++) {
+    addElem(nums[i - 1], root);
+    ans = max(ans, check(nums[i], root));
+  }
+  return ans;
+}
+
+// 前缀树，31位正整数可以看作一棵深度31的二叉树，左、右节点分别代表从高到底其每一位为0或1
+// addElem辅助函数将数组每一位分别加入树中。checkElem辅助函数，将待求元素x
+struct Trie1 {
+  Trie1* left;
+  Trie1* right;
+};
+
+void addElem1(int num, Trie1* root) {
+  Trie1* cur = root;
   for (int k = 30; k >= 0; k--) {
     if (num >> k & 1) {
       if (!cur->right)
-        cur->right = new Trie();
+        cur->right = new Trie1();
       cur = cur->right;
     } else {
       if (!cur->left)
-        cur->left = new Trie();
+        cur->left = new Trie1();
       cur = cur->left;
     }
   }
 }
-int checkElem(int num, Trie* root) {
-  Trie* cur = root;
+int checkElem1(int num, Trie1* root) {
+  Trie1* cur = root;
   int x = 0;
   for (int k = 30; k >= 0; k--) {
     if (num >> k & 1) {
@@ -60,13 +113,13 @@ int checkElem(int num, Trie* root) {
   }
   return x;
 }
-int findMaximumXOR(vector<int>& nums) {
-  Trie* root = new Trie();
+int findMaximumXOR2(vector<int>& nums) {
+  Trie1* root = new Trie1();
   int x = 0;
   for (int i = 1; i < nums.size(); i++) {
     // 此时[0,i-1]均在树内
-    addElem(nums[i - 1], root);
-    x = max(x, checkElem(nums[i], root));
+    addElem1(nums[i - 1], root);
+    x = max(x, checkElem1(nums[i], root));
   }
   return x;
 }
@@ -102,6 +155,7 @@ int main() {
   vector<int> nums1{3, 10, 5, 25, 2, 8},
       nums2{14, 70, 53, 83, 49, 91, 36, 80, 92, 51, 66, 70};
   cout << findMaximumXOR(nums1) << " " << findMaximumXOR(nums2) << endl;
+  cout << findMaximumXOR1(nums1) << " " << findMaximumXOR1(nums2) << endl;
 
   return 0;
 }

@@ -24,23 +24,54 @@ words[2] = "bell" ，s 开始于 indices[2] = 5 到下一个 '#'
 
 struct Trie {
   vector<Trie*> children;
-  int cnt;
+  int branch;
   Trie() {
+    children.resize(26, 0);
+    branch = 0;
+  }
+};
+int minimumLengthEncoding(vector<string>& words) {
+  Trie* root = new Trie();
+  int ans = 0;
+  unordered_map<Trie*, int> umap;
+  for (const auto& word : words) {
+    Trie* node = root;
+    for (int i = word.size() - 1; i >= 0; i--) {
+      int index = word[i] - 'a';
+      if (node->children[index] == nullptr) {
+        node->children[index] = new Trie();
+        node->branch++;
+      }
+      node = node->children[index];
+    }
+    umap[node] = word.size();
+  }
+  for (auto& node : umap) {
+    if (node.first->branch == 0)
+      ans += node.second + 1;
+  }
+  return ans;
+}
+
+struct Trie1 {
+  vector<Trie1*> children;
+  int cnt;
+  Trie1() {
     cnt = 0;  // 节点分支数
     children.resize(26, nullptr);
   }
 };
-
-// 所有单词倒序插入前缀树，即可找到共同后缀
-// 哈希表存储最后一个节点指针，及其对应单词长度。如此可以通过指针指向节点是否末尾（无其余分支，cnt==0），判断是否要将此单词长度加入
-int minimumLengthEncoding(vector<string>& words) {
-  Trie* root = new Trie();
-  unordered_map<Trie*, int> umap;
+// 所有单词倒序插入前缀树，即可找到共同后缀。前缀树无需存储是否为最后isEnd标志位，但要存储该结点有几个子分支branch
+// 哈希表存储最后一个节点（即字符串首字母）指针，及其对应单词长度。因此，前缀树深度信息不重要，字符串长度已知，并由哈希表记录
+// 如此可以通过指针指向节点是否末尾（无其余分支，cnt==0），判断是否要将此单词长度加入
+int minimumLengthEncoding1(vector<string>& words) {
+  Trie1* root = new Trie1();
+  unordered_map<Trie1*, int> umap;
   for (const string& word : words) {
-    Trie* cur = root;
+    Trie1* cur = root;
     for (int i = word.size() - 1; i >= 0; i--) {
       if (!cur->children[word[i] - 'a']) {
-        cur->children[word[i] - 'a'] = new Trie();
+        cur->children[word[i] - 'a'] = new Trie1();
         cur->cnt++;  // 该层节点有新分支
       }
       cur = cur->children[word[i] - 'a'];
@@ -57,7 +88,7 @@ int minimumLengthEncoding(vector<string>& words) {
 
 // 利用uset去除单词重，对每一个word，分别在uset中删除其所有可能的后缀元素，剩下uset中的即为不重复单词
 // 时间复杂度O(w^2)，
-int minimumLengthEncoding1(vector<string>& words) {
+int minimumLengthEncoding2(vector<string>& words) {
   unordered_set<string> uset(words.begin(), words.end());
   for (const string& word : words) {
     for (int i = 1; i < word.size(); i++)
@@ -72,5 +103,8 @@ int minimumLengthEncoding1(vector<string>& words) {
 int main() {
   vector<string> s1 = {"time", "me", "bell"}, s2 = {"t"};
   cout << minimumLengthEncoding(s1) << " " << minimumLengthEncoding(s2) << endl;
+  cout << minimumLengthEncoding1(s1) << " " << minimumLengthEncoding1(s2)
+       << endl;
+
   return 0;
 }

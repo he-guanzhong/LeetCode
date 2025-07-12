@@ -14,10 +14,30 @@ arr2 中出现过的元素需要按照升序放在 arr1 的末尾。
   1 <= arr1.length, arr2.length <= 1000
   0 <= arr1[i], arr2[i] <= 1000
   arr2 中的元素 arr2[i]  各不相同
-  arr2 中的每个元素 arr2[i] 都出现在 arr1 中*/
+  arr2 中的每个元素 arr2[i] 都出现在 arr1 中 */
 
-// 自定义排序。利用arr2构造哈希表，键是元素，值为其下表，供对比使用。sort()函数中比较函数x,y为真时x在前，为假时y在前
+vector<int> relativeSortArray(vector<int>& arr1, vector<int>& arr2) {
+  unordered_map<int, int> umap;
+  for (int i = 0; i < arr2.size(); i++) {
+    umap[arr2[i]] = i;
+  }
+  sort(arr1.begin(), arr1.end(), [&](int a, int b) {
+    if (umap.count(a) && umap.count(b))
+      return umap[a] < umap[b];
+    else if (umap.count(a))
+      return true;
+    else if (umap.count(b))
+      return false;
+    else
+      return a < b;
+  });
+  return arr1;
+}
+
+// 自定义排序。考察sort()、cmp、lambda函数的用法
+// 利用arr2构造哈希表，键是元素，值为其下标，供对比使用。sort()函数中比较函数x,y为真时x在前，为假时y在前
 // 若x、y均存在，则对比其下标。若x、y仅一方存在，则返回存在的一方靠前，若都不存在，则直接比较其值
+// 构建哈希表，时间空间均需要n。加之涉及排序。总体的时间复杂度O(mlogm+n)，空间复杂度O(logm+n)。
 vector<int> relativeSortArray1(vector<int>& arr1, vector<int>& arr2) {
   unordered_map<int, int> umap;
   for (int i = 0; i < arr2.size(); i++)
@@ -32,10 +52,11 @@ vector<int> relativeSortArray1(vector<int>& arr1, vector<int>& arr2) {
   return arr1;
 }
 
-// 计数排序，鉴于arr1中最大数字才1000，设置每个数字出现的频率数组freq。遍历第一遍，得到该freq数组所需大小
-// 二次遍历，统计所有arr1中元素出现次数。三次遍历，遍历arr2，对其中每个元素x，分别对答案压入freq[x]次
+// 计数排序，鉴于arr1中最大数字才1000，设置每个数字出现的频率数组freq。遍历第一遍，得到该freq数组长度，即最大的数字是多少
+// 二次遍历，统计所有arr1中元素出现次数到freq内。三次遍历，遍历arr2，对其中每个元素x，分别对答案压入freq[x]次
 // 四次遍历，此时freq中仍有一些元素未清零，再次遍历，对所有元素压入
-vector<int> relativeSortArray(vector<int>& arr1, vector<int>& arr2) {
+// 记upper是arr1中的最大数字，本题中小于1000。时间复杂度O(2m+n+upper)。空间复杂度O(upper)因为额外存储了freq数组
+vector<int> relativeSortArray2(vector<int>& arr1, vector<int>& arr2) {
   int upper = 0;
   for (int i = 0; i < arr1.size(); i++)
     upper = max(upper, arr1[i]);
@@ -66,5 +87,7 @@ int main() {
               vec4 = {22, 28, 8, 6};
   printVector(relativeSortArray(vec1, vec2));
   printVector(relativeSortArray(vec3, vec4));
+  printVector(relativeSortArray1(vec1, vec2));
+  printVector(relativeSortArray1(vec3, vec4));
   return 0;
 }

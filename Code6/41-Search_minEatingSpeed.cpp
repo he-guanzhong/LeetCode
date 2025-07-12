@@ -21,12 +21,28 @@ k 根，她将吃掉这堆的所有香蕉，然后这一小时内不会再吃更
   piles.length <= h <= 109
   1 <= piles[i] <= 109 */
 
+int minEatingSpeed(vector<int>& piles, int h) {
+  long long l = 1, r = accumulate(piles.begin(), piles.end(), 0ll);
+  while (l <= r) {
+    long m = l + ((r - l) >> 1);
+    int hour = 0;
+    for (const int& i : piles) {
+      hour += (i - 1) / m + 1;
+    }
+    if (hour > h)
+      l = m + 1;
+    else
+      r = m - 1;
+  }
+  return l;
+}
+
 // 自变量是吃香蕉速度x，最慢为1，如此时间最长，为总香蕉数量。最快为最大的那一堆香蕉数量，如此时间最短，为堆数
 // 二分法，对每一种速度x，遍历每一堆求总时间cnt，注意数量范围[1,m]之内的堆，对应速度m，结果应该等于1，则特殊向上取整处理。
 // 时间过长cnt>h，应加快速度，left右移。反之cnt<h，可以减缓速度，right左移。
 // 注意时间相等时，可以尝试再慢一些，而不是直接返回答案。故cnt<=h是right左移的条件，最终返回的是左指针
 // 时间复杂度O(NlogN)。
-int minEatingSpeed(vector<int>& piles, int h) {
+int minEatingSpeed1(vector<int>& piles, int h) {
   int maxVal = *max_element(piles.begin(), piles.end());
   int left = 1, right = maxVal;
   while (left <= right) {
@@ -46,9 +62,16 @@ int minEatingSpeed(vector<int>& piles, int h) {
 
 int main() {
   vector<int> vec1 = {3, 6, 7, 11}, vec2 = {30, 11, 23, 4, 20},
-              vec3 = {30, 11, 23, 4, 20}, vec4 = {1, 1, 1, 999999999};
+              vec3 = {30, 11, 23, 4, 20}, vec4 = {1, 1, 1, 999999999},
+              vec5 = {332484035, 524908576, 855865114, 632922376, 222257295,
+                      690155293, 112677673, 679580077, 337406589, 290818316,
+                      877337160, 901728858, 679284947, 688210097, 692137887,
+                      718203285, 629455728, 941802184};
   cout << minEatingSpeed(vec1, 8) << " " << minEatingSpeed(vec2, 5) << " "
        << minEatingSpeed(vec3, 6) << " " << minEatingSpeed(vec4, 10) << " "
-       << minEatingSpeed(vec1, 8) << endl;
+       << minEatingSpeed(vec5, 823855818) << endl;
+  cout << minEatingSpeed1(vec1, 8) << " " << minEatingSpeed1(vec2, 5) << " "
+       << minEatingSpeed1(vec3, 6) << " " << minEatingSpeed1(vec4, 10) << " "
+       << minEatingSpeed1(vec5, 823855818) << endl;
   return 0;
 }

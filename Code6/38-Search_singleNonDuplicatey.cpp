@@ -13,13 +13,26 @@
   1 <= nums.length <= 105
   0 <= nums[i] <= 105 */
 
+int singleNonDuplicate(vector<int>& nums) {
+  int l = 0, r = nums.size() - 1;
+  while (l <= r) {
+    int m = l + ((r - l) >> 1);
+    int n = m ^ 1;
+    if (n < nums.size() && nums[m] == nums[n])
+      l = m + 1;
+    else
+      r = m - 1;
+  }
+  return nums[l];
+}
+
 // 有序数组，并要求时间复杂度O(logN)，则不可以使用传统异或方法。
 // 对于普通数组，记答案为分割点，其左侧nums[i]==nums[i+1]，i为偶数。或另一种表述nums[i]==nums[i-1]，i为奇数
 // 显然，其右侧满足nums[i]==nums[i+1]，i为奇数。或另一种表述nums[i]==nums[i-1]，i为偶数
 // 左侧全部满足要求，无论奇偶，注意异或特性：i为偶数时i+1=i^1，i为奇数时i-1=i^1。所以，只要满足nums[i]==nums[i^1]即向右查询
 // 向右查询前提是i^1不能超过数组范围。注意退出条件，分割点必为偶数，且不满足条件nums[i]==nums[i+1]，故最后一步必然是将右指针移动
 // 因此，最终答案是左指针指向的值（不是下标）
-int singleNonDuplicate(vector<int>& nums) {
+int singleNonDuplicate1(vector<int>& nums) {
   int left = 0, right = nums.size() - 1;
   while (left <= right) {
     int mid = left + ((right - left) >> 1);
@@ -37,6 +50,7 @@ int main() {
       arr3({1});
   cout << singleNonDuplicate(arr1) << " " << singleNonDuplicate(arr2) << " "
        << singleNonDuplicate(arr3) << endl;
-
+  cout << singleNonDuplicate1(arr1) << " " << singleNonDuplicate1(arr2) << " "
+       << singleNonDuplicate1(arr3) << endl;
   return 0;
 }
