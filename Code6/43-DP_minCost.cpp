@@ -22,9 +22,21 @@ n x 3 的正整数矩阵 costs 来表示的。
     1 <= n <= 100
     1 <= costs[i][j] <= 20 */
 
+int minCost(vector<vector<int>>& costs) {
+  int dp[2][3] = {0};
+  dp[0][0] = costs[0][0], dp[0][1] = costs[0][1], dp[0][2] = costs[0][2];
+  for (int i = 1; i < costs.size(); i++) {
+    for (int j = 0; j < 3; j++)
+      dp[1][j] = costs[i][j] + min(dp[0][(j + 1) % 3], dp[0][(j + 2) % 3]);
+    for (int j = 0; j < 3; j++)
+      dp[0][j] = dp[1][j];
+  }
+  return min({dp[0][0], dp[0][1], dp[0][2]});
+}
+
 // 动态规划基础题。位置i刷其中一个颜色，则其前一位i-1就不能刷对应的颜色。
 // 问题转化为，假设长度n=3的序列[0,1,2]，对任意一个下标j，找出其余位置下标(j+k)%n，其中k意为偏置[1,n)
-int minCost(vector<vector<int>>& costs) {
+int minCost1(vector<vector<int>>& costs) {
   vector<int> pre = costs[0];
   vector<int> cur(3, 0);
   for (int i = 1; i < costs.size(); i++) {
@@ -42,5 +54,6 @@ int main() {
   vector<vector<int>> costs1 = {{17, 2, 17}, {16, 16, 5}, {14, 3, 19}},
                       costs2 = {{7, 6, 2}};
   cout << minCost(costs1) << " " << minCost(costs2) << endl;
+  cout << minCost1(costs1) << " " << minCost1(costs2) << endl;
   return 0;
 }

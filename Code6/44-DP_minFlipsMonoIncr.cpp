@@ -20,12 +20,27 @@
     1 <= s.length <= 105
     s[i] 为 '0' 或 '1' */
 
-//*
+int minFlipsMonoIncr(string s) {
+  int start = 0, end = s.size() - 1;
+  while (start < s.size() && s[start] == '0')
+    start++;
+  while (end >= start && s[end] == '1')
+    end--;
+  int cnt1 = 0, cnt0 = 0;
+  for (int i = start; i <= end; i++) {
+    if (s[i] == '1')
+      cnt1++;
+    else
+      cnt0++;
+  }
+  return min(cnt1, cnt0);
+}
+
 // 到字符i时，dp[i][0]、dp[i][1]分别为其位为0、1时的最小翻转次数。
 // 显然初始状态，只有需求0但实际值是1，或需求1但实际值为0，才需要计数
 // 从第二位开始，该位是0，要求该位前必须也是0，若此位为1，则计数增加一次
 // 若该位是1，则对该位前无要求，可以是0或1，具体看哪方更小。若此位为0，则计数增加一次
-int minFlipsMonoIncr(string s) {
+int minFlipsMonoIncr1(string s) {
   int dp[2][2] = {0};
   dp[0][0] = s[0] == '1';
   dp[0][1] = s[0] == '0';
@@ -40,7 +55,7 @@ int minFlipsMonoIncr(string s) {
 
 // 方便解法。dp表示到达i位前保持顺序，至少翻转多少次。当s[i]为1时，必满足要求，故对1计数
 // 当s[i]为0时，可能需要反转，具体参看是反转[0,i-1]前所有的1合适，还是翻转当前位合适，则翻转次数dp+1。取二者最小值
-int minFlipsMonoIncr1(string s) {
+int minFlipsMonoIncr2(string s) {
   int n = s.size();
   int one = 0;
   int dp = 0;
@@ -53,9 +68,14 @@ int minFlipsMonoIncr1(string s) {
   }
   return dp;
 }
+
 int main() {
   cout << minFlipsMonoIncr("00110") << " " << minFlipsMonoIncr("010110") << " "
        << minFlipsMonoIncr("00011000") << " " << minFlipsMonoIncr("0101100011")
-       << endl;
+       << " " << minFlipsMonoIncr("10011111110010111011") << endl;
+  cout << minFlipsMonoIncr1("00110") << " " << minFlipsMonoIncr1("010110")
+       << " " << minFlipsMonoIncr1("00011000") << " "
+       << minFlipsMonoIncr1("0101100011") << " "
+       << minFlipsMonoIncr1("10011111110010111011") << endl;
   return 0;
 }
