@@ -21,13 +21,31 @@ n >= 3
   3 <= arr.length <= 1000
   1 <= arr[i] < arr[i + 1] <= 10^9 */
 
-// **
+int lenLongestFibSubseq(vector<int>& arr) {
+  int n = arr.size();
+  int ans = 0;
+  vector<vector<int>> dp(n, vector<int>(n, 2));
+  for (int i = 2; i < n; i++) {
+    for (int j = 0, k = i - 1; j < k;) {
+      if (arr[j] + arr[k] == arr[i]) {
+        dp[k][i] = max(dp[k][i], dp[j][k] + 1);
+        ans = max(ans, dp[k][i]);
+        j++, k--;
+      } else if (arr[j] + arr[k] < arr[i])
+        j++;
+      else
+        k--;
+    }
+  }
+  return ans == 2 ? 0 : ans;
+}
+
 // 动态规划+双指针。斐波那契数列特征是，至少三个元素。下标j<k<i，起值arr[j]+arr[k]==arr[i]
 // dp[k][i]含义是，以arr[k]和arr[i]为末尾两个元素的数列长度。因此，第一轮遍历[0,i]范围内
 // 双指针(j,k)切割这个区间，若发现符合斐波那契列特征，则需要更新最大长度，在原dp[k][i]和dp[j][k]+1中取大
 // 鉴于最长斐波那契列不一定是以整个数列末尾元素为结束，故要单独设置答案变量并随时更新
 // dp[][]数组可全部初始化为2，省去判断首次成数列时，初始化长度为3的特殊处理。但在返回答案不能为2的特殊情况
-int lenLongestFibSubseq(vector<int>& arr) {
+int lenLongestFibSubseq1(vector<int>& arr) {
   int ans = 0;
   vector<vector<int>> dp(arr.size(), vector<int>(arr.size(), 2));
   for (int i = 2; i < arr.size(); i++) {
@@ -47,7 +65,11 @@ int lenLongestFibSubseq(vector<int>& arr) {
 }
 
 int main() {
-  vector<int> arr1 = {1, 2, 3, 4, 5, 6, 7, 8}, arr2 = {1, 3, 7, 11, 12, 14, 18};
-  cout << lenLongestFibSubseq(arr1) << " " << lenLongestFibSubseq(arr2) << endl;
+  vector<int> arr1 = {1, 2, 3, 4, 5, 6, 7, 8}, arr2 = {1, 3, 7, 11, 12, 14, 18},
+              arr3{2, 4, 7, 8, 9, 10, 14, 15, 18, 23, 32, 50};
+  cout << lenLongestFibSubseq(arr1) << " " << lenLongestFibSubseq(arr2) << " "
+       << lenLongestFibSubseq(arr3) << endl;
+  cout << lenLongestFibSubseq1(arr1) << " " << lenLongestFibSubseq1(arr2) << " "
+       << lenLongestFibSubseq1(arr3) << endl;
   return 0;
 }
