@@ -25,11 +25,34 @@ mat 中对应位置元素到最近的 0 的距离。 两个相邻元素间的距
   mat[i][j] is either 0 or 1.
   mat 中至少有一个 0  */
 
+vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+  int m = mat.size(), n = mat[0].size();
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      if (mat[i][j]) {
+        int a = i > 0 ? mat[i - 1][j] : INT_MAX / 2;
+        int b = j > 0 ? mat[i][j - 1] : INT_MAX / 2;
+        mat[i][j] = min(a, b) + 1;
+      }
+    }
+  }
+  for (int i = m - 1; i >= 0; i--) {
+    for (int j = n - 1; j >= 0; j--) {
+      if (mat[i][j]) {
+        int a = i < m - 1 ? mat[i + 1][j] : INT_MAX / 2;
+        int b = j < n - 1 ? mat[i][j + 1] : INT_MAX / 2;
+        mat[i][j] = min(mat[i][j], min(a, b) + 1);
+      }
+    }
+  }
+  return mat;
+}
+
 // 优选动态规划。每一个1节点[i][j]答案，可能来自于上、下、左、右四个方向的0而推出
 // dp[i][j]矩阵意为最靠近的0节点，到该节点的曼哈顿距离。由于要不断更新最小距离，故初始化为INT_MAX/2
 // 对0节点，初始化dp[i][j]=0。然后依次从左上角、右下角，两个方向，对全矩阵遍历两次
 // 如此空间复杂度O(1)，因为返回值不算入空间复杂度。时间复杂度O(mn)
-vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+vector<vector<int>> updateMatrix1(vector<vector<int>>& mat) {
   int m = mat.size(), n = mat[0].size();
   vector<vector<int>> dp(m, vector<int>(n, INT_MAX / 2));
   for (int i = 0; i < m; i++) {
@@ -60,7 +83,7 @@ vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
 // BFS广度优先搜索。现将所有的0节点压入队列，然后逐圈向外拓展。另设置visited矩阵保留每个节点是否访问过
 // ans[i][j]即为该轮轮次数，可以直接由cur节点的轮次数+1获得
 // 时间复杂度O(mn)，空间复杂度O(mn)
-vector<vector<int>> updateMatrix1(vector<vector<int>>& mat) {
+vector<vector<int>> updateMatrix2(vector<vector<int>>& mat) {
   int m = mat.size(), n = mat[0].size();
   vector<vector<bool>> visit(m, vector<bool>(n, 0));
   vector<vector<int>> ans(m, vector<int>(n, 0));
@@ -94,8 +117,19 @@ vector<vector<int>> updateMatrix1(vector<vector<int>>& mat) {
 
 int main() {
   vector<vector<int>> mat1 = {{0, 0, 0}, {0, 1, 0}, {0, 0, 0}},
-                      mat2 = {{0, 0, 0}, {0, 1, 0}, {1, 2, 1}};
+                      mat2 = {{0, 0, 0}, {0, 1, 0}, {1, 2, 1}},
+                      mat3 = {{0, 1, 0, 1, 1},
+                              {1, 1, 0, 0, 1},
+                              {0, 0, 0, 1, 0},
+                              {1, 0, 1, 1, 1},
+                              {1, 0, 0, 0, 1}};
+  vector<vector<int>> mat4 = mat1, mat5 = mat2, mat6 = mat3;
   printMat(updateMatrix(mat1));
   printMat(updateMatrix(mat2));
+  printMat(updateMatrix(mat3));
+  printMat(updateMatrix1(mat4));
+  printMat(updateMatrix1(mat5));
+  printMat(updateMatrix1(mat6));
+
   return 0;
 }

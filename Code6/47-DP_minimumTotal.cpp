@@ -26,11 +26,21 @@
 进阶：
   你可以只使用 O(n) 的额外空间（n 为三角形的总行数）来解决这个问题吗？ */
 
+int minimumTotal(vector<vector<int>>& triangle) {
+  int m = triangle.size();
+  vector<int> dp = triangle.back();
+  for (int i = m - 2; i >= 0; i--) {
+    for (int j = 0; j < triangle[i].size(); j++)
+      dp[j] = min(dp[j], dp[j + 1]) + triangle[i][j];
+  }
+  return dp.front();
+}
+
 // 动态规划。节省空间复杂度的做法是逆向思维，从下向上收敛最终结果。
 // 对于层i，其手机来自更下一层i+1的结果。有dp[i]=min(dp[i],dp[i+1])+tri[i][j]
 // 初始化，总计n层，则构造dp[n+1]，最下一层长度为n+1，内容全部为0
 // 最终返回根节点dp[0]即为结果
-int minimumTotal(vector<vector<int>>& triangle) {
+int minimumTotal1(vector<vector<int>>& triangle) {
   int n = triangle.size();
   vector<int> dp(n + 1, 0);
   for (int i = n - 1; i >= 0; i--) {
@@ -41,17 +51,15 @@ int minimumTotal(vector<vector<int>>& triangle) {
   return dp[0];
 }
 
-// 普通做法。空间复杂度O(2n)
-int minimumTotal1(vector<vector<int>>& triangle) {
+// 普通做法。从上至下，空间复杂度O(n)。由于dp[j]=min(dp[j-1],dp[j])，故j要反向遍历
+int minimumTotal2(vector<vector<int>>& triangle) {
   int n = triangle.size();
   vector<int> dp(n, INT_MAX);
   dp[0] = triangle[0][0];
   for (int i = 1; i < n; i++) {
-    vector<int> cur(n, INT_MAX);
-    for (int j = 0; j <= i; j++) {
-      cur[j] = (j == 0 ? dp[0] : min(dp[j], dp[j - 1])) + triangle[i][j];
-    }
-    dp = cur;
+    for (int j = i; j > 0; j--)
+      dp[j] = min(dp[j], dp[j - 1]) + triangle[i][j];
+    dp[0] += triangle[i][0];
   }
   return *min_element(dp.begin(), dp.end());
 }
@@ -60,5 +68,7 @@ int main() {
   vector<vector<int>> triangle1 = {{2}, {3, 4}, {6, 5, 7}, {4, 1, 8, 3}},
                       triangle2 = {{-10}};
   cout << minimumTotal(triangle1) << " " << minimumTotal(triangle2) << endl;
+  cout << minimumTotal1(triangle1) << " " << minimumTotal1(triangle2) << endl;
+
   return 0;
 }
