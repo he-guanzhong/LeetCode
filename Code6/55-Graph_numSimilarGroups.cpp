@@ -21,14 +21,7 @@
   strs[i] 只包含小写字母。
   strs 中的所有单词都具有相同的长度，且是彼此的字母异位词。 */
 
-// 每个字符串看作一个元素，两两元素间，只有两个字符相异的，才联通到一起。如此问题转化为求并查集中，有多少个联通分量
-// 并查集中没必要使用字符串作为键和值，由于下标可以直接访问到元素，故直接利用下标标记联通分量即可
-// 为节省时间复杂度，先判断两个字符串是否已经在同一集合。如不是，再通过check函数，检查其是否满足小于等于两个相异字符的条件，可以联通
 vector<int> father;
-void init(int n) {
-  father.resize(n);
-  iota(father.begin(), father.end(), 0);
-}
 int find(int u) {
   return father[u] == u ? u : father[u] = find(father[u]);
 }
@@ -42,7 +35,54 @@ void join(int u, int v) {
     return;
   father[u] = v;
 }
-bool check(const string& s1, const string& s2) {
+bool check(string& s, string& p) {
+  int cnt = 0;
+  for (int i = 0; i < s.size(); i++) {
+    cnt += s[i] != p[i];
+  }
+  return cnt == 0 || cnt == 2;
+}
+int numSimilarGroups(vector<string>& strs) {
+  int n = strs.size();
+  father.resize(n);
+  iota(father.begin(), father.end(), 0);
+  for (int i = 0; i < strs.size(); i++) {
+    for (int j = i + 1; j < strs.size(); j++) {
+      if (!check(strs[i], strs[j]))
+        continue;
+      if (isSame(i, j))
+        continue;
+      join(i, j);
+    }
+  }
+  int ans = 0;
+  for (int i = 0; i < n; i++)
+    ans += father[i] == i;
+  return ans;
+}
+
+// 每个字符串看作一个元素，两两元素间，只有两个字符相异的，才联通到一起。如此问题转化为求并查集中，有多少个联通分量
+// 并查集中没必要使用字符串作为键和值，由于下标可以直接访问到元素，故直接利用下标标记联通分量即可
+// 为节省时间复杂度，先判断两个字符串是否已经在同一集合。如不是，再通过check函数，检查其是否满足小于等于两个相异字符的条件，可以联通
+vector<int> father1;
+void init1(int n) {
+  father1.resize(n);
+  iota(father1.begin(), father1.end(), 0);
+}
+int find1(int u) {
+  return father1[u] == u ? u : father1[u] = find1(father1[u]);
+}
+bool isSame1(int u, int v) {
+  return find1(u) == find1(v);
+}
+void join1(int u, int v) {
+  u = find1(u);
+  v = find1(v);
+  if (u == v)
+    return;
+  father1[u] = v;
+}
+bool check1(const string& s1, const string& s2) {
   int cnt = 0;
   for (int i = 0; i < s1.size(); i++) {
     cnt += s1[i] != s2[i];
@@ -51,19 +91,19 @@ bool check(const string& s1, const string& s2) {
   }
   return true;
 }
-int numSimilarGroups(vector<string>& strs) {
-  init(strs.size());
+int numSimilarGroups1(vector<string>& strs) {
+  init1(strs.size());
   for (int i = 0; i < strs.size(); i++) {
     for (int j = i + 1; j < strs.size(); j++) {
-      if (isSame(i, j))
+      if (isSame1(i, j))
         continue;
-      if (check(strs[i], strs[j]))
-        join(i, j);
+      if (check1(strs[i], strs[j]))
+        join1(i, j);
     }
   }
   int ans = 0;
   for (int i = 0; i < strs.size(); i++)
-    ans += father[i] == i;
+    ans += father1[i] == i;
   return ans;
 }
 
@@ -72,5 +112,7 @@ int main() {
                  strs2 = {"omv", "ovm"}, strs3 = {"abc", "abc"};
   cout << numSimilarGroups(strs1) << " " << numSimilarGroups(strs2) << " "
        << numSimilarGroups(strs3) << endl;
+  cout << numSimilarGroups1(strs1) << " " << numSimilarGroups1(strs2) << " "
+       << numSimilarGroups1(strs3) << endl;
   return 0;
 }

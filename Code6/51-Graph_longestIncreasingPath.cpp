@@ -5,11 +5,15 @@
 对于每个单元格，你可以往上，下，左，右四个方向移动。 你 不能 在 对角线
 方向上移动或移动到 边界外（即不允许环绕）。
 示例 1：
-  输入：matrix = [[9,9,4],[6,6,8],[2,1,1]]
+  输入：matrix = [[9,9,4],
+                  [6,6,8],
+                  [2,1,1]]
   输出：4
   解释：最长递增路径为 [1, 2, 6, 9]。
 示例 2：
-  输入：matrix = [[3,4,5],[3,2,6],[2,2,1]]
+  输入：matrix = [[3,4,5],
+                  [3,2,6],
+                  [2,2,1]]
   输出：4
   解释：最长递增路径是 [3, 4, 5, 6]。注意不允许在对角线方向上移动。
 示例 3：
@@ -21,10 +25,55 @@
   1 <= m, n <= 200
   0 <= matrix[i][j] <= 231 - 1 */
 
+int longestIncreasingPath(vector<vector<int>>& matrix) {
+  int m = matrix.size(), n = matrix[0].size();
+  vector<vector<int>> outDeg(m, vector<int>(n, 0));
+  queue<pair<int, int>> que;
+  int dir[] = {1, 0, -1, 0, 1};
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      for (int k = 0; k < 4; k++) {
+        int nextx = i + dir[k];
+        int nexty = j + dir[k + 1];
+        if (nextx < 0 || nextx >= m || nexty < 0 || nexty >= n ||
+            matrix[nextx][nexty] <= matrix[i][j])
+          continue;
+        outDeg[i][j]++;
+      }
+    }
+  }
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      if (outDeg[i][j] == 0)
+        que.push({i, j});
+    }
+  }
+  int ans = 0;
+  while (!que.empty()) {
+    ans++;
+    int size = que.size();
+    while (size--) {
+      int x = que.front().first;
+      int y = que.front().second;
+      que.pop();
+      for (int k = 0; k < 4; k++) {
+        int nextx = x + dir[k];
+        int nexty = y + dir[k + 1];
+        if (nextx < 0 || nextx >= m || nexty < 0 || nexty >= n ||
+            matrix[nextx][nexty] >= matrix[x][y])
+          continue;
+        if (--outDeg[nextx][nexty] == 0)
+          que.push({nextx, nexty});
+      }
+    }
+  }
+  return ans;
+}
+
 // 拓扑排序。将矩阵看成有向图。若由低向高指，则最长路径的终端结点，其出度为0。若路径是从高向低指，则最长路径终端结点，入度为0
 // 以出度为例，一轮遍历统计出度。二轮遍历将所有出度为0结点压入队列。三轮遍历，每一层即为所有出度为0的结点删除操作
 // 即对所有周围点，其值小于该点的。出度减一。如此出度为0的，压入下一层结点。最终，层数就是所求最长路径
-int longestIncreasingPath(vector<vector<int>>& matrix) {
+int longestIncreasingPath1(vector<vector<int>>& matrix) {
   int m = matrix.size(), n = matrix[0].size();
   vector<vector<int>> outDeg(m, vector<int>(n, 0));
   int dir[5] = {1, 0, -1, 0, 1};
@@ -73,7 +122,7 @@ int longestIncreasingPath(vector<vector<int>>& matrix) {
 // 深度递归的返回值是memo[i][j]，主函数中，遍历所有结点，取其返回值中最大的，即为答案
 // 递归辅助函数中，退出条件是，该点一旦有值，即计算过，直接返回。否则即为从0开始的起点，赋值为1
 // 对上下左右四个方向，按值升序的状态，依次递归。本结点最长路径，是子结点最长路径+1
-int dfs(vector<vector<int>>& matrix, int x, int y, vector<vector<int>>& memo) {
+int dfs2(vector<vector<int>>& matrix, int x, int y, vector<vector<int>>& memo) {
   if (memo[x][y])
     return memo[x][y];
   memo[x][y] = 1;
@@ -84,17 +133,17 @@ int dfs(vector<vector<int>>& matrix, int x, int y, vector<vector<int>>& memo) {
     if (nextx < 0 || nextx >= matrix.size() || nexty < 0 ||
         nexty >= matrix[0].size() || matrix[nextx][nexty] <= matrix[x][y])
       continue;
-    memo[x][y] = max(memo[x][y], dfs(matrix, nextx, nexty, memo) + 1);
+    memo[x][y] = max(memo[x][y], dfs2(matrix, nextx, nexty, memo) + 1);
   }
   return memo[x][y];
 }
-int longestIncreasingPath1(vector<vector<int>>& matrix) {
+int longestIncreasingPath2(vector<vector<int>>& matrix) {
   int m = matrix.size(), n = matrix[0].size();
   int ans = 0;
   vector<vector<int>> memo(m, vector<int>(n, 0));
   for (int i = 0; i < m; i++) {
     for (int j = 0; j < n; j++) {
-      ans = max(ans, dfs(matrix, i, j, memo));
+      ans = max(ans, dfs2(matrix, i, j, memo));
     }
   }
   return ans;
@@ -102,8 +151,28 @@ int longestIncreasingPath1(vector<vector<int>>& matrix) {
 
 int main() {
   vector<vector<int>> mat1 = {{9, 9, 4}, {6, 6, 8}, {2, 1, 1}},
-                      mat2 = {{3, 4, 5}, {3, 2, 6}, {2, 2, 1}}, mat3 = {{1}};
+                      mat2 = {{3, 4, 5}, {3, 2, 6}, {2, 2, 1}}, mat3 = {{1}},
+                      mat4 = {
+                          {0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
+                          {19, 18, 17, 16, 15, 14, 13, 12, 11, 10},
+                          {20, 21, 22, 23, 24, 25, 26, 27, 28, 29},
+                          {39, 38, 37, 36, 35, 34, 33, 32, 31, 30},
+                          {40, 41, 42, 43, 44, 45, 46, 47, 48, 49},
+                          {59, 58, 57, 56, 55, 54, 53, 52, 51, 50},
+                          {60, 61, 62, 63, 64, 65, 66, 67, 68, 69},
+                          {79, 78, 77, 76, 75, 74, 73, 72, 71, 70},
+                          {80, 81, 82, 83, 84, 85, 86, 87, 88, 89},
+                          {99, 98, 97, 96, 95, 94, 93, 92, 91, 90},
+                          {100, 101, 102, 103, 104, 105, 106, 107, 108, 109},
+                          {119, 118, 117, 116, 115, 114, 113, 112, 111, 110},
+                          {120, 121, 122, 123, 124, 125, 126, 127, 128, 129},
+                          {139, 138, 137, 136, 135, 134, 133, 132, 131, 130},
+                          {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
   cout << longestIncreasingPath(mat1) << " " << longestIncreasingPath(mat2)
-       << " " << longestIncreasingPath(mat3) << endl;
+       << " " << longestIncreasingPath(mat3) << " "
+       << longestIncreasingPath(mat4) << endl;
+  cout << longestIncreasingPath1(mat1) << " " << longestIncreasingPath1(mat2)
+       << " " << longestIncreasingPath1(mat3) << " "
+       << longestIncreasingPath1(mat4) << endl;
   return 0;
 }

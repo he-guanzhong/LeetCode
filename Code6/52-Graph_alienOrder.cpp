@@ -27,6 +27,52 @@
   words[i] 仅由小写英文字母组成 */
 
 string alienOrder(vector<string>& words) {
+  unordered_map<char, int> inDeg;
+  unordered_map<char, unordered_set<char>> umap;
+  for (const auto& word : words) {
+    for (int i = 0; i < word.size(); i++) {
+      umap[word[i]] = {};
+      inDeg[word[i]] = 0;
+    }
+  }
+  for (int i = 0; i < words.size() - 1; i++) {
+    string pre = words[i], cur = words[i + 1];
+    int len = min(pre.size(), cur.size());
+    bool equal = true;
+    for (int j = 0; j < len; j++) {
+      char ch1 = pre[j], ch2 = cur[j];
+      if (ch1 == ch2)
+        continue;
+      equal = false;
+      if (umap[ch1].count(ch2) == 0) {
+        umap[ch1].insert(ch2);
+        inDeg[ch2]++;
+      }
+      break;
+    }
+    if (equal && pre.size() > cur.size())
+      return "";
+  }
+  queue<char> que;
+  for (const auto& itr : inDeg) {
+    if (itr.second == 0)
+      que.push(itr.first);
+  }
+  string ans;
+  while (!que.empty()) {
+    char c = que.front();
+    que.pop();
+    ans.push_back(c);
+    unordered_set<char> tmp = umap[c];
+    for (const auto& i : tmp) {
+      if (--inDeg[i] == 0)
+        que.push(i);
+    }
+  }
+  return ans.size() == inDeg.size() ? ans : "";
+}
+
+string alienOrder1(vector<string>& words) {
   // 根据字符串建图，统计所有出现过的字符，初始化graph和inDeg
   unordered_map<char, unordered_set<char>> graph;
   unordered_map<char, int> inDeg;
@@ -84,5 +130,8 @@ int main() {
   cout << alienOrder(words1) << " " << alienOrder(words2) << " "
        << alienOrder(words3) << " " << alienOrder(words4) << " "
        << alienOrder(words5) << endl;
+  cout << alienOrder1(words1) << " " << alienOrder1(words2) << " "
+       << alienOrder1(words3) << " " << alienOrder1(words4) << " "
+       << alienOrder1(words5) << endl;
   return 0;
 }

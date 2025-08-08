@@ -43,14 +43,50 @@
   sequences 的所有数组都是 唯一 的
   sequences[i] 是 nums 的一个子序列 */
 
-// 拓扑排序，由于每一个sequence都确定是nums的子序列，故必比可能出现两个sequence意指元素顺序不同的情况，即不存在环
+bool sequenceReconstruction(vector<int>& nums, vector<vector<int>>& sequences) {
+  int n = nums.size();
+  vector<int> inDeg(n + 1, 0);
+  vector<vector<int>> graph(n + 1);
+  for (const auto& seq : sequences) {
+    for (int i = 1; i < seq.size(); i++) {
+      int from = seq[i - 1], to = seq[i];
+      inDeg[to]++;
+      graph[from].push_back(to);
+    }
+  }
+  queue<int> que;
+  for (int i = 1; i < inDeg.size(); i++) {
+    if (inDeg[i] == 0)
+      que.push(i);
+  }
+  int j = 0;
+  while (!que.empty()) {
+    int m = que.size();
+    if (m > 1)
+      return false;
+    int cur = que.front();
+    que.pop();
+    if (cur != nums[j++])
+      return false;
+    ans.push_back(cur);
+    for (int i = 0; i < graph[cur].size(); i++) {
+      int to = graph[cur][i];
+      if (--inDeg[to] == 0)
+        que.push(to);
+    }
+  }
+  return true;
+}
+
+// 拓扑排序，由于每一个sequence都确定是nums的子序列，故必可能出现两个sequence意指元素顺序不同的情况，即不存在环
 // 每一个sequence均代表一条有向路径，由起点指向终点，故起点的入度必为0。总计n个结点，为方便，设置n+1大小的容器，
 // 对每个sequence相邻两个字符，以邻接表的形式记录a->b。统计入度时注意，可能多个sequence同时记录了a->b这一指向，故首次更新邻接表时才统计入度
 // 设置队列，将所有入度为0的结点作为起点压入。每一轮遍历时，若该轮节点数大于1，说明有两种路径可选，违背了nums时唯一最短超序列这一原则，返回假
 // 对该轮结点cur所指向的各next结点，入度减1，入度为0的。继续压入队列下一轮操作，直至结束
 // 鉴于题目提示中最后一条：sequences[i]必时nums子序列。因此，不存在nums和sequences无关的特殊情况。
 // 只要能求出最短唯一路径，其必然和nums完全一致。故结尾处，直接返回真，无需额外判断path和nums的相等性
-bool sequenceReconstruction(vector<int>& nums, vector<vector<int>>& sequences) {
+bool sequenceReconstruction1(vector<int>& nums,
+                             vector<vector<int>>& sequences) {
   vector<int> inDeg(nums.size() + 1, 0);
   vector<unordered_set<int>> graph(nums.size() + 1);
   for (int i = 0; i < sequences.size(); i++) {
@@ -91,5 +127,9 @@ int main() {
        << sequenceReconstruction(nums2, sequences2) << " "
        << sequenceReconstruction(nums3, sequences3) << " "
        << sequenceReconstruction(nums4, sequences4) << endl;
+  cout << sequenceReconstruction1(nums1, sequences1) << " "
+       << sequenceReconstruction1(nums2, sequences2) << " "
+       << sequenceReconstruction1(nums3, sequences3) << " "
+       << sequenceReconstruction1(nums4, sequences4) << endl;
   return 0;
 }
