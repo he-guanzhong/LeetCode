@@ -39,7 +39,7 @@ vector<int> twoSum(vector<int>& numbers, int target) {
   return {};
 }
 
-// 双指针向内收敛。时间复杂度O(n)，空间复杂度O(1)
+// 双指针向内收敛。时间复杂度O(n)，空间复杂度O(1)。题目LCR006和167，二者下标起点不同
 vector<int> twoSum1(vector<int>& numbers, int target) {
   int left = 0, right = numbers.size() - 1;
   while (left < right) {

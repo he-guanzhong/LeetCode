@@ -40,6 +40,7 @@ bool isPalindrome(string s) {
 // 考察内部API调用。islower()/isupper()判断是否大小写字母。tolower()和toupper()字符转换。
 // isdigit()判断数字，isalptha()判断字母，isalnum()判断是否字母或数字
 // ASCII码，数字0从48开始，A从65开始，a从97开始
+// tolower()函数可以传入非字母字符，但函数仅对大写字母字符进行转换，对非字母字符（如数字、标点符号等）将保持原值不变
 bool isPalindrome1(string s) {
   for (int i = 0; i < s.size(); i++) {
     if (isupper(s[i]))

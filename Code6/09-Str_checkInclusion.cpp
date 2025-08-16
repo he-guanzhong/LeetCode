@@ -15,20 +15,19 @@ true ；否则，返回 false 。
   s1 和 s2 仅包含小写字母 */
 
 bool checkInclusion(string s1, string s2) {
-  vector<int> ori(26, 0);
-  vector<int> win(26, 0);
+  array<int, 26> win{};
   if (s1.size() > s2.size())
     return false;
-  for (const auto& c : s1)
-    ori[c - 'a']++;
-  for (int i = 0; i < s1.size(); i++)
-    win[s2[i] - 'a']++;
-  if (ori == win)
-    return true;
-  for (int i = s1.size(); i < s2.size(); i++) {
-    win[s2[i - s1.size()] - 'a']--;
-    win[s2[i] - 'a']++;
-    if (ori == win)
+  for (int i = 0; i < s1.size(); i++) {
+    win[s1[i] - 'a']++;
+  }
+  int j = 0;
+  for (int i = 0; i < s2.size(); i++) {
+    win[s2[i] - 'a']--;
+    while (j <= i && win[s2[i] - 'a'] < 0) {
+      win[s2[j++] - 'a']++;
+    }
+    if (i - j + 1 == s1.size())
       return true;
   }
   return false;

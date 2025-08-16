@@ -35,7 +35,8 @@ bool validPalindrome(string s) {
   return true;
 }
 
-// 贪心算法。只有一次跳过字符的机会。双指针向中央收敛，主函数一旦发现不回文，左指针或右指针进一，任意一个满足剩下向中央的子串回文即可
+// 贪心算法。只有一次跳过字符的机会。双指针向中央收敛。
+// 主函数一旦发现不回文，左指针或右指针进一，任意一个满足剩下向中央的子串回文即可
 bool check(const string& s, int left, int right) {
   for (int i = left, j = right; i < j; i++, j--) {
     if (s[i] != s[j])
