@@ -13,23 +13,24 @@
     2 <= timePoints.length <= 2 * 104
     timePoints[i] 格式为 "HH:MM" */
 
-int getMinute(const string& time) {
-  return (time[0] - '0') * 10 * 60 + (time[1] - '0') * 60 +
-         (time[3] - '0') * 10 + (time[4] - '0');
+int getMinute(const string& s) {
+  return (s[0] - '0') * 600 + (s[1] - '0') * 60 + (s[3] - '0') * 10 + s[4] -
+         '0';
 }
 int findMinDifference(vector<string>& timePoints) {
-  int maxNum = 24 * 60;
-  if (timePoints.size() > maxNum)
+  if (timePoints.size() > 24 * 60)
     return 0;
-  vector<int> times(timePoints.size(), 0);
-  for (int i = 0; i < timePoints.size(); i++)
-    times[i] = getMinute(timePoints[i]);
-  sort(times.begin(), times.end());
-  int ans = INT_MAX;
-  for (int i = 1; i < times.size(); i++) {
-    ans = min(times[i] - times[i - 1], ans);
+  vector<int> dp(timePoints.size(), 0);
+  for (int i = 0; i < timePoints.size(); i++) {
+    dp[i] = getMinute(timePoints[i]);
   }
-  ans = min(ans, (times[0] + 24 * 60) - times.back());
+  sort(dp.begin(), dp.end());
+  dp.push_back(dp.front() + 24 * 60);
+  int ans = INT_MAX;
+  for (int i = 1; i < dp.size(); i++) {
+    int diff = dp[i] - dp[i - 1];
+    ans = min(ans, diff);
+  }
   return ans;
 }
 

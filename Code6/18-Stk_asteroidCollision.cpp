@@ -27,22 +27,17 @@
 vector<int> asteroidCollision(vector<int>& asteroids) {
   vector<int> ans;
   for (const int& i : asteroids) {
-    bool exist = true;
-    while (!ans.empty() && i < 0 && ans.back() > 0) {
-      if (-i > ans.back())
+    bool alive = true;
+    while (i < 0 && alive && !ans.empty() && ans.back() > 0) {
+      alive = -i > ans.back();
+      if (ans.back() <= -i)
         ans.pop_back();
-      else if (-i < ans.back()) {
-        exist = false;
-        break;
-      } else {
-        exist = false;
-        ans.pop_back();
-        break;
-      }
     }
-    if (exist)
+    if (alive)
       ans.push_back(i);
   }
+  return ans;
+
   return ans;
 }
 

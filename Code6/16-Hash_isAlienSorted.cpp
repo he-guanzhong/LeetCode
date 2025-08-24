@@ -49,7 +49,7 @@ bool isAlienSorted(vector<string>& words, string order) {
 
 // 使用数组替代哈希表，记录order每个字符出现的优先级顺序。
 // 遍历words每两个相邻字符串。字符依次比较，只要出现pre[j]>cur[j]即次序相反，直接返回假
-// 若字符相等，则无需任何操作，直接继续比较。若pre[j]<cur[j]，说明顺序已对，无继续比较下去意义。直接退出该轮比较
+// 若字符相等，则无需任何操作，直接继续比较。若pre[j]<cur[j]，说明顺序已对，无继续比较下去意义。该轮比较直接退出break，而不是continue
 // 单独设置一个长度比较标志位，对apple和app这种情况。默认为真，即默认比较长度。但只要是顺序对过一次而退出的，无需进行比较
 bool isAlienSorted1(vector<string>& words, string order) {
   int alpha[26] = {0};
