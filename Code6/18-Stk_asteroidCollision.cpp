@@ -37,8 +37,6 @@ vector<int> asteroidCollision(vector<int>& asteroids) {
       ans.push_back(i);
   }
   return ans;
-
-  return ans;
 }
 
 // 数组模拟栈。碰撞消除只发生在，栈非空+栈顶为正+新元素为负的情况下。栈顶元素绝对值小于等于新元素，不断弹出。

@@ -13,7 +13,7 @@
   0 <= Node.val <= 1000 */
 
 TreeNode* increasingBST(TreeNode* root) {
-  TreeNode *cur = root, *pre = nullptr, *ans = nullptr;
+  TreeNode *cur = root, *pre = nullptr, *newHead = nullptr;
   stack<TreeNode*> st;
   while (cur || !st.empty()) {
     if (cur) {
@@ -22,18 +22,16 @@ TreeNode* increasingBST(TreeNode* root) {
     } else {
       cur = st.top();
       st.pop();
-      if (pre == nullptr)
-        ans = cur;
-      else {
+      if (!pre)
+        newHead = cur;
+      else
         pre->right = cur;
-        pre->left = nullptr;
-      }
-      pre = cur;
       cur->left = nullptr;
+      pre = cur;
       cur = cur->right;
     }
   }
-  return ans;
+  return newHead;
 }
 
 // 迭代法中序遍历。pre保存前一节点。注意，最后cur为空，而pre停在最后一个节点。其左指针必须再次人工指向空

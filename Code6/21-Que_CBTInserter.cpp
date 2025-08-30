@@ -120,7 +120,8 @@ class CBTInserter1 {
   TreeNode* root;
 };
 
-// 传统做法，使用BFS或DFS遍历全树，额外一个candidate队列保存所有可以插入的结点
+// 传统做法，使用BFS或DFS遍历全树，额外一个candidate队列保存所有可以插入的结点，即其无左、右孩子均无，或无右孩子
+// 注意insert()函数中，不仅插入了新结点，同时该新结点，亦为后续可被插入的父节点之一。要更新candidates
 class CBTInserter2 {
  public:
   CBTInserter2(TreeNode* root) {
@@ -153,7 +154,7 @@ class CBTInserter2 {
     return cur->val;
   }
 
-  TreeNode* get_root() { return root; }
+  TreeNode* get_root() { return this->root; }
 
  private:
   TreeNode* root;

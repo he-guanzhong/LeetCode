@@ -50,6 +50,22 @@ vector<int> largestValues1(TreeNode* root) {
   return ans;
 }
 
+void dfs2(TreeNode* root, int depth, vector<int>& ans) {
+  if (!root)
+    return;
+  if (depth == ans.size())
+    ans.push_back(root->val);
+  else
+    ans[depth] = max(ans[depth], root->val);
+  dfs2(root->left, depth + 1, ans);
+  dfs2(root->right, depth + 1, ans);
+}
+vector<int> largestValues2(TreeNode* root) {
+  vector<int> ans;
+  dfs2(root, 0, ans);
+  return ans;
+}
+
 int main() {
   TreeNode* root1 = construct_binary_tree({1, 3, 2, 5, 3, null, 9});
   TreeNode* root2 = construct_binary_tree({1, 2, 3});
