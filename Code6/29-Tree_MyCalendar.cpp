@@ -54,7 +54,7 @@ class MyCalendar {
 // 无冲突则将左右区间，作为键值对存入map。并返回真
 class MyCalendar1 {
  public:
-  MyCalendar1() {}
+  MyCalendar1() { events.clear(); }
 
   bool book(int startTime, int endTime) {
     auto it = events.lower_bound(startTime);
