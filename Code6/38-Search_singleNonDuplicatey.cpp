@@ -14,11 +14,11 @@
   0 <= nums[i] <= 105 */
 
 int singleNonDuplicate(vector<int>& nums) {
-  int l = 0, r = nums.size() - 1;
+  int l = 0, r = nums.size() - 2;
   while (l <= r) {
     int m = l + ((r - l) >> 1);
-    int n = m ^ 1;
-    if (n < nums.size() && nums[m] == nums[n])
+    int t = m ^ 1;
+    if (nums[m] == nums[t])
       l = m + 1;
     else
       r = m - 1;

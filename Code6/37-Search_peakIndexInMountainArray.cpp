@@ -32,8 +32,10 @@ int peakIndexInMountainArray(vector<int>& arr) {
 }
 
 // 二分法。中点的特性是，arr[i]>arr[i+1]，若满足则一定在左面，若不满足，一定在右面。
-// 由于比较的是i和i+1，最终一步left==right时，有可能处于某一序列a<b>c中，a位，a<b不满足条件，left标志位右移至b，为答案
-// 也有可能处于b位，b>c满足条件，right标志位左移至a，b不动。为答案。因此，left标志代表第一次下降的起点
+// 由于比较的是i和i+1，最终一步left==right时，有可能处于某一序列a<b>c中
+// 假定m落在a位，a<b不满足条件，left标志位右移至b，为答案
+// 也有可能m处于b位，b>c满足条件，right标志位左移至a，b不动。left为答案。
+// 因此，left标志代表第一次满足arr[i]>arr[i+1]，即山峰下降的起点
 int peakIndexInMountainArray1(vector<int>& arr) {
   int left = 0, right = arr.size() - 2;
   while (left <= right) {

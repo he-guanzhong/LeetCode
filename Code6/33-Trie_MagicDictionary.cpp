@@ -179,6 +179,10 @@ int main() {
        << magicDictionary->search("hhllo") << " "
        << magicDictionary->search("hell") << " "
        << magicDictionary->search("leetcoded") << endl;
+  cout << magicDictionary->search("hello") << " "
+       << magicDictionary->search("hallo") << " "
+       << magicDictionary->search("hell") << " "
+       << magicDictionary->search("leetcodd") << endl;
 
   MagicDictionary1* magicDictionary1 = new MagicDictionary1();
   magicDictionary1->buildDict({"hello", "leetcode"});
@@ -191,5 +195,9 @@ int main() {
        << magicDictionary1->search("hhllo") << " "
        << magicDictionary1->search("hell") << " "
        << magicDictionary1->search("leetcoded") << endl;
+  cout << magicDictionary1->search("hello") << " "
+       << magicDictionary1->search("hallo") << " "
+       << magicDictionary1->search("hell") << " "
+       << magicDictionary1->search("leetcodd") << endl;
   return 0;
 }

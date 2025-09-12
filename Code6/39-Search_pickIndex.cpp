@@ -64,11 +64,12 @@ class Solution {
 // 前缀和+二分法。w数组所有元素和n代表总概率1，则对w[i]代表答案是下标i时，落概率w[i]/n
 // 利用partial_sum()库函数求前缀和数组，注意back_inserter()尾插标记。如此，落在i的概率是(prefix[i]-prefix[i-1])/n
 // 对于随机数x=rand()%n，其范围[0,n-1]。用二分法求出第一个比他大的位置upper_bound()，对应下标即为结果
+// 必须使用back_inserter()创建插入迭代器，因为arr为空，其arr.begin()和arr.end()均为无效
 class Solution1 {
  public:
   Solution1(vector<int>& w) {
     partial_sum(w.begin(), w.end(), back_inserter(prefixSum));
-    // srand(time(nullptr));
+    srand(time(nullptr));
   }
 
   int pickIndex() {
