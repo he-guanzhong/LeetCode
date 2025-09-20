@@ -17,21 +17,20 @@ arr2 中出现过的元素需要按照升序放在 arr1 的末尾。
   arr2 中的每个元素 arr2[i] 都出现在 arr1 中 */
 
 vector<int> relativeSortArray(vector<int>& arr1, vector<int>& arr2) {
-  unordered_map<int, int> umap;
-  for (int i = 0; i < arr2.size(); i++) {
-    umap[arr2[i]] = i;
+  vector<int> nums(1003, 0);
+  for (int& i : arr1)
+    nums[i]++;
+  vector<int> ans = arr1;
+  int j = 0;
+  for (int& i : arr2) {
+    while (nums[i]-- > 0)
+      ans[j++] = i;
   }
-  sort(arr1.begin(), arr1.end(), [&](int a, int b) {
-    if (umap.count(a) && umap.count(b))
-      return umap[a] < umap[b];
-    else if (umap.count(a))
-      return true;
-    else if (umap.count(b))
-      return false;
-    else
-      return a < b;
-  });
-  return arr1;
+  for (int i = 0; i < nums.size(); i++) {
+    while (nums[i]-- > 0)
+      ans[j++] = i;
+  }
+  return ans;
 }
 
 // 自定义排序。考察sort()、cmp、lambda函数的用法

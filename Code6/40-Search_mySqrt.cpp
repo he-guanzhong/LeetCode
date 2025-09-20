@@ -14,7 +14,7 @@
   0 <= x <= 231 - 1 */
 
 int mySqrt(int x) {
-  int left = 0, right = x / 2;
+  int left = 0, right = x;
   while (left <= right) {
     long long mid = left + ((right - left) >> 1);
     if (mid * mid > x) {
@@ -50,7 +50,8 @@ int mySqrt2(int x) {
 // 展开式 x1 = x0 - (x0 * x0 - C) / (2 * x0)
 // while循环退出条件是x1和x0足够接近，注意不得使用numeric_limits<double>::epsilon()，因为求解精度不足，会无限时间
 // 一般地，1e-6的精度足够。特殊地，为保证进入循环前x0和x1不等。每轮x0赋值一定是在计算x1之前。
-// 因此，虽然x1是更新值，但初始化一定要等于x，因为其实质上是x0的初始值。x0可以初始化不等于x的任意数，一般取0，如此节省判断x==0时特殊处理逻辑
+// 因此，虽然x1是更新值，但初始化一定要等于x，因为其实质上是x0的初始值。
+// x0可以初始化不等于x的任意数，一般取0，如此节省判断x==0时特殊处理逻辑
 int mySqrt1(int x) {
   double x0 = 0;
   double x1 = x;

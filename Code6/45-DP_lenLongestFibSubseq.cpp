@@ -64,6 +64,27 @@ int lenLongestFibSubseq1(vector<int>& arr) {
   return ans == 2 ? 0 : ans;
 }
 
+// 哈希表做法。利用哈希表记录每个元素值及其下标。若能在[0,j]中找到下标k，其值tmp可以满足数列和关系，即成立
+int lenLongestFibSubseq2(vector<int>& arr) {
+  unordered_map<int, int> umap;
+  int n = arr.size();
+  for (int i = 0; i < n; i++) {
+    umap[arr[i]] = i;
+  }
+  vector<vector<int>> dp(n, vector<int>(n, 2));
+  int ans = 0;
+  for (int i = 2; i < n; i++) {
+    for (int j = 1; j < i; j++) {
+      int tmp = arr[i] - arr[j];
+      if (umap.count(tmp) && umap[tmp] < j) {
+        dp[j][i] = max(dp[j][i], dp[umap[tmp]][j] + 1);
+        ans = max(ans, dp[j][i]);
+      }
+    }
+  }
+  return ans;
+}
+
 int main() {
   vector<int> arr1 = {1, 2, 3, 4, 5, 6, 7, 8}, arr2 = {1, 3, 7, 11, 12, 14, 18},
               arr3{2, 4, 7, 8, 9, 10, 14, 15, 18, 23, 32, 50};

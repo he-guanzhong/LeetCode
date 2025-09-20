@@ -24,7 +24,6 @@ t = t1 + t2 + ... + tm
   s1、s2、和 s3 都由小写英文字母组成
 进阶：您能否仅使用 O(s2.length) 额外的内存空间来解决它? */
 
-// "aabd", "abdc", "aabdbadc"
 bool isInterleave(string s1, string s2, string s3) {
   int m = s1.size(), n = s2.size(), len = s3.size();
   if (m + n != len)
@@ -70,23 +69,25 @@ bool isInterleave1(string s1, string s2, string s3) {
   return dp[n];
 }
 
-// 动态规划二维做法
+// 动态规划二维做法。没有必要交换s1和s2，来保证s1一定短于s2。
+// 但一定要注意排除s1与s2长度和，不等于s3的意外情况。
 bool isInterleave2(string s1, string s2, string s3) {
-  if (s1.size() + s2.size() != s3.size())
+  int m = s1.size(), n = s2.size(), len = s3.size();
+  if (m + n != len)
     return false;
-  vector<vector<bool>> dp(s1.size() + 1, vector<bool>(s2.size() + 1, false));
+  vector<vector<bool>> dp(m + 1, vector<bool>(n + 1, false));
   dp[0][0] = true;
-  for (int j = 0; j < s2.size() && s2[j] == s3[j]; j++)
+  for (int j = 0; j < n && s2[j] == s3[j]; j++)
     dp[0][j + 1] = true;
-  for (int i = 0; i < s1.size() && s1[i] == s3[i]; i++)
+  for (int i = 0; i < m && s1[i] == s3[i]; i++)
     dp[i + 1][0] = true;
-  for (int i = 0; i < s1.size(); i++) {
-    for (int j = 0; j < s2.size(); j++) {
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
       dp[i + 1][j + 1] = (s1[i] == s3[i + j + 1] && dp[i][j + 1]) ||
                          (s2[j] == s3[i + j + 1] && dp[i + 1][j]);
     }
   }
-  return dp[s1.size()][s2.size()];
+  return dp[m][n];
 }
 
 int main() {
@@ -94,10 +95,12 @@ int main() {
   cout << isInterleave(s1, s2, s3) << " " << isInterleave(s1, s2, s4) << " "
        << isInterleave("", "", "") << " " << isInterleave("a", "", "c") << " "
        << isInterleave("ab", "bc", "bbac") << " "
-       << isInterleave("aabd", "abdc", "aabdbadc") << endl;
+       << isInterleave("aabd", "abdc", "aabdbadc") << " "
+       << isInterleave("", "", "a") << endl;
   cout << isInterleave1(s1, s2, s3) << " " << isInterleave1(s1, s2, s4) << " "
        << isInterleave1("", "", "") << " " << isInterleave1("a", "", "c") << " "
        << isInterleave1("ab", "bc", "bbac") << " "
-       << isInterleave1("aabd", "abdc", "aabdbadc") << endl;
+       << isInterleave1("aabd", "abdc", "aabdbadc") << " "
+       << isInterleave1("", "", "a") << endl;
   return 0;
 }

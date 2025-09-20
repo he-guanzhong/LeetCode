@@ -21,19 +21,17 @@
     s[i] 为 '0' 或 '1' */
 
 int minFlipsMonoIncr(string s) {
-  int start = 0, end = s.size() - 1;
-  while (start < s.size() && s[start] == '0')
-    start++;
-  while (end >= start && s[end] == '1')
-    end--;
-  int cnt1 = 0, cnt0 = 0;
-  for (int i = start; i <= end; i++) {
-    if (s[i] == '1')
-      cnt1++;
-    else
-      cnt0++;
+  vector<int> dp(s.size() + 1);
+  int one = 0;
+  for (int i = 0; i < s.size(); i++) {
+    if (s[i] == '1') {
+      one++;
+      dp[i + 1] = dp[i];
+    } else {
+      dp[i + 1] = min(one, dp[i] + 1);
+    }
   }
-  return min(cnt1, cnt0);
+  return dp.back();
 }
 
 // 到字符i时，dp[i][0]、dp[i][1]分别为其位为0、1时的最小翻转次数。
@@ -53,7 +51,7 @@ int minFlipsMonoIncr1(string s) {
   return min(dp[0][0], dp[0][1]);
 }
 
-// 方便解法。dp表示到达i位前保持顺序，至少翻转多少次。当s[i]为1时，必满足要求，故对1计数
+// 方便解法。dp表示到达i位前保持顺序，至少翻转多少次。当s[i]为1时，必满足要求，不必反转操作，仅对1计数
 // 当s[i]为0时，可能需要反转，具体参看是反转[0,i-1]前所有的1合适，还是翻转当前位合适，则翻转次数dp+1。取二者最小值
 int minFlipsMonoIncr2(string s) {
   int n = s.size();
