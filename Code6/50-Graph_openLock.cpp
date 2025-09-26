@@ -56,6 +56,7 @@ int openLock(vector<string>& deadends, string target) {
     }
     bool operator>(const AStar& other) const { return f > other.f; }
   };
+
   priority_queue<AStar, vector<AStar>, greater<>> que;
   AStar cur("0000", target, 0);
   que.push(cur);
@@ -89,10 +90,12 @@ int openLock(vector<string>& deadends, string target) {
 // 启发函数heuristic对应代价h_，含义为两个字符串，4位中每一位的相距距离。其必不可能大于5，故距离为四个min(dis,10-dis)之和
 // 另外优先队列默认调用less<>，生成最大堆。故重载小于号<，本类代价大于其他代价。可生成最小堆
 // 主函数中，首先排除目标就是起点，和终点或起点不可达的情况。注意设置哈希集合visit，保存所有访问过的结点，以防被后续重复访问
-
 // 注意，C++构造函数，f=g+h，可以在构造函数体内赋值，也可以初始化列表中初始化成员。
 // 但是，初始化顺序由变量在类中声明的顺序决定，而不是初始化列表的顺序，所以声明f，不能再g和h之后。要么就直接早构造函数体内赋值
 struct AStar1 {
+  string status_;
+  int f_, g_, h_;
+
   AStar1(const string& status, const string& target, int g)
       : status_(status), h_(Heuristic(status, target)), g_(g) {
     f_ = g_ + h_;  // 注意！这里不能写在初始化列表里
@@ -100,7 +103,7 @@ struct AStar1 {
   int Heuristic(const string& status, const string& target) {
     int ans = 0;
     for (int i = 0; i < 4; i++) {
-      int dis = abs(status[i] - '0' - target[i] + '0');
+      int dis = abs(status[i] - target[i]);
       dis = min(dis, 10 - dis);
       ans += dis;
     }
@@ -108,8 +111,6 @@ struct AStar1 {
   }
   // 比较函数必须加const
   bool operator<(const AStar1& other) const { return this->f_ > other.f_; }
-  string status_;
-  int f_, g_, h_;
 };
 
 int openLock1(vector<string>& deadends, string target) {

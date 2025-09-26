@@ -80,10 +80,37 @@ vector<vector<int>> updateMatrix1(vector<vector<int>>& mat) {
   return dp;
 }
 
-// BFS广度优先搜索。现将所有的0节点压入队列，然后逐圈向外拓展。另设置visited矩阵保留每个节点是否访问过
+// 简便写法。矩形四个边可能存在1，一定要遍历，边界条件可以设计成轮廓之外距离为INT_MAX/2
+// 一次遍历从左上开始，若此时唯一0在右下角，则整个遍历过程中，结点1的dp值只能不断变大，这是为什么要INT_MAX/2而不是INT_MAX
+// 二次遍历从右下开始，结点1的dp值可能会变小（因为接触到了右下角的0），所以递推公式要考虑dp自身小，还是从别处转移过来更小
+vector<vector<int>> updateMatrix2(vector<vector<int>>& mat) {
+  int m = mat.size(), n = mat[0].size();
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      if (mat[i][j]) {
+        int a = i > 0 ? mat[i - 1][j] : INT_MAX / 2;
+        int b = j > 0 ? mat[i][j - 1] : INT_MAX / 2;
+        mat[i][j] = min(a, b) + 1;
+      }
+    }
+  }
+  for (int i = m - 1; i >= 0; i--) {
+    for (int j = n - 1; j >= 0; j--) {
+      if (mat[i][j]) {
+        int a = i < m - 1 ? mat[i + 1][j] : INT_MAX / 2;
+        int b = j < n - 1 ? mat[i][j + 1] : INT_MAX / 2;
+        mat[i][j] = min(mat[i][j], min(a, b) + 1);
+      }
+    }
+  }
+  return mat;
+}
+
+// BFS广度优先搜索。现将所有的0节点压入队列，然后逐圈向外拓展。可选地、设置visited矩阵保留每个节点是否访问过
 // ans[i][j]即为该轮轮次数，可以直接由cur节点的轮次数+1获得
 // 时间复杂度O(mn)，空间复杂度O(mn)
-vector<vector<int>> updateMatrix2(vector<vector<int>>& mat) {
+// 若不利用visit矩阵，则要对ans矩阵先初始化为INT_MAX/2，以保证nextx默认值大于cur
+vector<vector<int>> updateMatrix3(vector<vector<int>>& mat) {
   int m = mat.size(), n = mat[0].size();
   vector<vector<bool>> visit(m, vector<bool>(n, 0));
   vector<vector<int>> ans(m, vector<int>(n, 0));
