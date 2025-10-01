@@ -68,7 +68,6 @@ bool sequenceReconstruction(vector<int>& nums, vector<vector<int>>& sequences) {
     que.pop();
     if (cur != nums[j++])
       return false;
-    ans.push_back(cur);
     for (int i = 0; i < graph[cur].size(); i++) {
       int to = graph[cur][i];
       if (--inDeg[to] == 0)
@@ -83,7 +82,7 @@ bool sequenceReconstruction(vector<int>& nums, vector<vector<int>>& sequences) {
 // 对每个sequence相邻两个字符，以邻接表的形式记录a->b。统计入度时注意，可能多个sequence同时记录了a->b这一指向，故首次更新邻接表时才统计入度
 // 设置队列，将所有入度为0的结点作为起点压入。每一轮遍历时，若该轮节点数大于1，说明有两种路径可选，违背了nums时唯一最短超序列这一原则，返回假
 // 对该轮结点cur所指向的各next结点，入度减1，入度为0的。继续压入队列下一轮操作，直至结束
-// 鉴于题目提示中最后一条：sequences[i]必时nums子序列。因此，不存在nums和sequences无关的特殊情况。
+// 鉴于题目提示中最后一条：sequences[i]必是nums子序列。因此，不存在nums和sequences无关的特殊情况。
 // 只要能求出最短唯一路径，其必然和nums完全一致。故结尾处，直接返回真，无需额外判断path和nums的相等性
 bool sequenceReconstruction1(vector<int>& nums,
                              vector<vector<int>>& sequences) {

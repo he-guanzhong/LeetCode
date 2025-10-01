@@ -25,46 +25,30 @@
   1 <= m, n <= 200
   0 <= matrix[i][j] <= 231 - 1 */
 
+int dfs(vector<vector<int>>& matrix, int x, int y, vector<vector<int>>& memo) {
+  if (memo[x][y])
+    return memo[x][y];
+  memo[x][y] = 1;
+  int m = matrix.size(), n = matrix[0].size();
+  int dir[] = {1, 0, -1, 0, 1};
+  for (int k = 0; k < 4; k++) {
+    int nextx = x + dir[k];
+    int nexty = y + dir[k + 1];
+    if (nextx < 0 || nextx >= m || nexty < 0 || nexty >= n ||
+        matrix[nextx][nexty] <= matrix[x][y])
+      continue;
+    memo[x][y] = max(memo[x][y], dfs(matrix, nextx, nexty, memo) + 1);
+  }
+  return memo[x][y];
+}
+
 int longestIncreasingPath(vector<vector<int>>& matrix) {
   int m = matrix.size(), n = matrix[0].size();
-  vector<vector<int>> outDeg(m, vector<int>(n, 0));
-  queue<pair<int, int>> que;
-  int dir[] = {1, 0, -1, 0, 1};
-  for (int i = 0; i < m; i++) {
-    for (int j = 0; j < n; j++) {
-      for (int k = 0; k < 4; k++) {
-        int nextx = i + dir[k];
-        int nexty = j + dir[k + 1];
-        if (nextx < 0 || nextx >= m || nexty < 0 || nexty >= n ||
-            matrix[nextx][nexty] <= matrix[i][j])
-          continue;
-        outDeg[i][j]++;
-      }
-    }
-  }
-  for (int i = 0; i < m; i++) {
-    for (int j = 0; j < n; j++) {
-      if (outDeg[i][j] == 0)
-        que.push({i, j});
-    }
-  }
+  vector<vector<int>> memo(m, vector<int>(n, 0));
   int ans = 0;
-  while (!que.empty()) {
-    ans++;
-    int size = que.size();
-    while (size--) {
-      int x = que.front().first;
-      int y = que.front().second;
-      que.pop();
-      for (int k = 0; k < 4; k++) {
-        int nextx = x + dir[k];
-        int nexty = y + dir[k + 1];
-        if (nextx < 0 || nextx >= m || nexty < 0 || nexty >= n ||
-            matrix[nextx][nexty] >= matrix[x][y])
-          continue;
-        if (--outDeg[nextx][nexty] == 0)
-          que.push({nextx, nexty});
-      }
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      ans = max(ans, dfs(matrix, i, j, memo));
     }
   }
   return ans;
