@@ -47,7 +47,9 @@ string addBinary1(string a, string b) {
 }
 
 int main() {
-  cout << addBinary("11", "1") << " " << addBinary("1010", "1011") << endl;
-  cout << addBinary1("11", "1") << " " << addBinary1("1010", "1011") << endl;
+  cout << addBinary("11", "1") << " " << addBinary("1010", "1011") << " "
+       << addBinary("1", "111") << endl;
+  cout << addBinary1("11", "1") << " " << addBinary1("1010", "1011") << " "
+       << addBinary1("1", "111") << endl;
   return 0;
 }
