@@ -53,10 +53,16 @@ int findMaxLength1(vector<int>& nums) {
 
 int main() {
   vector<int> nums1 = {0, 1}, nums2 = {0, 1, 0},
-              nums3 = {0, 1, 1, 1, 1, 1, 0, 0, 0};
+              nums3 = {0, 1, 1, 1, 1, 1, 0, 0, 0}, nums4 = {0, 0, 1},
+              nums5 = {0, 1, 1, 0, 1, 1, 1, 0}, nums6 = {0, 1, 1},
+              nums7 = {0, 1, 0, 1};
   cout << findMaxLength(nums1) << " " << findMaxLength(nums2) << " "
-       << findMaxLength(nums3) << endl;
+       << findMaxLength(nums3) << " " << findMaxLength(nums4) << " "
+       << findMaxLength(nums5) << " " << findMaxLength(nums6) << " "
+       << findMaxLength(nums7) << endl;
   cout << findMaxLength1(nums1) << " " << findMaxLength1(nums2) << " "
-       << findMaxLength1(nums3) << endl;
+       << findMaxLength1(nums3) << " " << findMaxLength1(nums4) << " "
+       << findMaxLength1(nums5) << " " << findMaxLength1(nums6) << " "
+       << findMaxLength1(nums7) << endl;
   return 0;
 }

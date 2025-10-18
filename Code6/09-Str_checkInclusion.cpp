@@ -15,18 +15,16 @@ true ；否则，返回 false 。
   s1 和 s2 仅包含小写字母 */
 
 bool checkInclusion(string s1, string s2) {
-  array<int, 26> win{};
-  if (s1.size() > s2.size())
-    return false;
-  for (int i = 0; i < s1.size(); i++) {
-    win[s1[i] - 'a']++;
+  array<int, 26> win;
+  for (const char& c : s1) {
+    win[c - 'a']++;
   }
-  int j = 0;
-  for (int i = 0; i < s2.size(); i++) {
-    win[s2[i] - 'a']--;
-    while (j <= i && win[s2[i] - 'a'] < 0) {
+  for (int i = 0, j = 0; i < s2.size(); i++) {
+    --win[s2[i] - 'a'];
+    while (win[s2[i] - 'a'] < 0) {
       win[s2[j++] - 'a']++;
     }
+    cout << "i " << i << ", j " << j << ", c " << s2[i] << endl;
     if (i - j + 1 == s1.size())
       return true;
   }
@@ -35,6 +33,7 @@ bool checkInclusion(string s1, string s2) {
 
 // 优化思路。双指针，使用一个数组记录26个字母出现次数，s1为负，s2为正。需保证窗口内部不得有正数，即不得有s2出现，但s1没有的字符
 // 一旦出现正数，则向右移动左指针j，直至[j,i]区间内有负有0。此时区间长度i-j+1若恰好等与s1长度n，说明窗口匹配
+// 核心，左指针j表征满足窗口的第一个元素下标，其位置可以超过右指针i。因为当窗口内元素均不满足，此时j=i+1
 bool checkInclusion1(string s1, string s2) {
   int m = s1.size(), n = s2.size();
   if (m > n)

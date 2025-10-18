@@ -59,10 +59,11 @@ bool isPalindrome1(string s) {
 
 int main() {
   string s1 = "A man, a plan, a canal: Panama", s2 = "race a car", s3 = " ",
-         s4 = "0P";
+         s4 = "0P", s5 = ".,";
   cout << isPalindrome(s1) << " " << isPalindrome(s2) << " " << isPalindrome(s3)
-       << " " << isPalindrome(s4) << endl;
+       << " " << isPalindrome(s4) << " " << isPalindrome(s5) << endl;
   cout << isPalindrome1(s1) << " " << isPalindrome1(s2) << " "
-       << isPalindrome1(s3) << " " << isPalindrome1(s4) << endl;
+       << isPalindrome1(s3) << " " << isPalindrome1(s4) << " "
+       << isPalindrome1(s5) << endl;
   return 0;
 }
