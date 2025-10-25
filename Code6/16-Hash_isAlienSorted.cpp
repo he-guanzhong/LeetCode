@@ -28,20 +28,24 @@ false。
   在 words[i] 和 order 中的所有字符都是英文小写字母。*/
 
 bool isAlienSorted(vector<string>& words, string order) {
-  vector<int> alpha(26, 0);
+  array<int, 26> arr;
   for (int i = 0; i < order.size(); i++) {
-    alpha[order[i] - 'a'] = i;
+    arr[order[i] - 'a'] = i;
   }
-  for (int i = 1; i < words.size(); i++) {
-    string pre = words[i - 1], cur = words[i];
-    int j = 0;
-    for (; j < pre.size() && j < cur.size(); j++) {
-      if (alpha[pre[j] - 'a'] > alpha[cur[j] - 'a'])
-        return false;
-      else if (alpha[pre[j] - 'a'] < alpha[cur[j] - 'a'])
+  for (int i = 0; i < words.size() - 1; i++) {
+    string &pre = words[i], cur = words[i + 1];
+    int m = pre.size(), n = cur.size();
+    int len = min(m, n);
+    bool equal = true;
+    for (int j = 0; j < len; j++) {
+      int a = pre[j] - 'a', b = cur[j] - 'a';
+      if (arr[a] < arr[b]) {
+        equal = false;
         break;
+      } else if (arr[a] > arr[b])
+        return false;
     }
-    if (j == min(pre.size(), cur.size()) && pre.size() > cur.size())
+    if (equal && m > n)
       return false;
   }
   return true;

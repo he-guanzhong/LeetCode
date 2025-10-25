@@ -19,29 +19,34 @@
 进阶：如果输入链表不能翻转该如何解决？ */
 
 ListNode* reverseList(ListNode* head) {
-  if (!head || !head->next)
-    return head;
-  ListNode* newHead = reverseList(head->next);
-  head->next->next = head;
-  head->next = nullptr;
-  return newHead;
+  ListNode *tmp = nullptr, *p = head, *pre = nullptr;
+  while (p) {
+    tmp = p->next;
+    p->next = pre;
+    pre = p;
+    p = tmp;
+  }
+  return pre;
 }
 ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-  ListNode *p = reverseList(l1), *q = reverseList(l2);
-  ListNode* dummy = new ListNode(-1);
-  ListNode* k = dummy;
+  l1 = reverseList(l1);
+  l2 = reverseList(l2);
+  ListNode *head = new ListNode(), *p = head;
   int carry = 0;
-  while (p || q || carry) {
-    int val1 = p ? p->val : 0;
-    int val2 = q ? q->val : 0;
+  while (l1 || l2 || carry) {
+    int val1 = l1 ? l1->val : 0;
+    int val2 = l2 ? l2->val : 0;
+    if (l1)
+      l1 = l1->next;
+    if (l2)
+      l2 = l2->next;
     carry += val1 + val2;
-    k->next = new ListNode(carry % 10);
+    p->next = new ListNode();
+    p = p->next;
+    p->val = carry % 10;
     carry /= 10;
-    k = k->next;
-    p = p ? p->next : p;
-    q = q ? q->next : q;
   }
-  return reverseList(dummy->next);
+  return reverseList(head->next);
 }
 
 // 不反转，就要利用栈，或数组将结点数据保存，如此空间复杂度O(m+n)

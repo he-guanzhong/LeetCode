@@ -54,10 +54,13 @@ bool validPalindrome1(string s) {
 }
 
 int main() {
-  string s1 = "aba", s2 = "abca", s3 = "abc", s4 = "zryxeededexyz";
+  string s1 = "aba", s2 = "abca", s3 = "abc", s4 = "zryxeededexyz",
+         s5 = "cbbcc";
   cout << validPalindrome(s1) << " " << validPalindrome(s2) << " "
-       << validPalindrome(s3) << " " << validPalindrome(s4) << endl;
+       << validPalindrome(s3) << " " << validPalindrome(s4) << " "
+       << validPalindrome(s5) << endl;
   cout << validPalindrome1(s1) << " " << validPalindrome1(s2) << " "
-       << validPalindrome1(s3) << " " << validPalindrome1(s4) << endl;
+       << validPalindrome1(s3) << " " << validPalindrome1(s4) << " "
+       << validPalindrome1(s5) << endl;
   return 0;
 }
