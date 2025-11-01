@@ -24,9 +24,11 @@ TreeNode* pruneTree(TreeNode* root) {
     return nullptr;
   root->left = pruneTree(root->left);
   root->right = pruneTree(root->right);
-  return root->val == 0 && !root->left && !root->right ? nullptr : root;
+  if (!root->left && !root->right && root->val == 0)
+    return nullptr;
+  else
+    return root;
 }
-
 // 后序遍历典型问题。删除一个结点的必要条件是，该结点值为0，且其左右孩子均为空指针
 // 由于是后续遍历，所以到指定结点root时，其孩子必定已经被删减过，不存在孩子有值但本层为0需要删减的情况
 TreeNode* pruneTree1(TreeNode* root) {
