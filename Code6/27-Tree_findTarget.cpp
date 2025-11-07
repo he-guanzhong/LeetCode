@@ -15,40 +15,40 @@ k，如果二叉搜索树中存在两个元素且它们的和等于给定的目�
     题目数据保证，输入的 root 是一棵 有效 的二叉搜索树
     -105 <= k <= 105 */
 
-TreeNode* getNextLeft(stack<TreeNode*>& st, TreeNode* cur, int& val) {
-  while (cur) {
-    st.push(cur);
-    cur = cur->left;
+int nextLeft(TreeNode*& p, stack<TreeNode*>& st) {
+  while (p) {
+    st.push(p);
+    p = p->left;
   }
-  cur = st.top();
-  val = cur->val;
+  p = st.top();
   st.pop();
-  return cur->right;
+  int ans = p->val;
+  p = p->right;
+  return ans;
 }
-TreeNode* getNextRight(stack<TreeNode*>& st, TreeNode* cur, int& val) {
-  while (cur) {
-    st.push(cur);
-    cur = cur->right;
+int nextRight(TreeNode*& p, stack<TreeNode*>& st) {
+  while (p) {
+    st.push(p);
+    p = p->right;
   }
-  cur = st.top();
-  val = cur->val;
+  p = st.top();
   st.pop();
-  return cur->left;
+  int ans = p->val;
+  p = p->left;
+  return ans;
 }
 bool findTarget(TreeNode* root, int k) {
-  stack<TreeNode*> leftSt, rightSt;
-  int val1 = 0, val2 = 0;
-  TreeNode* l = getNextLeft(leftSt, root, val1);
-  TreeNode* r = getNextRight(rightSt, root, val2);
-
-  while (val1 < val2) {
-    int sum = val1 + val2;
-    if (sum == k)
-      return true;
-    else if (sum < k) {
-      l = getNextLeft(leftSt, l, val1);
+  TreeNode *l = root, *r = root;
+  stack<TreeNode*> stLeft, stRight;
+  int left = nextLeft(l, stLeft);
+  int right = nextRight(r, stRight);
+  while (left < right) {
+    if (left + right > k) {
+      right = nextRight(r, stRight);
+    } else if (left + right < k) {
+      left = nextLeft(l, stLeft);
     } else {
-      r = getNextRight(rightSt, r, val2);
+      return true;
     }
   }
   return false;

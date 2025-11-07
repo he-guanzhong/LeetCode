@@ -63,7 +63,7 @@ class BSTIterator {
 
 // 方法一，直接使用栈。仍然利用迭代法中序遍历，成员函数仅保存栈和cur结点。向左遍历所有左孩子入栈，可以不在构造函数中
 // 而是next()中，因为题目已经说明，next()调用必有效。故无需保存pre结点。
-// 直接再next()函数中序遍历。特殊点在于，每次弹栈代表访问某个结点时，直接要退出循环break。
+// 直接在next()函数中序遍历。特殊点在于，每次弹栈代表访问某个结点时，直接要退出循环break。
 class BSTIterator1 {
  public:
   BSTIterator1(TreeNode* root) { cur = root; }

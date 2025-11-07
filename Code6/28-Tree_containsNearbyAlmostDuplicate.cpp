@@ -25,31 +25,30 @@
     1 <= indexDiff <= nums.length
     0 <= valueDiff <= 109 */
 
-int getId(long num, long t) {
-  if (num >= 0) {
+long getId(long num, long t) {
+  if (num >= 0)
     return num / (t + 1);
-  } else {
+  else
     return (num + 1) / (t + 1) - 1;
-  }
 }
 bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
-  unordered_map<int, long> umap;
+  unordered_map<long, long> umap;
   for (int i = 0; i < nums.size(); i++) {
     long num = nums[i];
-    int inId = getId(nums[i], t);
-    if (umap.count(inId) ||
-        umap.count(inId - 1) && abs(umap[inId - 1] - num) <= t ||
-        umap.count(inId + 1) && abs(umap[inId + 1] - num) <= t)
+    long id = getId(num, t);
+    if (umap.count(id))
       return true;
-    umap[inId] = num;
+    else if (umap.count(id - 1) && abs(umap[id - 1] - num) <= t)
+      return true;
+    else if (umap.count(id + 1) && abs(umap[id + 1] - num) <= t)
+      return true;
+    umap[id] = num;
     if (i >= k) {
-      int outId = getId(nums[i - k], t);
-      umap.erase(outId);
+      umap.erase(getId(nums[i - k], t));
     }
   }
   return false;
 }
-
 // 不得使用滑动窗口+有序集合。会超时
 // 正确的方式是用桶。桶Id为num/(valueDiff+1)，例如以3为间隔，则0-1-2-3为一桶
 // 但对于复数，要保证-4-3-2-1为一桶。先转化为-3-2-1-0，得到商0为桶Id，再向左偏移一位，即(num+1)/(valueDiff+1)-1
@@ -90,18 +89,21 @@ int main() {
   vector<int> nums4 = {-2, 3};
   vector<int> nums5 = {8, 7, 15, 1, 6, 1, 9, 15};
   vector<int> nums6 = {2147483647, -1, 2147483647};
+  vector<int> nums7 = {-1, -1};
 
   cout << containsNearbyAlmostDuplicate(nums1, indexDiff1, valueDiff1) << " "
        << containsNearbyAlmostDuplicate(nums2, indexDiff2, valueDiff2) << " "
        << containsNearbyAlmostDuplicate(nums3, 1, 0) << " "
        << containsNearbyAlmostDuplicate(nums4, 2, 5) << " "
        << containsNearbyAlmostDuplicate(nums5, 1, 3) << " "
-       << containsNearbyAlmostDuplicate(nums6, 1, 2147483647) << endl;
+       << containsNearbyAlmostDuplicate(nums6, 1, 2147483647) << " "
+       << containsNearbyAlmostDuplicate(nums7, 1, 0) << endl;
   cout << containsNearbyAlmostDuplicate1(nums1, indexDiff1, valueDiff1) << " "
        << containsNearbyAlmostDuplicate1(nums2, indexDiff2, valueDiff2) << " "
        << containsNearbyAlmostDuplicate1(nums3, 1, 0) << " "
        << containsNearbyAlmostDuplicate1(nums4, 2, 5) << " "
        << containsNearbyAlmostDuplicate1(nums5, 1, 3) << " "
-       << containsNearbyAlmostDuplicate1(nums6, 1, 2147483647) << endl;
+       << containsNearbyAlmostDuplicate1(nums6, 1, 2147483647) << " "
+       << containsNearbyAlmostDuplicate1(nums7, 1, 0) << endl;
   return 0;
 }
