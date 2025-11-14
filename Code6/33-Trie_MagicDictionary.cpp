@@ -117,7 +117,7 @@ class MagicDictionary1 {
     return dfs(root, searchWord, 0, isMod);
   }
 
-  // 终止条件，到达最后一个字符，且修改过，且前缀树到达底层
+  // 终止条件，到达最后一个字符。此时判断前缀树到达底层且修改过，为真，否则为假
   bool dfs(Trie1* cur, const string& searchWord, int pos, bool isMod) {
     if (pos == searchWord.size())
       return cur->isFinished && isMod;

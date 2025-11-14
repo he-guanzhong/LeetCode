@@ -55,12 +55,14 @@ vector<vector<int>> kSmallestPairs1(vector<int>& nums1,
   for (int i = 0; i < nums1.size() && i < k; i++)
     que.push({i, 0});
   vector<vector<int>> ans;
-  while (k-- && !que.empty()) {
+  while (k-- &&
+         !que.empty()) {  // 核心一，考虑k远大于组合数，不可能对空队列pop()
     pair<int, int> index = que.top();
     int a = index.first, b = index.second;
     que.pop();
     ans.push_back({nums1[a], nums2[b]});
-    if (b + 1 < nums2.size()) {
+    if (b + 1 <
+        nums2.size()) {  // 核心二，考虑nums2极短，到末尾元素已无候选对组
       que.push({a, b + 1});
     }
   }
@@ -71,11 +73,17 @@ int main() {
   vector<int> nums1 = {1, 7, 11}, nums2 = {2, 4, 6};
   vector<int> nums3 = {1, 1, 2}, nums4 = {1, 2, 3};
   vector<int> nums5 = {1, 2, 4, 5, 6}, nums6 = {3, 5, 7, 9};
+  vector<int> nums7 = {1, 2}, nums8 = {3};
+
   printMat(kSmallestPairs(nums1, nums2, 3));
   printMat(kSmallestPairs(nums3, nums4, 2));
   printMat(kSmallestPairs(nums5, nums6, 3));
+  printMat(kSmallestPairs(nums7, nums8, 3));
+
   printMat(kSmallestPairs1(nums1, nums2, 3));
   printMat(kSmallestPairs1(nums3, nums4, 2));
   printMat(kSmallestPairs1(nums5, nums6, 3));
+  printMat(kSmallestPairs1(nums7, nums8, 3));
+
   return 0;
 }
