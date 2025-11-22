@@ -104,10 +104,12 @@ int minimumLengthEncoding2(vector<string>& words) {
 }
 
 int main() {
-  vector<string> s1 = {"time", "me", "bell"}, s2 = {"t"};
-  cout << minimumLengthEncoding(s1) << " " << minimumLengthEncoding(s2) << endl;
-  cout << minimumLengthEncoding1(s1) << " " << minimumLengthEncoding1(s2)
-       << endl;
+  vector<string> s1 = {"time", "me", "bell"}, s2 = {"t"},
+                 s3 = {"time", "atime", "btime"};
+  cout << minimumLengthEncoding(s1) << " " << minimumLengthEncoding(s2) << " "
+       << minimumLengthEncoding(s3) << endl;
+  cout << minimumLengthEncoding1(s1) << " " << minimumLengthEncoding1(s2) << " "
+       << minimumLengthEncoding1(s3) << endl;
 
   return 0;
 }

@@ -71,8 +71,8 @@ int findMaximumXOR(vector<int>& nums) {
 // 先将num[i-1]存入树中，然后以nums[i]对树进行比较。如此相当于执行了数组中，两两元素的比较
 // addElem辅助函数将数组每一位分别加入树中。checkElem辅助函数，将待求元素x
 struct Trie1 {
-  Trie1* left;
-  Trie1* right;
+  Trie1* left = nullptr;  // C++11成员默认初始化
+  Trie1* right = nullptr;
 };
 
 void addElem1(int num, Trie1* root) {

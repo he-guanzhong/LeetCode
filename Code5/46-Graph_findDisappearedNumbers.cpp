@@ -23,7 +23,8 @@ vector<int> findDisappearedNumbers(vector<int>& nums) {
   return ans;
 }
 
-// 利用数组本身充当哈希表，节省空间复杂度O(1)。对每一个元素num，其理论应该在[1,n]之中。求出其在数组中的真实位置x,nums[x]+n处理。保证其一定大于n
+// 利用数组本身充当哈希表，节省空间复杂度O(1)。对每一个元素num，其理论应该在[1,n]之中。
+// 求出其在数组中的真实位置x,nums[x]+n处理。保证其一定大于n
 // 二次遍历，以下标i遍历任何小于等于n的元素，说明数i+1没出现过。
 vector<int> findDisappearedNumbers1(vector<int>& nums) {
   vector<int> ans;

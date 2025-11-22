@@ -49,6 +49,20 @@ int peakIndexInMountainArray1(vector<int>& arr) {
   return left;
 }
 
+// 也可以认为中点的特性是arr[m-1]<arr[m]，只要满足，说明中点在更右侧，左边界右移
+// 因此，left含义是第一个不满足升序的位置。最终循环退出时必为right<left，则right为最后一个满足升序的位置，为答案
+int peakIndexInMountainArray2(vector<int>& arr) {
+  int left = 1, right = arr.size() - 1;
+  while (left <= right) {
+    int m = left + ((right - left) >> 1);
+    if (arr[m] > arr[m - 1])
+      left = m + 1;
+    else
+      right = m - 1;
+  }
+  return right;
+}
+
 int main() {
   vector<int> arr1({0, 1, 0}), arr2({0, 2, 1, 0}), arr3({0, 10, 5, 2}),
       arr4({3, 5, 3, 2, 0});
