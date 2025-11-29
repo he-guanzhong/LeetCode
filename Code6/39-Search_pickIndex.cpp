@@ -44,21 +44,16 @@ w.length - 1）选出并返回一个下标。选取下标 i 的 概率 为 w[i] 
 
 class Solution {
  public:
+  vector<int> nums;
   Solution(vector<int>& w) {
     srand(time(nullptr));
-    arr.resize(w.size());
-    int pre = 0;
-    for (int i = 0; i < w.size(); i++) {
-      arr[i] = pre + w[i];
-      pre = arr[i];
-    }
+    partial_sum(w.begin(), w.end(), back_inserter(nums));
   }
 
   int pickIndex() {
-    int index = rand() % arr.back();
-    return upper_bound(arr.begin(), arr.end(), index) - arr.begin();
+    int i = rand() % nums.back() + 1;
+    return lower_bound(nums.begin(), nums.end(), i) - nums.begin();
   }
-  vector<int> arr;
 };
 
 // 前缀和+二分法。w数组所有元素和n代表总概率1，则对w[i]代表答案是下标i时，落概率w[i]/n

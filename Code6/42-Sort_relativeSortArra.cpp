@@ -53,7 +53,7 @@ vector<int> relativeSortArray1(vector<int>& arr1, vector<int>& arr2) {
 
 // 计数排序，鉴于arr1中最大数字才1000，设置每个数字出现的频率数组freq。遍历第一遍，得到该freq数组长度，即最大的数字是多少
 // 二次遍历，统计所有arr1中元素出现次数到freq内。三次遍历，遍历arr2，对其中每个元素x，分别对答案压入freq[x]次
-// 四次遍历，此时freq中仍有一些元素未清零，再次遍历，对所有元素压入
+// 四次遍历，此时freq中仍有一些元素未清零，再次遍历，对剩余所有元素压入
 // 记upper是arr1中的最大数字，本题中小于1000。时间复杂度O(2m+n+upper)。空间复杂度O(upper)因为额外存储了freq数组
 vector<int> relativeSortArray2(vector<int>& arr1, vector<int>& arr2) {
   int upper = 0;

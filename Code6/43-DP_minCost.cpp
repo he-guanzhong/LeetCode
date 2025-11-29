@@ -1,5 +1,4 @@
 #include "head.h"
-
 /* LCR 091. 粉刷房子
 假如有一排房子，共 n
 个，每个房子可以被粉刷成红色、蓝色或者绿色这三种颜色中的一种，你需要粉刷所有的房子并且使其相邻的两个房子颜色不能相同。
@@ -36,6 +35,7 @@ int minCost(vector<vector<int>>& costs) {
 
 // 动态规划基础题。位置i刷其中一个颜色，则其前一位i-1就不能刷对应的颜色。
 // 问题转化为，假设长度n=3的序列[0,1,2]，对任意一个下标j，找出其余位置下标(j+k)%n，其中k意偏置[1,n)
+// 求余符号%与乘除优先级一致，大于加减
 int minCost1(vector<vector<int>>& costs) {
   vector<int> pre = costs[0];
   vector<int> cur(3, 0);

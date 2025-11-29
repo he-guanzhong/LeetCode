@@ -40,7 +40,7 @@ int minEatingSpeed(vector<int>& piles, int h) {
 // 自变量是吃香蕉速度x，最慢为1，如此时间最长，为总香蕉数量。最快为最大的那一堆香蕉数量，如此时间最短，为堆数
 // 二分法，对每一种速度x，遍历每一堆求总时间cnt，注意数量范围[1,m]之内的堆，对应速度m，结果应该等于1，则特殊向上取整处理。
 // 时间过长cnt>h，应加快速度，left右移。反之cnt<h，可以减缓速度，right左移。
-// 注意时间相等时，可以尝试再慢一些，而不是直接返回答案。故cnt<=h是right左移的条件，最终返回的是左指针
+// 注意时间相等时，可以尝试再慢一些，而不是直接返回答案。故cnt<=h是right左移的条件，最终返回的是左指针位置
 // 时间复杂度O(NlogN)。
 int minEatingSpeed1(vector<int>& piles, int h) {
   int maxVal = *max_element(piles.begin(), piles.end());
