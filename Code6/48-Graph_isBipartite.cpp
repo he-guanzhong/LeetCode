@@ -60,7 +60,7 @@ bool isBipartite(vector<vector<int>>& graph) {
 // 从一个节点出发，每轮交替对该轮空白结点，染红/黑二者之一。若遇到与本轮同色结点，说明不符合要求，返回假
 // 注意，结点不一定全部是联通的，要保证每个回环均满足要求，
 // 所以主函数中，一定要遍历所有结点一次，注意可能此时结点已被染色过，所以只深度搜索未染色的结点
-// visited和color入参可以二合一。
+// visited和color入参可以二合一。前提是直接在dfs外层就染好色，dfs内部通过colors[cur]获取当前颜色
 bool dfs1(int index,
           vector<vector<int>>& graph,
           vector<int>& visited,
