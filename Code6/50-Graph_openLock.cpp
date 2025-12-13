@@ -34,52 +34,46 @@ target代表可以解锁的数字，你需要给出解锁需要的最小旋转�
 
 int openLock(vector<string>& deadends, string target) {
   unordered_set<string> uset(deadends.begin(), deadends.end());
-  unordered_map<string, int> visit;
-  if (target == "0000")
-    return 0;
-  if (uset.count("0000") || uset.count(target))
+  unordered_set<string> visit;
+  if (uset.count(target) || uset.count("0000"))
     return -1;
-  struct AStar {
-    string str;
+  struct Node {
+    string cur;
     int f, g, h;
-    int heuristic(const string& s, const string& target) {
+    int heuristic(const string& target) {
       int ans = 0;
       for (int i = 0; i < 4; i++) {
-        int dis = abs(s[i] - target[i]);
+        int dis = abs(target[i] - cur[i]);
         ans += min(dis, 10 - dis);
       }
       return ans;
     }
-    AStar(const string& s, const string& target, int _g)
-        : str(s), g(_g), h(heuristic(s, target)) {
+    Node(const string& _cur, const string& target, int _g) : cur(_cur), g(_g) {
+      h = heuristic(target);
       f = g + h;
     }
-    bool operator>(const AStar& other) const { return f > other.f; }
+    bool operator>(const Node& other) { return this->f > other.f; }
   };
-
-  priority_queue<AStar, vector<AStar>, greater<>> que;
-  AStar cur("0000", target, 0);
-  que.push(cur);
-  visit["0000"] = 0;
-  while (!que.empty()) {
-    cur = que.top();
-    que.pop();
-    if (cur.str == target)
-      return cur.g;
+  priority_queue<Node, vector<Node>, greater<>> pq;
+  pq.push(Node("0000", target, 0));
+  visit.insert("0000");
+  while (!pq.empty()) {
+    Node node = pq.top();
+    pq.pop();
+    if (node.cur == target)
+      return node.g;
     for (int i = 0; i < 4; i++) {
-      string tmp = cur.str;
-      tmp[i] = (tmp[i] == '9' ? '0' : tmp[i] + 1);
-      if (uset.count(tmp) == 0 &&
-          (visit.count(tmp) == 0 || visit[tmp] > cur.g + 1)) {
-        que.push(AStar(tmp, target, cur.g + 1));
-        visit[tmp] = cur.g + 1;
+      string add = node.cur;
+      add[i] = add[i] == '9' ? '0' : add[i] + 1;
+      if (!uset.count(add) && !visit.count(add)) {
+        pq.push(Node(add, target, node.g + 1));
+        visit.insert(add);
       }
-      tmp = cur.str;
-      tmp[i] = (tmp[i] == '0' ? '9' : tmp[i] - 1);
-      if (uset.count(tmp) == 0 &&
-          (visit.count(tmp) == 0 || visit[tmp] > cur.g + 1)) {
-        que.push(AStar(tmp, target, cur.g + 1));
-        visit[tmp] = cur.g + 1;
+      string minus = node.cur;
+      minus[i] = minus[i] == '0' ? '9' : minus[i] - 1;
+      if (!uset.count(minus) && !visit.count(minus)) {
+        pq.push(Node(minus, target, node.g + 1));
+        visit.insert(minus);
       }
     }
   }

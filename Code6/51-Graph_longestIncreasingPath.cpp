@@ -56,7 +56,7 @@ int longestIncreasingPath(vector<vector<int>>& matrix) {
 
 // 拓扑排序。将矩阵看成有向图。若由低向高指，则最长路径的终端结点，其出度为0。若路径是从高向低指，则最长路径终端结点，入度为0
 // 以出度为例，一轮遍历统计出度。二轮遍历将所有出度为0结点压入队列。三轮遍历，每一层即为所有出度为0的结点删除操作
-// 即对所有周围点，其值小于该点的。出度减一。如此出度为0的，压入下一层结点。最终，层数就是所求最长路径
+// 即对所有周围点，其值小于该点的。出度减一。如此出度为0的，压入下一层结点。最终，层数就是所求最长路径。
 int longestIncreasingPath1(vector<vector<int>>& matrix) {
   int m = matrix.size(), n = matrix[0].size();
   vector<vector<int>> outDeg(m, vector<int>(n, 0));
@@ -83,7 +83,7 @@ int longestIncreasingPath1(vector<vector<int>>& matrix) {
   int ans = 0;
   while (!que.empty()) {
     ans++;
-    int size = que.size();
+    int size = que.size();  // 注意这里不得写为n，与外层定义重复
     while (size--) {
       int curx = que.front().first;
       int cury = que.front().second;
@@ -106,6 +106,7 @@ int longestIncreasingPath1(vector<vector<int>>& matrix) {
 // 深度递归的返回值是memo[i][j]，主函数中，遍历所有结点，取其返回值中最大的，即为答案
 // 递归辅助函数中，退出条件是，该点一旦有值，即计算过，直接返回。否则即为从0开始的起点，赋值为1
 // 对上下左右四个方向，按值升序的状态，依次递归。本结点最长路径，是子结点最长路径+1
+// 由于求最长路径，所以与升、降次序无关
 int dfs2(vector<vector<int>>& matrix, int x, int y, vector<vector<int>>& memo) {
   if (memo[x][y])
     return memo[x][y];

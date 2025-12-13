@@ -72,6 +72,11 @@ string alienOrder(vector<string>& words) {
   return ans.size() == inDeg.size() ? ans : "";
 }
 
+// 所有出现的字符，无论是否起关键排序作用，都要在答案中。因此，第一次纯遍历字典中的字符个数，不可避免
+// 拓扑排序，可以借用入度表，统计出现过的字符。邻接表的键，可以不含有所有字符
+// 两两遍历字符串pre和cur，在第一个不同字符处停下，更新入度，和邻接表指向关系。处于排除原本就无效的特例
+// 统计所有入度为0的结点，作为队列首批元素。根据邻接表提供的指向关系，扣减入度
+// 若邻接表中存在互指关系，则存在入度永远无法为0的结点，此时返回的答案长度，一定小于所有字符数，该场景无效
 string alienOrder1(vector<string>& words) {
   // 根据字符串建图，统计所有出现过的字符，初始化graph和inDeg
   unordered_map<char, unordered_set<char>> graph;
@@ -126,12 +131,15 @@ string alienOrder1(vector<string>& words) {
 int main() {
   vector<string> words1 = {"wrt", "wrf", "er", "ett", "rftt"},
                  words2 = {"z", "x"}, words3 = {"z", "x", "z"},
-                 words4 = {"abc", "ab"}, words5 = {"ac", "ab", "zc", "zb"};
+                 words4 = {"abc", "ab"}, words5 = {"ac", "ab", "zc", "zb"},
+                 words6 = {"z", "z"}, words7 = {"z", "x", "a", "zb", "zx"};
   cout << alienOrder(words1) << " " << alienOrder(words2) << " "
        << alienOrder(words3) << " " << alienOrder(words4) << " "
-       << alienOrder(words5) << endl;
+       << alienOrder(words5) << " " << alienOrder(words6) << " "
+       << alienOrder(words7) << endl;
   cout << alienOrder1(words1) << " " << alienOrder1(words2) << " "
        << alienOrder1(words3) << " " << alienOrder1(words4) << " "
-       << alienOrder1(words5) << endl;
+       << alienOrder1(words5) << " " << alienOrder1(words6) << " "
+       << alienOrder1(words7) << endl;
   return 0;
 }
