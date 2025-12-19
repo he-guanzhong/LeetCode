@@ -49,6 +49,7 @@ int findCircleNum(vector<vector<int>>& isConnected) {
 // 并查集典型题。给出邻接矩阵，求联通分量数。联通分量的根节点特征是，其父节点即为自身
 // 题目备注中，已说明isConnected[i][i]==1，故所有城市必完全存在，init()函数无需特殊处理
 // [i][j]和[j][i]完全相等，故遍历矩阵只需要从右上角，或左下角开始，无需遍历全矩阵
+// join函数自带区分u,v是否一个集合，故无需专门的isSame()函数
 vector<int> father1;
 void init1() {
   father1.resize(201);

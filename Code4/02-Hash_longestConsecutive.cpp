@@ -36,6 +36,7 @@ int longestConsecutive(vector<int>& nums) {
 // 遍历uset。最长连续序列起点，其前一位数字一定不在uset内，故只对num-1不在set中的情况，记录当前数字，当前长度为1
 // 基于当前数字，其后一位数字只要还在set内，长度和数字即不断加1，即得到该段连续数字的长度。
 // 变量记录所有连续数字段的长度，取其最大值为最终返回值。空间和时间复杂度均为O(n)
+// 考虑空数组，所以默认数组长度一定是0；考虑只有一个元素，ans的比较赋值一定在while之外
 int longestConsecutive1(vector<int>& nums) {
   unordered_set<int> nums_set;
   int result = 0;
