@@ -6,8 +6,9 @@
   输入：s = 7, nums = [2,3,1,2,4,3]
   输出：2
   解释：子数组 [4,3]
-    是该条件下的长度最小的子数组。 提示： 1 <= target <= 10^9 1 <= nums.length
-<= 10^5 1 <= nums[i] <= 10^5 */
+    是该条件下的长度最小的子数组。
+  提示： 1 <= target <= 10^9
+        1 <= nums.length <= 10^5 1 <= nums[i] <= 10^5 */
 
 int minSubArrayLen(int target, vector<int>& nums) {
   int j = 0;

@@ -14,7 +14,8 @@ deleteAtIndex(index)：如果索引 index 有效，则删除链表中的第 inde
 // 构造函数中，size_置0，而虚头结点，不能为nullptr，必须为值为0的真实结点，否则其next,也即真实的链表头结点不存在
 // get函数中，要判断index小于0或大于等于size。移动步数index，即为真实下标。因为是访问结点val，故p初始化为dummy_next
 // addAtTail和addAtHead等操作函数，一定及时更新size_，头插直接插，尾插则要遍历到p->next为空，再插
-// addAtIndex，不必使用已完成的头插和尾插函数。先判定index处于正确区间，之后p初始化为dummy_，标准插入流程，完全可以覆盖头插和尾插情况
+// addAtIndex，不必使用已完成的头插和尾插函数。先判定index处于正确区间，之后p初始化为dummy_
+// 标准插入流程，完全可以覆盖头插和尾插情况
 // deleteAtIndex，判断index合规后，之后p初始化为dummy_，待删除结点要delete并置为nullptr
 class MyLinkedList {
  public:
@@ -130,7 +131,7 @@ class MyLinkedList1 {
       p = p->next;
     ListNode* tmp = p->next;  // 要释放节点
     p->next = p->next->next;
-    delete tmp;  // 释放后tmp指针值不会默认为null，而是随机值，野指针
+    delete tmp;      // 释放后tmp指针值不会默认为null，而是随机值，野指针
     tmp == nullptr;  // 之后程序若不小心使用tmp，则有严重问题
     size_--;
   }

@@ -24,7 +24,8 @@ vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
 }
 
 // 哈希值较少，跨度大，不得使用数组。考虑集合，set和multiset底层是红黑树，且排序，访问效率低。选择unordered_set，自带去重效果
-// 由于要对num1的中间层、和最终结果去重，故需要两个set。一为nums_set，保存nums1信息，直接初始化构造。二为result_set，保存符合条件的nums2
+// 由于要对num1的中间层、和最终结果去重，故需要两个set。一为nums_set，保存nums1信息，直接初始化构造。
+// 二为result_set，保存符合条件的nums2
 // 最终返回由result_set构造的vector
 vector<int> intersection1(vector<int>& nums1, vector<int>& nums2) {
   unordered_set<int> result_set;  // 利用set对结果去重
@@ -35,6 +36,7 @@ vector<int> intersection1(vector<int>& nums1, vector<int>& nums2) {
   }
   return vector<int>(result_set.begin(), result_set.end());
 }
+
 int main() {
   vector<int> vec1 = {1, 2, 2, 1};
   vector<int> vec2 = {2, 2};

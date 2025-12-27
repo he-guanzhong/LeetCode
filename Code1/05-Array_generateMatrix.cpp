@@ -6,9 +6,6 @@
   输入: 3
   输出: [ [ 1, 2, 3 ], [ 8, 9, 4 ], [ 7, 6, 5 ] ] */
 
-// 螺旋矩阵打印，先创建计数器cnt=1，并定义上下左右四个变量left/right/up/down
-// 循环条件为left<=right和up<=down，因为相等时也是可以赋值的。
-// 按照顺时针顺序依次遍历，更新完上边后，对于实时判断是否大于下边，可有可无。有了可少进一轮循环。没有则不影响最终结果
 vector<vector<int>> generateMatrix(int n) {
   vector<vector<int>> ans(n, vector<int>(n, 0));
   int l = 0, r = n - 1, u = 0, d = n - 1;
@@ -30,6 +27,9 @@ vector<vector<int>> generateMatrix(int n) {
   return ans;
 }
 
+// 螺旋矩阵打印，先创建计数器cnt=1，并定义上下左右四个变量left/right/up/down
+// 循环条件为left<=right和up<=down，因为相等时也是可以赋值的。
+// 按照顺时针顺序依次遍历，更新完上边后，对于实时判断是否大于下边，可有可无。有了可少进一轮循环。没有则不影响最终结果
 // 推荐解法，左闭右开
 vector<vector<int>> generateMatrix1(int n) {
   vector<vector<int>> res(n, vector<int>(n, 0));

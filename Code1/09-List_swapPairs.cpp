@@ -1,6 +1,7 @@
 #include "head.h"
 /* 24. 两两交换链表中的节点
-给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。
+给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。
+你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。
 示例 1：
   输入：head = [1,2,3,4]
   输出：[2,1,4,3]
@@ -11,9 +12,6 @@
   输入：head = [1]
   输出：[1] */
 
-// 交换结点涉及4个结点的同时操作，虚拟头结点设为1，2和4需要额外保存。因为1可以直接指3，此时会丢失2、4的链接。
-// 由于需要额外保存2、3，所以遍历的条件即为2、3存在。1必存在，4可以为空结点。2存在4不存在时，也不行
-// 按照1->3，3-2，2->4的顺序，更改结点指向，并随时挪动两步不1结点的位置
 ListNode* swapPairs(ListNode* head) {
   if (!head || !head->next)
     return head;
@@ -30,6 +28,9 @@ ListNode* swapPairs(ListNode* head) {
   return dummy->next;
 }
 
+// 交换结点涉及4个结点的同时操作，虚拟头结点设为1，2和4需要额外保存。因为1可以直接指3，此时会丢失2、4的链接。
+// 由于需要额外保存2、3，所以遍历的条件即为2、3存在。1必存在，4可以为空结点。2存在4不存在时，也不行
+// 按照1->3，3->2，2->4的顺序，更改结点指向，并随时挪动两步不1结点的位置
 ListNode* swapPairs1(ListNode* head) {
   ListNode* dummy = new ListNode(0);
   dummy->next = head;
@@ -42,6 +43,26 @@ ListNode* swapPairs1(ListNode* head) {
     p->next->next = tmp2;        // 步骤二，2 <- 3
     p->next->next->next = tmp4;  // 步骤三，2 -> 4
     p = p->next->next;           // 移动两次，准备下一轮
+  }
+  return dummy->next;
+}
+
+// 另一种思路，设结点序号为0、1、2、3。0作为前置结点必存在。由于要调换1、2的位置，故1、2必存在，构成while条件
+// 最后一个结点3可以由2->next得到，因此无需特殊保存。
+// 勾连顺序为，一、0->2。然后不得2->1，因为会丢失3的位置信息。因此第二步是1->3。第三步2->1
+// 此时1、2位置已互换完成。0挪动两个位置即为原1
+ListNode* swapPairs2(ListNode* head) {
+  if (!head || !head->next)
+    return head;
+  ListNode* dummy = new ListNode(-1, head);
+  ListNode *p0 = dummy, *p1 = nullptr, *p2 = nullptr;
+  while (p0->next && p0->next->next) {
+    p1 = p0->next;
+    p2 = p0->next->next;
+    p0->next = p2;
+    p1->next = p2->next;
+    p2->next = p1;
+    p0 = p1;
   }
   return dummy->next;
 }

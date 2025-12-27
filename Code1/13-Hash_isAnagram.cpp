@@ -26,7 +26,8 @@ bool isAnagram(string s, string t) {
   return true;
 }
 
-// 数组当作哈希表，因为26个字母是有限的。核心判断条件，s和t分别遍历一遍后，每个字母位出现的次数是否为0。大于或者小于0都是不允许的。
+// 数组当作哈希表，因为26个字母是有限的。
+// 核心判断条件，s和t分别遍历一遍后，每个字母位出现的次数是否为0。大于或者小于0都是不允许的。
 // 数组当哈希表，26个字母构成连续空间。s出现的字母++，t出现的字母--，查看是否存在非零值
 bool isAnagram1(string s, string t) {
   int record[26] = {0};
@@ -40,6 +41,7 @@ bool isAnagram1(string s, string t) {
   }
   return true;
 }
+
 bool isAnagram2(string s, string t) {
   unordered_map<char, int> hash;
   for (auto i : s)

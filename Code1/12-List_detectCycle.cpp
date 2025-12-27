@@ -19,12 +19,28 @@ pos来表示链表尾连接到链表中的位置（索引从 0 开始）。如�
   输出：返回 null
   解释：链表中没有环。*/
 
+ListNode* detectCycle(ListNode* head) {
+  ListNode *fast = head, *slow = head;
+  do {
+    if (!fast || !fast->next)
+      return nullptr;
+    fast = fast->next->next;
+    slow = slow->next;
+  } while (fast != slow);
+  fast = head;
+  while (fast != slow) {
+    fast = fast->next;
+    slow = slow->next;
+  }
+  return fast;
+}
+
 // 链表是否有环求入口分两步，一、首元素出发，快指针走两步，慢指针走一步。如果相遇则必有环。
 // 二、相遇点和起始点同时出发结点，每次走一步，新相遇点即为环入口
 // 注意：1.快指针每次要走两步，故须判断fast和fast->next必须同时存在。不存在则返回nullptr
 // 2.快慢指针首次出发时，必须先移动指针，再判断相等与否，否则一开始即相等，不入循环。
 // 3.如果有环，则fast可以置为head，于slow同步出发，必然存在某一时刻slow==fast，while循环条件也可以设置如此，最终返回fast
-ListNode* detectCycle(ListNode* head) {
+ListNode* detectCycle2(ListNode* head) {
   ListNode *fast = head, *slow = head;
   while (fast && fast->next) {
     fast = fast->next->next;
@@ -43,6 +59,8 @@ ListNode* detectCycle(ListNode* head) {
 }
 
 // 快慢指针法，快走两步，慢走一步，相遇时确定位置。从相遇点和头部各出发指针，相遇记为入口
+// 写法一：dowhile语句，无需一开始错开指针，内置退出条件为快指针判空。循环条件是双指针不相遇
+// 写法二：普通while语句，循环条件是快指针的存在性。内置退出条件为快慢指针相遇。但要求外层判断fast是相遇还是异常退出
 ListNode* detectCycle1(ListNode* head) {
   ListNode* fast = head;
   ListNode* slow = head;

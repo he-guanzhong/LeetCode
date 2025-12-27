@@ -52,7 +52,7 @@ ListNode* getIntersectionNode2(ListNode* headA, ListNode* headB) {
   }
   curA = headA;
   curB = headB;
-  if (lenA < lenB) {  // 以A为最长链表。
+  if (lenA < lenB) {  // 以A为最长链表
     swap(curA, curB);
     swap(lenA, lenB);
   }
@@ -68,7 +68,7 @@ ListNode* getIntersectionNode2(ListNode* headA, ListNode* headB) {
   return nullptr;
 }
 
-// 两个临时结点p、q分别指向headA和headB，假设两链表相交点前长度分别a\b，相交点后长度c。
+// 方法二：两个临时结点p、q分别指向headA和headB，假设两链表相交点前长度分别a\b，相交点后长度c。
 // p走到A末端后指向B，q走到B末端后指向A。则走到相交点时，a+(b-c)==b+(a-c)，c!=0说明有相交，c==0说明无相交，直接返回点p即可
 ListNode* getIntersectionNode1(ListNode* headA, ListNode* headB) {
   ListNode *p = headA, *q = headB;

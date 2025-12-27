@@ -11,7 +11,6 @@
   输入：head = [7,7,7,7], val = 7
   输出：[] */
 
-// 删除链表元素。优选虚拟头结点dummy，省去一系列头结点等于目标值的麻烦
 ListNode* removeElements(ListNode* head, int val) {
   ListNode* dummy = new ListNode(0, head);
   ListNode* p = dummy;
@@ -24,12 +23,12 @@ ListNode* removeElements(ListNode* head, int val) {
   return dummy->next;
 }
 
-// 生成虚拟头节点
+// 优选生成哑节点。省去一系列头结点等于目标值的麻烦。p->next的含义是待删除的结点
 ListNode* removeElements1(ListNode* head, int val) {
   ListNode* dummy = new ListNode(0);  // 生成虚拟头节点
   dummy->next = head;
   ListNode* p = dummy;
-  while (p->next) {  // 不必考虑p
+  while (p->next) {  // 不必考虑p。因其必然存在，且不会被删除
     if (p->next->val == val) {
       ListNode* tmp = p->next;
       p->next = p->next->next;
@@ -45,7 +44,7 @@ ListNode* removeElements1(ListNode* head, int val) {
 
 // 直接在原链表处删除。无元素，只有一个不等元素，都不需要特殊处理，因为返回head。
 // 首系列元素等于目标值，则不断循环while，挪动head的起始位置。直至其不存在（删干净了）或到达第一个不等于目标值的结点
-// 删除后序结点，p和p->next必须同时存在。注意删除时p不能挪动，不删除时，p才能挪动
+// 删除后序结点，p和p->next必须同时存在。注意删除时p不能挪动，因为下一个补上来的结点可能仍要删除。不删除时，p才能挪动
 ListNode* removeElements2(ListNode* head, int val) {
   while (head && head->val == val) {  // 删除头节点，注意是 while
     ListNode* tmp = head;
@@ -92,6 +91,7 @@ void deleteNode(ListNode* pListHead, ListNode* pToBeDeleted) {
     pToBeDeleted = nullptr;
   }
 }
+
 int main() {
   vector<int> vec1 = {1, 2, 6, 3, 4, 5, 6};
   vector<int> vec2 = {};

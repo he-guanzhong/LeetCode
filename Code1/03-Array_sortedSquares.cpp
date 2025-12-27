@@ -27,14 +27,6 @@ vector<int> sortedSquares(vector<int>& nums) {
   return ans;
 }
 
-// 暴力解法，O(n) = n + nlogn
-vector<int> sortedSquares1(vector<int>& nums) {
-  for (int i = 0; i < nums.size(); i++) {
-    nums[i] *= nums[i];  // 注意平方写法
-  }
-  sort(nums.begin(), nums.end());
-  return nums;
-}
 // 双指针法，O(n) = n
 vector<int> sortedSquares2(vector<int>& nums) {
   int k = nums.size() - 1;
@@ -50,6 +42,15 @@ vector<int> sortedSquares2(vector<int>& nums) {
     }
   }
   return result;
+}
+
+// 暴力解法，O(n) = n + nlogn
+vector<int> sortedSquares1(vector<int>& nums) {
+  for (int i = 0; i < nums.size(); i++) {
+    nums[i] *= nums[i];  // 注意平方写法
+  }
+  sort(nums.begin(), nums.end());
+  return nums;
 }
 
 int main() {

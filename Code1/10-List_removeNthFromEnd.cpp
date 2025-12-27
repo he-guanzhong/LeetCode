@@ -31,7 +31,8 @@ ListNode* removeNthFromEnd(ListNode* head, int n) {
 }
 
 // 快慢指针法，快指针先走n步，然后慢指针走快指针走到底的步数。对慢指针下一个结点进行删除操作。
-// 虚拟头结点，可删除走一步的头结点。while条件内，判断推荐p->next，确定p终止于最后一个结点，而非空。如果判断条件为p，则fast要多走一步
+// 虚拟头结点，可删除走一步的头结点。while条件内，判断推荐p->next，确定p终止于最后一个结点，而不是到空结点
+// 如果判断条件为p，则fast要多走一步
 ListNode* removeNthFromEnd1(ListNode* head, int n) {
   ListNode* dummy = new ListNode(0);
   dummy->next = head;
