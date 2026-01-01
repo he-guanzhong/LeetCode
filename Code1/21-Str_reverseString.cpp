@@ -18,8 +18,8 @@ void reverseString(vector<char>& s) {
 }
 
 // 尽量不要使用Reverse，而是从头到中央一半，swap函数调换位置。注意任何一个只遍历一半的操作，下标可以使用i<size()/2
-// 对于偶数，其正好是一半，对于奇数，其是小一半。
-// for循环内可以定义双变量，奇偶数都可以使用 size() / 2来判断。
+// 对于偶数，其正好是一半，对于奇数，其是小一半
+// for循环内可以定义双变量，奇偶数都可以使用 size() / 2来判断
 // 可以直接reverse()库函数，利用栈，定义左右点swap。官方推荐for 循环内的swap方法
 void reverseString1(vector<char>& s) {
   for (int i = 0, j = s.size() - 1; i < s.size() / 2; i++, j--)
@@ -27,11 +27,11 @@ void reverseString1(vector<char>& s) {
 }
 
 int main() {
-  vector<char> s = {'a', 'b', 'c', 'd', 'e'};
-  reverseString(s);
-  printVector(s);
-  s = {'a', 'b', 'c', 'd', 'e'};
-  reverseString1(s);
-  printVector(s);
+  vector<char> s1 = {'a', 'b', 'c', 'd', 'e'};
+  vector<char> s2 = s1;
+  reverseString(s1);
+  printVector(s1);
+  reverseString1(s2);
+  printVector(s2);
   return 0;
 }

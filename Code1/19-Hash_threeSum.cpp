@@ -1,8 +1,8 @@
 #include "head.h"
 /* 15. 三数之和
-给你一个整数数组 nums ，判断是否存在三元组 [nums[i], nums[j], nums[k]] 满足 i !=
-j、i != k 且 j != k ，同时还满足 nums[i] + nums[j] + nums[k] == 0 。请
-你返回所有和为 0 且不重复的三元组。
+给你一个整数数组 nums ，判断是否存在三元组 [nums[i], nums[j], nums[k]] 满足
+i != j、i != k 且 j != k ，同时还满足 nums[i] + nums[j] + nums[k] == 0 。
+请你返回所有和为 0 且不重复的三元组。
 注意：答案中不可以包含重复的三元组。
 示例 1：
   输入：nums = [-1,0,1,2,-1,-4]
@@ -76,6 +76,7 @@ vector<vector<int>> threeSum1(vector<int>& nums) {
   }
   return result;
 }
+
 // 双指针法，先排序，a作为i节点移动，bc设置为left和right
 vector<vector<int>> threeSum2(vector<int>& nums) {
   vector<vector<int>> result;
@@ -107,6 +108,7 @@ vector<vector<int>> threeSum2(vector<int>& nums) {
   }
   return result;
 }
+
 int main() {
   vector<int> nums1 = {-1, 0, 1, 2, -1, -4};
   vector<int> nums2 = {-4, -1, -1, 0, 1, 2};
@@ -117,6 +119,5 @@ int main() {
   printMat(threeSum2(nums1));
   printMat(threeSum2(nums2));
   printMat(threeSum2(nums3));
-
   return 0;
 }

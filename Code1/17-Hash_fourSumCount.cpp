@@ -33,7 +33,7 @@ int fourSumCount(vector<int>& nums1,
   return ans;
 }
 
-// 四个独立数组，总和是0的可能数，分两个组计算大小，第一组AB时，unordered_map记录总和，和该和出现的次数。
+// 四个独立数组，总和是0的可能数，分两个组计算大小，第一组AB时，unordered_map记录总和，和该和出现的次数
 // 遍历第二组时，如果CD总和的负数，在哈希表出现过。设立计数cnt，加上该和在第一组出现的次数
 // 注意，哈希表的第二个值，不是记录坐标，而是记录次数，因为同样总和是2，第一组可能有很多种排列组合
 int fourSumCount1(vector<int>& A,
@@ -57,14 +57,8 @@ int fourSumCount1(vector<int>& A,
 }
 
 int main() {
-  vector<int> A1 = {1, 2};
-  vector<int> B1 = {-2, -1};
-  vector<int> C1 = {-1, 2};
-  vector<int> D1 = {0, 2};
-  vector<int> A2 = {-1, -1};
-  vector<int> B2 = {-1, 1};
-  vector<int> C2 = {-1, 1};
-  vector<int> D2 = {1, -1};
+  vector<int> A1 = {1, 2}, B1 = {-2, -1}, C1 = {-1, 2}, D1 = {0, 2};
+  vector<int> A2 = {-1, -1}, B2 = {-1, 1}, C2 = {-1, 1}, D2 = {1, -1};
   cout << fourSumCount(A1, B1, C1, D1) << " " << fourSumCount(A2, B2, C2, D2)
        << endl;
   cout << fourSumCount1(A1, B1, C1, D1) << " " << fourSumCount1(A2, B2, C2, D2)

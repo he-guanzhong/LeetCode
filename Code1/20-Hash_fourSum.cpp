@@ -55,7 +55,8 @@ vector<vector<int>> fourSum1(vector<int>& nums, int target) {
   sort(nums.begin(), nums.end());
   for (int k = 0; k < nums.size(); k++) {
     if (nums[k] > target && nums[k] >= 0)  // 注意是不能变小，所以>=
-      break;  // 不必直接return，后续统一处理
+      break;                               // 不必直接return，后续统一处理
+
     if (k > 0 && nums[k] == nums[k - 1])
       continue;  // 重复数剪枝处理
 
@@ -89,16 +90,26 @@ vector<vector<int>> fourSum1(vector<int>& nums, int target) {
 }
 
 int main() {
-  vector<int> nums1 = {1, 0, -1, 0, -2, 2};
-  vector<int> nums2 = {0, 0, 0, 1000000000, 1000000000, 1000000000, 1000000000};
-  vector<int> nums3 = {2, 2, 2, 2, 2};
-  int target1 = 0, target2 = 1000000000, target3 = 8;
+  vector<int> nums1 = {1, 0, -1, 0, -2, 2},
+              nums2 = {0, 0, 0, 1000000000, 1000000000, 1000000000, 1000000000},
+              nums3 = {2, 2, 2, 2, 2},
+              nums4 = {-1000000000, -1000000000, -1000000000, -1000000000},
+              nums5 = {-4, -3, -2, -1, 0, 0, 1, 2, 3, 4};
+
+  int target1 = 0, target2 = 1000000000, target3 = 8, target4 = -1,
+      target5 = -1;
+
   printMat(fourSum(nums1, target1));
   printMat(fourSum(nums2, target2));
   printMat(fourSum(nums3, target3));
+  printMat(fourSum(nums4, target4));
+  printMat(fourSum(nums5, target5));
+
   printMat(fourSum1(nums1, target1));
   printMat(fourSum1(nums2, target2));
   printMat(fourSum1(nums3, target3));
+  printMat(fourSum1(nums4, target4));
+  printMat(fourSum1(nums5, target5));
 
   return 0;
 }

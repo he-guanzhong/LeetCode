@@ -29,8 +29,8 @@ vector<int> twoSum(vector<int>& nums, int target) {
 vector<int> twoSum1(vector<int> nums, int target) {
   unordered_map<int, int> map;
   for (int i = 0; i < nums.size(); i++) {
-    auto it = map.find(target -
-                       nums[i]);  // key记录值，value记录下标.找对应可成组的key
+    // key记录值，value记录下标.找对应可成组的key
+    auto it = map.find(target - nums[i]);
     if (it != map.end())
       return {it->second, i};  // vector可以直接大括号返回，注意先后顺序
     map.insert(pair<int, int>(nums[i], i));

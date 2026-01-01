@@ -47,7 +47,7 @@ bool isHappy1(int num) {
     }
     if (sum == 1)  // 结果为1 就返回真
       return true;
-    if (set.find(sum) != set.end())  // 找不到就返回假
+    if (set.find(sum) != set.end())  // 找到就返回假
       return false;
     else
       set.insert(sum);
