@@ -28,7 +28,8 @@ string removeDuplicates(string s) {
   return ans;
 }
 
-// 核心思路是利用栈，如果碰到栈不空，且栈顶元素等于下一压入元素时，弹出栈顶元素。若栈为空、或栈顶元素不等，则压入新元素。
+// 核心思路是利用栈，如果碰到栈不空，且栈顶元素等于下一压入元素时，弹出栈顶元素。
+// 若栈为空、或栈顶元素不等，则压入新元素。
 // 结果字符串的back\pop_back可以替代栈的操作，如此不必使用额外的栈，和额外的反转操作。
 // 直接把字符串当栈，节省资源。其具有front back push_back pop_back功能
 string removeDuplicates1(string S) {
