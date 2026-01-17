@@ -45,7 +45,7 @@ bool isBalanced1(TreeNode* root) {
   return getHeight1(root) == -1 ? false : true;
 }
 
-// 迭代法，模拟后续遍历，利用当前结点的最大深度，求高度
+// 迭代法，模拟后续遍历，利用当前结点的最大深度，辅助函数求高度
 int getHeight2(TreeNode* root) {
   if (!root)
     return 0;
@@ -74,7 +74,6 @@ int getHeight2(TreeNode* root) {
   }
   return result;
 }
-
 bool isBalanced2(TreeNode* root) {  // 后序遍历
   if (!root)
     return true;

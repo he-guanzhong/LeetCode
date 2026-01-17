@@ -15,8 +15,7 @@ TreeNode* invertTree(TreeNode* root) {
 // 中序遍历：递归法，注意反转右孩子时，原右孩子已经变成了左孩子，故再反转一次左孩子。但如果迭代法利用栈。则不受影响
 // 翻转左右孩子核心在于swap，交换了两个结点的地址，故原左指针指向了右孩子，右指针指向左孩子。
 // 不可以将右孩子的递归，直接用左孩子承接。因为这涉及两次反转
-// 递归法，前序遍历
-TreeNode* invertTree1(TreeNode* root) {
+TreeNode* invertTree1(TreeNode* root) {  // 递归法，前序遍历
   if (root == nullptr)
     return nullptr;
   swap(root->left, root->right);
@@ -94,11 +93,9 @@ int main() {
   TreeNode* t1 = sortedArray2BST(vec1);
   vector<int> vec2 = {1};
   TreeNode* t2 = sortedArray2BST(vec2);
-  vector<int> vec3;
   TreeNode* t3 = nullptr;
   vec1.clear();
   vec2.clear();
-  vec3.clear();
   print_binary_tree(invertTree(t1));
   print_binary_tree(invertTree(t2));
   print_binary_tree(invertTree(t3));

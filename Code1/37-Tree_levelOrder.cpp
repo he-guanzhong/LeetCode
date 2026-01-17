@@ -42,7 +42,8 @@ vector<vector<int>> levelOrder1(TreeNode* root) {
 }
 
 // 除了普通的队列辅助法，递归法也可处理层序遍历，
-// 递归法，传入参数为矩阵结果，额外的深度信息，作为拓展result层数的条件。不必传入一层结果，因为有深度值，可以直接操作一层结果。
+// 递归法，传入参数为矩阵结果，额外的深度信息，作为拓展result层数的条件。
+// 不必传入一层结果，因为有深度值，可以直接操作一层结果。
 // 然后前序遍历，对该层的结果末尾，push该结点值。之后分别访问左、右孩子，并传入深度+1
 void order2(TreeNode* cur, vector<vector<int>>& result, int depth) {
   if (cur == nullptr)
@@ -63,8 +64,7 @@ vector<vector<int>> levelOrder2(TreeNode* root) {
 int main() {
   vector<int> vec1 = {1, 2, 3, 4, 5, 6, 7};
   TreeNode* t1 = sortedArray2BST(vec1);
-  vector<int> vec2 = {1};
-  TreeNode* t2 = sortedArray2BST(vec2);
+  TreeNode* t2 = sortedArray2BST({1});
   TreeNode* t3 = nullptr;
 
   printMat(levelOrder(t1));

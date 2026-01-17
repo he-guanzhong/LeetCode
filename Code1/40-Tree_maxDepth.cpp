@@ -84,6 +84,7 @@ int maxDepth3(TreeNode* root) {
   }
   return depth;
 }
+
 int main() {
   vector<int> vec1 = {1, 2, 3, 4, 3, 2, 1};
   vector<int> vec2 = {1};

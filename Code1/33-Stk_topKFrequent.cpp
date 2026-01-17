@@ -37,7 +37,8 @@ vector<int> topKFrequent(vector<int>& nums, int k) {
 
 // 传统方法：unordered_map统计各元素出现次数，转化为vector<pair>按照出现频率从大到小排序，最后result数组取前k个元素
 // 时间复杂度在于排序，O(n)=nlogn，空间复杂度O(n)
-// 推荐方法：得到umap后，优先级队列，使用小顶堆，堆内只维护k个元素，如果size大于k就弹出小的元素。如此时间复杂度可优化为O(n)=nlog(k)
+// 推荐方法：得到umap后，优先级队列，使用小顶堆，堆内只维护k个元素，如果size大于k就弹出小的元素。
+// 如此时间复杂度可优化为O(n)=nlog(k)
 // 注意，优先级队列priority_queue默认大顶堆，其比较函数cmp是反的，a>b表示小顶堆。
 vector<int> topKFrequent2(vector<int>& nums, int k) {
   unordered_map<int, int> umap;

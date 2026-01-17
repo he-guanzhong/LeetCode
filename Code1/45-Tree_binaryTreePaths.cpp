@@ -41,7 +41,7 @@ vector<string> binaryTreePaths(TreeNode* root) {
 // 细节：整型int，只能通过to_string，使用+=压入string。不得使用push_back，因为如果是两位数，不能转化位字符型char
 // 细节：同理，回溯时，也不得使用-=和pop_back，因为不知道要弹出多少位。核心方案在于传入的string不加引用，如此自动回溯了值
 
-// 中序遍历，使用vector<int>作为暂存结果，因为pop_back时好处理，注意压入的量全部有值，才处理
+// 前序遍历，使用vector<int>作为暂存结果，因为pop_back时好处理，注意压入的量全部有值，才处理
 void traversal1(TreeNode* cur, vector<int>& path, vector<string>& result) {
   path.push_back(cur->val);
   if (cur->left == nullptr && cur->right == nullptr) {  // 中，叶子结点
@@ -158,6 +158,7 @@ void printMatrix(const vector<string>& mat) {
     cout << row << ", ";
   cout << endl;
 }
+
 int main() {
   vector<int> vec1 = {1, 2, 3, null, 5};
   TreeNode* node1 = construct_binary_tree(vec1);

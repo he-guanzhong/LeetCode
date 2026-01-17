@@ -15,7 +15,7 @@ bool isSymmetric(TreeNode* root) {
   return compare(root->left, root->right);
 }
 
-// 优选递归法，对比左、右两个结点，分三种情况讨论。次选迭代法，任意容器两两压入、取出容器比较。
+// 优选递归法，对比左、右两个结点，分三种情况讨论。次选迭代法，任意容器两两压入、取出容器比较
 // 递归法，双空为真，一空为假，不等为假，其余递归比较左左右右，左右右左
 bool compare1(TreeNode* left, TreeNode* right) {
   if (!left && !right)
@@ -81,11 +81,11 @@ bool isSymmetric3(TreeNode* root) {
   }
   return true;
 }
+
 int main() {
   vector<int> vec1 = {1, 2, 3, 4, 3, 2, 1};
   vector<int> vec2 = {1, 2, 3, 4, 5, 6, 7};
   vector<int> vec3 = {1, 2, 3, 4, 5, 6};
-
   TreeNode* root1 = sortedArray2BST(vec1);
   TreeNode* root2 = sortedArray2BST(vec2);
   TreeNode* root3 = sortedArray2BST(vec3);
