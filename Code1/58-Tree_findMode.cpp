@@ -73,7 +73,8 @@ vector<int> findMode1(TreeNode* root) {
   return result;
 }
 
-// 使用二叉搜索树性质，在中序遍历二叉树。外置数量、最大数量、前一个结点、结果。先判断前一结点与当前结点是否相等，计算数量
+// 使用二叉搜索树性质，在中序遍历二叉树。
+// 外置数量、最大数量、前一个结点、结果。先判断前一结点与当前结点是否相等，计算数量
 // 更新前一结点，当数量等于最大数量，就压入结果。当数量大于最大数量，清空结果，并压入最新数量
 vector<int> result;
 int cnt2 = 0;
@@ -108,6 +109,7 @@ vector<int> findMode2(TreeNode* root) {
   searchBST2(root);
   return result;
 }
+
 // 迭代法，栈模拟递归，注意不必处理根节点为空的特殊情况
 vector<int> findMode3(TreeNode* root) {
   vector<int> result;

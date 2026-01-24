@@ -25,7 +25,7 @@ vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
 }
 
 // 习惯写法，允许空结点递归，多遍历一层。明写回溯。注意result和path可以作为传参
-// 优化一，如果在递归函数形参target-root->val，可以省去递归函数前的的加，和递归后的减回溯。
+// 优化一，如果在递归函数形参target-root->val，可以省去递归函数前的的加，和递归后的减回溯
 // 优化二，如果传参path不为传址，为传值，则可以省略path.pop_back()回溯
 void traversal1(TreeNode* root,
                 int count,

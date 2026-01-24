@@ -32,8 +32,8 @@ TreeNode* convertBST(TreeNode* root) {
   return root;
 }
 
-// 递归法。累加树意为从最右侧开始，按右中左的顺序，每个结点val，叠加上一个结点累加后的值。故设定上一结点累加值，并实时更新
-// 迭代法。反中序遍历，右中做。记录pre上一结点值
+// 递归法。累加树意为从最右侧开始，按右中左的顺序，每个结点val，叠加上一个结点累加后的值。
+// 故设定上一结点累加值，并实时更新
 // 右中左，反中序遍历，利用pre来记录前值
 int pre = 0;
 void traversal1(TreeNode* root) {
@@ -50,7 +50,7 @@ TreeNode* convertBST1(TreeNode* root) {
   return root;
 }
 
-// 迭代法。反中序，右中左
+// 迭代法。迭代法。反中序遍历，右中左。记录pre上一结点值
 TreeNode* convertBST2(TreeNode* root) {
   if (!root)
     return root;

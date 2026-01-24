@@ -42,7 +42,7 @@ int main() {
   TreeNode* q2 = node1->left->right->right;
   TreeNode* p3 = node2;
   TreeNode* q3 = node2->left;
-  // print_binary_tree(node1);
+
   cout << lowestCommonAncestor(node1, p1, q1)->val << " "
        << lowestCommonAncestor(node1, p2, q2)->val << " "
        << lowestCommonAncestor(node2, p3, q3)->val << endl;

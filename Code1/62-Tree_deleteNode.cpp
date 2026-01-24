@@ -69,7 +69,8 @@ TreeNode* deleteNode1(TreeNode* root, int key) {
   return root;
 }
 
-// 普通二叉树的删除方式。不必考虑五种情况。第一步，找到等值结点，将其交换至右子树的最左叶子结点上，不需返回
+// 普通二叉树的删除方式。不必考虑五种情况。
+// 第一步，找到等值结点，将其交换至右子树的最左叶子结点上，不需返回
 // 第二步，二次确认等值结点的位置，返回其左子树结点，一般为值或nullptr。
 TreeNode* deleteNode2(TreeNode* root, int key) {
   if (!root)
@@ -87,7 +88,8 @@ TreeNode* deleteNode2(TreeNode* root, int key) {
   return root;
 }
 
-// 迭代法，单独设计删除结点函数，其右子树空，则返回左子树。右子树不空，找右子树最左结点，原左子树放置于最左结点之左，返回右子树
+// 迭代法，单独设计删除结点函数，其右子树空，则返回左子树。
+// 右子树不空，找右子树最左结点，原左子树放置于最左结点之左，返回右子树
 // 主函数中，记录上一结点。cur确定相等结点，pre确定其上一结点。如只有一个结点直接删，如确定cur是左、右子结点，删除之
 TreeNode* deleteOneNode3(TreeNode* node) {
   if (!node)

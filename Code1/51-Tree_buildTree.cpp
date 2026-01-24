@@ -35,7 +35,8 @@ TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
                    postorder.size() - 1);
 }
 
-// 后序最后一位作为根节点，find找到中序遍历根节点坐标，切中、后序遍历，左右分而治之递归。中序遍历直接切，可选左闭右闭、或左闭右开区间
+// 后序最后一位作为根节点，find找到中序遍历根节点坐标，切中、后序遍历，左右分而治之递归。
+// 中序遍历直接切，可选左闭右闭、或左闭右开区间
 // 切后序遍历时，不可以直接使用中序遍历的根节点下标，因为后序、中序遍历首位不一定对齐，一定要先求中序遍历左分支长度。
 // find函数求迭代器位置，减初始迭代器位置，即为下标
 TreeNode* buildTree_std(vector<int>& inorder, vector<int>& postorder) {

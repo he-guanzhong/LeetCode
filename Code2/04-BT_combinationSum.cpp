@@ -43,7 +43,7 @@ vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
 // 深度方向允许重复，故传入start参数不+1，广度方向不允许重复，故传入start为当前一层的i
 // 剪支思路是总和过大时，不进入递归。但需要前提是数组有序，从小到大排列。否则若首元素即大于target，不会执行程序
 // 组合元素可重复，退出条件不再是递归轮数，而是总和sum>target直接退出，sum==target保存退出
-// 传入参数有当前分支总和，其实点坐标（只在一个集合内选择适配），startIndex不代表深度，由于可重复，则不必+1递归
+// 传入参数有当前分支总和，起始点坐标（只在一个集合内选择适配），startIndex不代表深度，由于可重复，则不必+1递归
 vector<vector<int>> result1;
 vector<int> path1;
 void backtracking1(vector<int>& candidates,

@@ -17,8 +17,8 @@ TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
   return root;
 }
 
-// 二叉搜索树，递归法不必搜索全树。核心为若root值在pq之间即为公共祖先。若root小于pq，则向右搜索，root大于pq则向左搜索，否则即为要返回的根节点
-// 迭代法。不必特殊遍历，直接根据有序移动root结点。
+// 二叉搜索树，递归法不必搜索全树。核心为若root值在pq之间即为公共祖先。
+// 若root小于pq，则向右搜索，root大于pq则向左搜索，否则即为要返回的根节点
 // 二叉搜索树有序性，只搜索一条边，若pq均小，则搜索左子树，pq均大，则搜索右子树。
 // 其余情况即为一大一小，且为左闭右闭区间，则该结点必为所求公共祖先
 // 递归法。注意返回值形式，由于本题确认pq存在，可以如下写
@@ -33,7 +33,7 @@ TreeNode* lowestCommonAncestor1(TreeNode* root, TreeNode* p, TreeNode* q) {
     return root;
 }
 
-// 迭代法，不必利用栈，因为二叉搜索树有序
+// 迭代法，不必利用栈，因为二叉搜索树有序，直接移动root结点。
 TreeNode* lowestCommonAncestor2(TreeNode* root, TreeNode* p, TreeNode* q) {
   while (root) {
     if (p->val < root->val && q->val < root->val)

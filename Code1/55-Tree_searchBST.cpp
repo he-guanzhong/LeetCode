@@ -18,9 +18,8 @@ TreeNode* searchBST(TreeNode* root, int val) {
 }
 
 // 二叉搜索树的性质：左节点不为空，则所有左节点值小于根节点。右节点不为空，则所有右节点值大于根节点
-// 二叉搜索树的左右子树也为二叉搜素树。
-// 递归法，判断当前节点值大小，传入当前结点的左右孩子。迭代法，while循环内，直接移动root，直至找到val或者为空
-// 递归法，因此可以利用其特殊性质，缩小递归范围
+// 二叉搜索树的左右子树也为二叉搜素树。递归法和迭代法均可
+// 递归法，可以利用其特殊性质，缩小递归范围，判断当前节点值大小，传入当前结点的左右孩子
 TreeNode* searchBST1(TreeNode* root, int val) {
   if (!root || root->val == val)  // 判空和值相等，统一处理
     return root;
@@ -32,7 +31,7 @@ TreeNode* searchBST1(TreeNode* root, int val) {
 }
 
 // 迭代法，无需利用栈和队列，无需回溯，无需搜索其他结点，因为搜索的朝向是确定的。
-// 当前节点值大于搜索值，左移。当前节点值小于搜索值，右移
+// while循环内，直接移动root，直至找到val或者为空。当前节点值大于搜索值，左移。当前节点值小于搜索值，右移
 TreeNode* searchBST2(TreeNode* root, int val) {
   while (root) {
     if (root->val > val)

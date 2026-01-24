@@ -68,10 +68,6 @@ void backtracking1(vector<int>& candidates,
   }
 }
 
-// 每个元素只用一次，故递归传入start位i+1，退出条件位总和等于target。剪支要求先排序，总和大于target不进入递归。
-// 元素值允许深度重复，下标是不重复的，依然传入i+1。但广度方向不重复。
-// 去重方法一：该层循环内两个条件按，i从大于start起始，i==i-1则跳过。不能i+1==i
-// 去重方法二：利用<bool>used，该层循环内三个条件，i有效，且i-1==i，且i-1位置为false未访问过，则跳过
 vector<vector<int>> combinationSum21(vector<int>& candidates, int target) {
   result1.clear();
   path1.clear();
@@ -80,6 +76,11 @@ vector<vector<int>> combinationSum21(vector<int>& candidates, int target) {
   backtracking1(candidates, target, 0, 0, used);
   return result1;
 }
+
+// 每个元素只用一次，故递归传入start位i+1，退出条件位总和等于target。剪支要求先排序，总和大于target不进入递归
+// 元素值允许深度重复，下标是不重复的，依然传入i+1。但广度方向不重复。
+// 去重方法一：该层循环内两个条件按，i从大于start起始，i==i-1则跳过。不能i+1==i
+// 去重方法二：利用<bool>used，该层循环内三个条件，i有效，且i-1==i，且i-1位置为false未访问过，则跳过
 void backtracking2(vector<int>& candidates,
                    int target,
                    int sum,

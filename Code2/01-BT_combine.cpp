@@ -25,7 +25,8 @@ vector<vector<int>> combine(int n, int k) {
   return ans;
 }
 
-// 横向遍历，需要传入起始坐标start，下一层纵向遍历时要输入i+1。退出条件不必记录深度，因为path.size可以表征
+// 横向遍历，需要传入起始坐标start，下一层纵向遍历时要输入i+1。
+// 退出条件不必记录深度，因为path.size可以表征
 // 剪支思路。剩余n的数量小于path内还需要的数量，故n要终止于
 // k-path.size()+1。例：总计4个元素，已有0，仍需3个元素为例。
 // 外置结果和路径。递归结束条件为path深度等于k，广度for循环内使用startIndex记录开始点

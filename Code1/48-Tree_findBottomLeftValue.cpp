@@ -29,10 +29,9 @@ int findBottomLeftValue(TreeNode* root) {
   return ans;
 }
 
-// 递归法，任何遍历均可，但要先做后右，核心是求深度，一旦突破最大深度，即更新result保存的该结点值
-// 迭代法，层序遍历，保存每一层第一个结点的值，作为result
+// 递归法和迭代法均可
 // 递归法，前、中、后序遍历均可，因为没有中间节点处理逻辑，一定保证先左后右。参数为根节点、当前层深度，无返回值。
-// 额外设定最大深度maxDepth、result值两个变量。一旦发现深度超过了最大深度，更新深度和result保存的该结点值。
+// 核心是求深度，额外设定最大深度maxDepth、result值两个变量。一旦发现深度超过了最大深度，更新深度和result保存的该结点值。
 int result = 0;
 int maxDepth = INT_MIN;
 void traversal1(TreeNode* root, int depth) {
@@ -54,7 +53,10 @@ int findBottomLeftValue1(TreeNode* root) {
   traversal1(root, 0);
   return result;
 }
-// 层序遍历，最后一行的第一个元素就是最低左层结点
+
+// 迭代法，层序遍历，保存每一层第一个结点的值，作为result
+// 层序遍历，最后一行的第一个元素就是最低左层结点。如从左向右遍历，则要记录下标为0时的值作为答案
+// 如从右向左遍历，则每行最后一个返回的值自然就是答案
 int findBottomLeftValue2(TreeNode* root) {
   queue<TreeNode*> que;
   if (root)

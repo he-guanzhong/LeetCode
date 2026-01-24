@@ -57,6 +57,34 @@ TreeNode* constructMaximumBinaryTree1(vector<int>& nums) {
   return traversal1(nums, 0, nums.size());
 }
 
+// 下标法重写，只有一个元素，返回这个元素值的新节点。
+// 找到剩余最大元素值和其对应的下标，将原数组左右分割迭代
+TreeNode* traversal2(vector<int>& nums, int left, int right) {
+  TreeNode* node = new TreeNode(0);
+  if (right - left == 1) {
+    node->val = nums[left];
+    return node;
+  }
+  int maxValue = nums[left], maxValueIndex = left;
+  for (int i = left; i < right; i++) {
+    if (nums[i] > nums[maxValueIndex]) {
+      maxValue = nums[i];
+      maxValueIndex = i;
+    }
+  }
+  node->val = maxValue;
+  if (maxValueIndex - left > 0) {
+    node->left = traversal2(nums, left, maxValueIndex);
+  }
+  if (right - maxValueIndex > 1) {
+    node->right = traversal2(nums, maxValueIndex + 1, right);
+  }
+  return node;
+}
+TreeNode* constructMaximumBinaryTree2(vector<int>& nums) {
+  return traversal2(nums, 0, nums.size());
+}
+
 // 构造容器法，耗费较多资源，不推荐
 TreeNode* constructMaximumBinaryTree3(vector<int>& nums) {
   TreeNode* root = new TreeNode(0);
@@ -85,33 +113,6 @@ TreeNode* constructMaximumBinaryTree3(vector<int>& nums) {
     root->right = constructMaximumBinaryTree3(rightTree);
   }
   return root;
-}
-
-// 下标法重写，只有一个元素，返回这个元素值的新节点。找到剩余最大元素值和其对应的下标，将原数组左右分割迭代
-TreeNode* traversal2(vector<int>& nums, int left, int right) {
-  TreeNode* node = new TreeNode(0);
-  if (right - left == 1) {
-    node->val = nums[left];
-    return node;
-  }
-  int maxValue = nums[left], maxValueIndex = left;
-  for (int i = left; i < right; i++) {
-    if (nums[i] > nums[maxValueIndex]) {
-      maxValue = nums[i];
-      maxValueIndex = i;
-    }
-  }
-  node->val = maxValue;
-  if (maxValueIndex - left > 0) {
-    node->left = traversal2(nums, left, maxValueIndex);
-  }
-  if (right - maxValueIndex > 1) {
-    node->right = traversal2(nums, maxValueIndex + 1, right);
-  }
-  return node;
-}
-TreeNode* constructMaximumBinaryTree2(vector<int>& nums) {
-  return traversal2(nums, 0, nums.size());
 }
 
 int main() {

@@ -30,7 +30,7 @@ int getMinimumDifference(TreeNode* root) {
   return minValue;
 }
 
-// 中序遍历，求相邻值差的最小值。递归法，可用vec存储，可以保存上一结点。迭代法，中序遍历，cur作为压入的前导指针
+// 中序遍历，求相邻值差的最小值。递归法，可用vec存储，可以保存上一结点。
 void traversal1(TreeNode* root, vector<int>& vec) {
   if (!root)
     return;
@@ -68,7 +68,7 @@ int getMinimumDifference2(TreeNode* root) {
   return result;
 }
 
-// 迭代法，中序遍历
+// 迭代法，中序遍历，cur作为压入的前导指针
 int getMinimumDifference3(TreeNode* root) {
   int result = INT_MAX;
   TreeNode* pre = nullptr;

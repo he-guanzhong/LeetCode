@@ -14,11 +14,9 @@ TreeNode* traversal(vector<int>& nums, int l, int r) {
   root->right = traversal(nums, m + 1, r);
   return root;
 }
-TreeNode* sortedArrayToBST(vector<int>& nums) {
-}
+TreeNode* sortedArrayToBST(vector<int>& nums) {}
 
 // 递归法。传入左右下标，左闭右闭区间，中间生成新节点，左右分割区间递归。
-// 递归法。新数组，左闭右开区间。迭代器it+mid下标，即为真实mid下标
 // 递归法，去中间值生成根节点，最好利用左右坐标，左闭右闭区间
 TreeNode* traversal1(vector<int>& nums, int left, int right) {
   if (left > right)
@@ -33,6 +31,7 @@ TreeNode* sortedArrayToBST1(vector<int>& nums) {
   return traversal1(nums, 0, nums.size() - 1);
 }
 
+// 递归法。新数组，左闭右开区间。迭代器it+mid下标，即为真实mid下标
 TreeNode* sortedArrayToBST2(vector<int>& nums) {  // 生成新数组，左闭右开区间
   if (nums.empty())
     return nullptr;

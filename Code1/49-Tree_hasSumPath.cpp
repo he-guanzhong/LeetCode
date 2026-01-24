@@ -40,7 +40,6 @@ bool hasPathSum(TreeNode* root, int targetSum) {
 
 // 递归法，判断叶子结点处总和是否为targetSum
 // 常规思路外置sum，递归前后加减root->val，事实可以简化，直接在targetSum加减，递归形参处减去本值，则自动回溯
-// 迭代法。回溯需再栈中，额外记录直至该结点的总和sum。如此可以不必对targetSum进行加减
 // 传统递归法，使用count计数，到减去该节点值后，还剩余的值
 bool traversal_std(TreeNode* root, int count) {
   if (!root->left && !root->right && count == 0)
@@ -73,6 +72,7 @@ bool hasPathSum1(TreeNode* root, int targetSum) {
          hasPathSum1(root->right, targetSum - root->val);
 }
 
+// 迭代法。回溯需再栈中，额外记录直至该结点的总和sum。如此可以不必对targetSum进行加减
 // 迭代法，使用栈模拟递归，栈需要额外记录到此结点时，其总和为多少
 bool hasPathSum2(TreeNode* root, int targetSum) {
   stack<pair<TreeNode*, int>> st;
