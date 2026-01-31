@@ -37,11 +37,9 @@ vector<vector<int>> permute(vector<int>& nums) {
   return ans;
 }
 
-// 排列问题，每一轮都要从头搜索，无需startIndex，但需used数组记录树枝结点上是否访问过。访问过就跳过。
-// 退出条件，为used数组全为真不可表述，由于path压入弹出，与数组赋值真假同步，故path.size相等可作为退出条件
-
-// 排列问题需要重复选取，没有startIndex，但used数组记录元素是否曾经用过。
-// 全排列退出条件,为path的大小已经达到nums大小
+// 排列问题，每一轮都要从头搜索选取，因此无需startIndex，
+// 但需used数组记录树枝结点上是否访问过。访问过就跳过。
+// 退出条件是，为used数组全为真，且由于path压入弹出，与数组赋值真假同步，故path.size相等可作为退出条件
 // 时间复杂度O(n)=n!，空间复杂度O(n)=n
 vector<vector<int>> result1;
 vector<int> path1;

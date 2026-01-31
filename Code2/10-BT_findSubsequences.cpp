@@ -39,12 +39,13 @@ vector<vector<int>> findSubsequences(vector<int>& nums) {
 }
 
 // 求子序列，为搜索全部结点，但只有path.size>=2才入结果。不能排序，因为破坏原有顺序
-// 两种跳过：同层重复跳过和不递增跳过。同层之间不得相同，使用unordered_set记录。只有下一个元素值大于path末尾元素，才深度进入下一层
+// 两种跳过：同层重复跳过和不递增跳过。同层之间不得相同，使用unordered_set记录。
+// 只有下一个元素值大于path末尾元素，才深度进入下一层
 // 数字范围有限，使用数组比集合效率更高
 
 // unordered_set和set 不是一个头文件，map同理
 // 全结点搜索，但是必须path内含两个元素以上，才压入结果。求递增序列，故不可以排序，因为破坏了原有顺序
-// 跳过有两个条件按：一、树层不得重复，由于数组无序，则本层set，记录前元素是否出现过。
+// 跳过有两个条件：一、树层不得重复，由于数组无序，则本层set，记录前元素是否出现过。
 // 二、接下来的所有元素，比path末尾元素小，故不能使用nums[i] < num[i-1]作为判断
 // 考虑到本题nums[i] 在[-100, 100]之内，可以使用数组代替set提高效率
 vector<vector<int>> result1;
@@ -55,8 +56,8 @@ void backtracking1(vector<int>& nums, int startIndex) {
   unordered_set<int> uset;  // set去重，不能使用vector<bool>
   // int used[201] = {0};
   for (int i = startIndex; i < nums.size(); i++) {
-    if (!path1.empty() &&
-            path1.back() > nums[i] ||  // 不能比较相邻两个元素，因为无序
+    // 不能比较相邻两个元素，因为无序
+    if (!path1.empty() && path1.back() > nums[i] ||
         uset.find(nums[i]) != uset.end())
       // used[i + 100] == 1
       continue;

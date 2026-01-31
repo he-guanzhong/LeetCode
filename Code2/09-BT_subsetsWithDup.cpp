@@ -1,14 +1,14 @@
 #include "head.h"
 /* 90. 子集 II
-给你一个整数数组
-nums，其中可能包含重复元素，请你返回该数组所有可能的子集（幂集）。 解集 不能
+给你一个整数数组 nums，
+其中可能包含重复元素，请你返回该数组所有可能的子集（幂集）。 解集 不能
 包含重复的子集。返回的解集中，子集可以按 任意顺序 排列。
 示例 1：
   输入：nums =[1,2,2]
   输出：[[],[1],[1,2],[1,2,2],[2],[2,2]]
 示例 2：
   输入：nums = [0]
-  输出：[[],[0]]*/
+  输出：[[],[0]]  */
 
 void backtracking(vector<int>& nums,
                   int index,
@@ -59,7 +59,8 @@ vector<vector<int>> subsetsWithDup1(vector<int>& nums) {
   return result1;
 }
 
-// 重复元素子集，先排序，然后求树上所有结点。深度遍历允许重复，传入下一层为i+1。广度方向不允许重复，如果与前一元素相等，直接跳过
+// 重复元素子集，先排序，然后求树上所有结点。深度遍历允许重复，传入下一层为i+1。
+// 广度方向不允许重复，如果与前一元素相等，直接跳过
 // 或使用vector<bool>记录重复元素。i有效，i-1==i，used[i-1]==false同层没用过为假
 void backtracking2(vector<int>& nums, int startIndex) {
   result1.push_back(path1);

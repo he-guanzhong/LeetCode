@@ -30,14 +30,14 @@ vector<vector<int>> subsets(vector<int>& nums) {
   return ans;
 }
 
-// 子集问题为求树全部结点，并非叶子结点。可以没有退出条件，因为每次传入的start为i+1，遍历到nums.size即终止
-// 子集问题，要记录所有结点，而非叶子结点。组合、分割问题为仅处理叶子结点。所以压入结果要在返回之前。
+// 子集问题，要记录所有结点，而非叶子结点。可以没有退出条件，因为每次传入的start为i+1，遍历到nums.size即终止
+// 组合、分割问题为仅处理叶子结点。所以压入结果要在返回之前。
 // 返回的条件为集合为空时，即startIndex要大于nums.size()，此处可写可不写，因为不在横向遍历范围之内
 // 传入参数为startIndex，因为已经选取过的元素不能重复选取，下递归时传入i+1。时间复杂度n*2^n
 vector<vector<int>> result1;
 vector<int> path1;
 void backtracking1(vector<int>& nums, int startIndex) {
-  result1.push_back(path1);  // 必须写在返回之前，否则会漏掉自己
+  result1.push_back(path1);       // 必须写在返回之前，否则会漏掉自己
   if (startIndex >= nums.size())  // 可写可不写，充分
     return;
   for (int i = startIndex; i < nums.size(); i++) {

@@ -35,12 +35,14 @@ int wiggleMaxLength(vector<int>& nums) {
   return ans;
 }
 
-// nums.size()是0和1单独特殊处理，起步就处理内含2个及其以上元素的情况，pre记录上一周期相差，与本周期相差比较，若符号相反则result++
+// nums.size()是0和1单独特殊处理(可选)，起步就处理内含2个及其以上元素的情况
+// pre记录上一周期相差，与本周期相差比较，若符号相反则result++
 // 注意：1. 考虑平坡最后一个元素为准，故pre允许是0。
 // 2.首字母前假设为平坡，其pre为0，result要初始化为1。
 // 3. pre不能随时更新，而必须是发生摆动后更新，否则易出现[2,1,2,2,3]的误报
 
-// 首顶点设为1，设置前后差。从前向后遍历计算后差，出现波峰或者波谷，计数加一的同时更新前差。不得每步都更新前差
+// 首顶点设为1，设置前后差。从前向后遍历计算后差，出现波峰或者波谷，计数加一的同时更新前差。
+// 不得每步都更新前差
 int wiggleMaxLength1(vector<int>& nums) {
   if (nums.size() <= 1)
     return nums.size();
@@ -60,7 +62,7 @@ int wiggleMaxLength1(vector<int>& nums) {
 // 数组初始化函数，必须包含头文件string.h或cstring。memset函数（首地址，值，赋值空间大小）
 int wiggleMaxLength2(vector<int>& nums) {
   int dp[nums.size()][2];
-  memset(dp, 0, sizeof dp);
+  memset(dp, 0, sizeof dp);  // sizeof(dp)
   for (int i = 1; i < nums.size(); i++) {
     dp[0][0] = dp[0][1] = 1;
     for (int j = 0; j < i; j++) {

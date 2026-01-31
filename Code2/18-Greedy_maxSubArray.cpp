@@ -49,7 +49,8 @@ int maxSubArray3(vector<int>& nums) {
   return result;
 }
 
-// 局部最优为连续和为正，count累计和，取最大值计入result，一旦发现count为负则立刻置零，因为会对后续产生负面影响。
+// 局部最优为连续和为正，count累计和，取最大值计入result
+// 一旦发现count为负则立刻置零，因为会对后续产生负面影响。
 int maxSubArray2(vector<int>& nums) {
   int result = INT_MIN;
   int count = 0;
@@ -65,9 +66,10 @@ int main() {
   vector<int> nums1 = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
   vector<int> nums2 = {1};
   vector<int> nums3 = {5, 4, -1, 7, 8};
+  vector<int> nums4 = {-1};
   cout << maxSubArray(nums1) << " " << maxSubArray(nums2) << " "
-       << maxSubArray(nums3) << " " << endl;
+       << maxSubArray(nums3) << " " << maxSubArray(nums4) << endl;
   cout << maxSubArray1(nums1) << " " << maxSubArray1(nums2) << " "
-       << maxSubArray1(nums3) << " " << endl;
+       << maxSubArray1(nums3) << " " << maxSubArray1(nums4) << endl;
   return 0;
 }
