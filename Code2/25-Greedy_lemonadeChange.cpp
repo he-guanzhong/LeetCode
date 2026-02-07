@@ -45,7 +45,8 @@ bool lemonadeChange(vector<int>& bills) {
   return true;
 }
 
-// 使用普通整形变量基数，分三种情况讨论即可。注意收到20时，优先判断10和5够不够，再次判断5有没有3个以上。其余情况都是不可行的
+// 使用普通整形变量基数，分三种情况讨论即可。
+// 注意收到20时，优先判断10和5够不够，再次判断5有没有3个以上。其余情况都是不可行的
 // 直接模拟，5、10美元数即可，不必设置20美元数。twenty 这个变量可有可无
 bool lemonadeChange1(vector<int>& bills) {
   int five = 0, ten = 0, twenty = 0;

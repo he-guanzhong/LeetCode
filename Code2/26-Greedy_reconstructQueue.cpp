@@ -42,7 +42,7 @@ vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
 
 // 先按照身高从大到小，次序从小到大排序，二次遍历时前面i个身高大于自身数量，即插入的位置。
 // vector频繁插入时间复杂度n^2较大。使用list替代，但其不支持迭代器随机访问，必须设定int临时变量挪动步数
-// 先按照首数字h从大到小排列，k由小到大排列。然后遍历，找到k代表的前方右几个数合格，就当作下标，插入结果中
+// 先按照首数字h从大到小排列，k由小到大排列。然后遍历，找到k代表的前方有几个数合格，就当作下标，插入结果中
 // 时间复杂度nlogn + n^2，因为插入需要大量资源
 static bool cmp(const vector<int>& a, const vector<int>& b) {
   if (a[0] == b[0])

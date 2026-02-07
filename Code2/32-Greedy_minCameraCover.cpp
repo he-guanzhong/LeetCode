@@ -34,13 +34,19 @@ int minCameraCover(TreeNode* root) {
   return ans;
 }
 
-// 后序遍历递归，回溯。摄像头数量额外设置传参，返回值表述前结点状态。0-未覆盖，1-摄像头，2-覆盖。空结点必为2-覆盖
-// 提取左右结点递归返回值状态。情况一，左右均覆盖，返回未覆盖；情况二、左右任一没覆盖，返回摄像头，数量加1。情况三、左右任一摄像头，返回覆盖。
-// 根节状态未处理，如果为未覆盖，则摄像头数+1.
+// 后序遍历递归，回溯。摄像头数量额外设置传参，返回值表述前结点状态。
+// 0-未覆盖，1-摄像头，2-覆盖。空结点必为2-覆盖
+// 提取左右结点递归返回值状态。情况一，左右均覆盖，返回未覆盖；情况二、左右任一没覆盖，返回摄像头，数量加1。
+// 情况三、左右任一摄像头，返回覆盖。
+// 特别注意，三种情况有严格优先级顺序。子节点存在0，本结点布点1的优先级，一定大于子节点是1，该结点已被监控2
+// 因为子节点有摄像头1，不代表本结点就不需要布1。考虑左右结点分别0、1情况，此时一定要布1，而不是认为已监控2
+// 根节状态未处理，因其无更上结点，所以必须为1或2之一。如果为未覆盖，则摄像头数+1.
 
-// 核心是从叶子节点的父节点开始布置摄像头，由下至上回溯，后序遍历。返回值设置为状态，0为无覆盖。1为摄像头，2为有覆盖
+// 核心是从叶子节点的父节点开始布置摄像头，由下至上回溯，后序遍历。
+// 返回值设置为状态，0为无覆盖。1为摄像头，2为有覆盖
 // 返回条件是遇到空结点，只能认为其有覆盖2。提取左右返回状态。
-// 情况一，左右均有覆盖，返回无覆盖。情况二，左右任何出现无覆盖，均布置摄像头。情况三，左右任何出现摄像头，返回有覆盖
+// 情况一，左右均有覆盖，返回无覆盖。情况二，左右任何出现无覆盖，均布置摄像头。
+// 情况三，左右任何出现摄像头，返回有覆盖
 // 时间复杂度: O(n)，空间复杂度: O(n)
 int result1;
 int traversal1(TreeNode* cur) {
@@ -58,13 +64,13 @@ int traversal1(TreeNode* cur) {
     return 2;
   return -1;  // 此处不会出现
 }
+// 不可以使用层序遍历，分别统计单双层结点数量的办法。
 int minCameraCover1(TreeNode* root) {
   result1 = 0;
   if (traversal1(root) == 0)  // 最后根节点未覆盖，结果加一
     result1++;
   return result1;
 }
-// 不可以使用层序遍历，分别统计单双层结点数量的办法。
 
 int main() {
   TreeNode* t1 = construct_binary_tree({0, 0, null, 0, 0});
@@ -72,9 +78,14 @@ int main() {
   TreeNode* t3 = construct_binary_tree({0});
   TreeNode* t4 =
       construct_binary_tree({0, 0, null, null, 0, 0, null, null, 0, 0});
+  TreeNode* t5 = construct_binary_tree({0, null, 0, null, 0, null, 0});
+  TreeNode* t6 = construct_binary_tree({0, 0, 0, null, null, null, 0});
+
   cout << minCameraCover(t1) << " " << minCameraCover(t2) << " "
-       << minCameraCover(t3) << " " << minCameraCover(t4) << endl;
+       << minCameraCover(t3) << " " << minCameraCover(t4) << " "
+       << minCameraCover(t5) << " " << minCameraCover(t6) << endl;
   cout << minCameraCover1(t1) << " " << minCameraCover1(t2) << " "
-       << minCameraCover1(t3) << " " << minCameraCover1(t4) << endl;
+       << minCameraCover1(t3) << " " << minCameraCover1(t4) << " "
+       << minCameraCover1(t5) << " " << minCameraCover1(t6) << endl;
   return 0;
 }

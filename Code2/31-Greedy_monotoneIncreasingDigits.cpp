@@ -27,7 +27,8 @@ int monotoneIncreasingDigits(int n) {
 
 // 转为字符串，从后向前遍历，前位数字大于本位数字（不能等于），记录改9本位，前位减1。
 // 避免例子101类似情况，记录改9起始位，其初始化位size()，二次循环遍历，再统一改9
-// 使用字符串转化to_string和stoi，方便按位操作。从后向前遍历，如果前数字大于当前数字，则前数字-1，当前数字改9
+// 使用字符串转化to_string和stoi，方便按位操作。
+// 从后向前遍历，如果前数字大于当前数字，则前数字-1，当前数字改9
 // 时间复杂度n，空间复杂度n，因为转化了字符串，n均为字符串长度
 int monotoneIncreasingDigits1(int n) {
   string strNum = to_string(n);
