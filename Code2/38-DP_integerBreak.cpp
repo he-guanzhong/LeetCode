@@ -22,10 +22,8 @@ int integerBreak(int n) {
   return dp[n];
 }
 
-// 贪心算法。小于4，等于4特殊处理。不断减3，结果乘3，直至n<=4的特殊情况，乘以末尾
 // 动态规划。dp[i]表示拆分i的最大乘积。j为拆分点至j<=i/2，分为i-j可拆、可不拆，原dp[i]三种情况最大值
-
-// 动态规划。dp[i]表示数字i拆分下的最大乘积。初始化dp[2]=1因为dp[0]和dp[1]无意义。
+// dp[i]表示数字i拆分下的最大乘积。初始化dp[2]=1因为dp[0]和dp[1]无意义。
 // 递推公式dp[i]=max(dp[i],max(j*(i-j),j*dp[i-j]))。因为以j分i，可拆2份，也可拆更多。
 // 时间复杂度n^2，空间复杂度n
 int integerBreak1(int n) {
@@ -39,7 +37,8 @@ int integerBreak1(int n) {
   return dp[n];
 }
 
-// 贪心算法。时间复杂度O(n)，空间复杂度O(1)
+// 贪心算法。小于4，等于4特殊处理。不断减3，结果乘3，直至n<=4的特殊情况，乘以末尾
+// 时间复杂度O(n)，空间复杂度O(1)
 int integerBreak2(int n) {
   if (n < 4)
     return n - 1;

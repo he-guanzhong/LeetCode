@@ -34,10 +34,13 @@ int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
   return dp[n - 1];
 }
 
-// dp[i][j]表示坐标i,j的路径数。初始化全部路径值为0，第一行、第一列路径值为1，遇到障碍物1break可以简写到for循环内。正常递推遇到障碍物1要跳过continue
-// 节省空间复杂度方法，dp[j]初始化第一行。递推从第二行开始，遇到障碍物，直接置零而非跳过。递推自j=0开始，但j>0时才适配递推公式。
+// dp[i][j]表示坐标i,j的路径数。初始化全部路径值为0，第一行、第一列路径值为1
+// 遇到障碍物1break可以简写到for循环内。正常递推遇到障碍物1要跳过continue
+// 节省空间复杂度方法，dp[j]初始化第一行。递推从第二行开始，遇到障碍物，直接置零而非跳过。
+// 递推自j=0开始，但j>0时才适配递推公式。
 
-// 必须首先对起点终点排除。dp[i][j]表示到达此处的路方法，堵塞处值为0。初始化时左边一列和上面一行遇堵塞后均为0
+// 必须首先对起点终点排除。dp[i][j]表示到达此处的路方法，堵塞处值为0。
+// 初始化时左边一列和上面一行遇堵塞后均为0
 // 时间复杂度和空间复杂度均为m*n
 int uniquePathsWithObstacles1(vector<vector<int>>& obstacleGrid) {
   int m = obstacleGrid.size();
@@ -59,7 +62,8 @@ int uniquePathsWithObstacles1(vector<vector<int>>& obstacleGrid) {
   return dp[m - 1][n - 1];
 }
 
-// 空间复杂度简写写法，m。还是先判断赋予首行状态。然后不断向下遍历。遇到障碍物dp=0，首列不处理。其余列叠加前一列结果
+// 空间复杂度简写写法，m。还是先判断赋予首行状态。然后不断向下遍历。
+// 遇到障碍物dp=0，首列不处理。其余列叠加前一列结果
 int uniquePathsWithObstacles2(vector<vector<int>>& obstacleGrid) {
   int m = obstacleGrid.size();
   int n = obstacleGrid[0].size();

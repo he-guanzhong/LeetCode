@@ -33,9 +33,12 @@ int findTargetSumWays(vector<int>& nums, int target) {
   return dp[n];
 }
 
-// 回溯算法，改为已知负数一堆的总和为(sum-target)/2组合问题。注意排除两种意外情况，一是全为负也不行，即abs(target)>sum，二是sum-target为奇数.
-// 01背包，分正负两堆,已知和差。问题转化为已知正数堆和为背包总重，求填满背包种类数。dp[j]为重j背包填满的方法数。dp[j]+=dp[j-nums[i]]
-// 关键在于将所有元素总和分成left和right两堆，之和sum已知，两堆之差target已知。则left=(sum+target)/2，其必不可能为小数
+// 回溯算法，改为已知负数一堆的总和为(sum-target)/2组合问题。
+// 注意排除两种意外情况，一是全为负也不行，即abs(target)>sum，二是sum-target为奇数.
+// 01背包，分正负两堆,已知和差。问题转化为已知正数堆和为背包总重，求填满背包种类数。
+// dp[j]为重j背包填满的方法数。dp[j]+=dp[j-nums[i]]
+// 关键在于将所有元素总和分成left和right两堆，之和sum已知，两堆之差target已知。
+// 则left=(sum+target)/2，其必不可能为小数
 // 问题转化为在一系列元素中，已知某部分总和，求组合问题，可以使用回溯
 vector<vector<int>> result1;
 vector<int> path1;
@@ -66,8 +69,10 @@ int findTargetSumWays1(vector<int>& nums, int target) {
 }
 
 // 先排除两种必不可能分的情况。即左右两堆差值大于总和和左堆数量不是整数。
-// 左堆的数量即背包容量。dp[j]表示填满j大小的包，总共几种方法。显然填满dp[0]只有一种办法。初始化dp[0]=1
-// 已经有nums[i]这个元素选定后，还剩余空间被填满方法是dp[j-nums[i]]种。递推公式dp[j]+=dp[j-nums[i]]
+// 左堆的数量即背包容量。dp[j]表示填满j大小的包，总共几种方法。
+// 显然填满dp[0]只有一种办法。初始化dp[0]=1
+// 已经有nums[i]这个元素选定后，还剩余空间被填满方法是dp[j-nums[i]]种。
+// 递推公式dp[j]+=dp[j-nums[i]]
 // 遍历顺序，nums[i]放在外循环，包的容量放在内循环，且必需倒序
 int findTargetSumWays2(vector<int>& nums, int target) {
   int sum = accumulate(nums.begin(), nums.end(), 0);

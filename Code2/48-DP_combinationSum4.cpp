@@ -19,7 +19,8 @@
 示例 2：
   输入：nums = [9], target = 3
   输出：0
-进阶：如果给定的数组中含有负数会发生什么？问题会产生何种变化？如果允许负数出现，需要向题目中添加哪些限制条件？*/
+进阶：如果给定的数组中含有负数会发生什么？问题会产生何种变化？
+  如果允许负数出现，需要向题目中添加哪些限制条件？*/
 
 int combinationSum4(vector<int>& nums, int target) {
   vector<int> dp(target + 1, 0);
@@ -37,7 +38,7 @@ int combinationSum4(vector<int>& nums, int target) {
 // 完全背包，从前向后遍历。求排列数，先遍历容量，再遍历物品。
 // 注意，此题在某dp[j]值会大于INT_MAX，故额外条件限制，只计算dp[j]小于INT_MAX的结果
 
-// 完全背包问题，如果求具体排列，必须回溯。但是求数量，可以完全背包，注意外层遍历背包，内层遍历物品
+// 完全背包问题。如果求具体排列，必须回溯。但是求数量，可以完全背包，注意外层遍历背包，内层遍历物品
 // 由于力扣内部存在两个数相加超过INT_MAX的数据，所以if判断条件要额外加INT_MAX判断
 int combinationSum41(vector<int>& nums, int target) {
   vector<int> dp(target + 1, 0);
