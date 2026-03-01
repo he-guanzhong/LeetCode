@@ -48,7 +48,8 @@ vector<int> findRedundantConnection(vector<vector<int>>& edges) {
 }
 
 // 遍历每一条边，如果已经在同一并查集内，直接返回，否则相连接。
-// 判断每一条边，如果不是同一集合就链接。如果是，则当即返回该边信息。注意，最终需要返回空集合，作为默认情况
+// 判断每一条边，如果不是同一集合就链接。如果是，则当即返回该边信息。
+// 注意，最终需要返回空集合，作为默认情况
 int n1 = 1003;
 vector<int> father1 = vector<int>(n1, 0);  // 必须如此写
 void init1() {

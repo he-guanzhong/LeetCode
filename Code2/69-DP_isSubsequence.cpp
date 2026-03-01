@@ -22,10 +22,13 @@ bool isSubsequence(string s, string t) {
   return j == s.size();
 }
 
-// 问题转化为求两个字符串公共子序列长度，若其等于s.size即为真。区别在于，本题s必短于t，末尾元素不等时删除t[j-1]元素即可，不必删除s[i-1]
-// s为t的子序列，s必比t短。可以求s与t的公共最长子序列。dp[i][j]代表以s[i-1]结尾的s和以t[j-1]结尾的t，最长子序列
+// 问题转化为求两个字符串公共子序列长度，若其等于s.size即为真。
+// 区别在于，本题s必短于t，末尾元素不等时删除t[j-1]元素即可，不必删除s[i-1]
+// s为t的子序列，s必比t短。可以求s与t的公共最长子序列。
+// dp[i][j]代表以s[i-1]结尾的s和以t[j-1]结尾的t，最长子序列
 // 显然，初始化dp[i][j]=0，因为公共序列一开始不存在。
-// 递推公式。如果s[i-1]==t[j-1]，则dp[i][j]=dp[i-1][j-1]+1。如果二者不相等，则dp[i][j]=dp[i][j-1]，因为要跳过t[j-2]的位置
+// 递推公式。如果s[i-1]==t[j-1]，则dp[i][j]=dp[i-1][j-1]+1。
+// 如果二者不相等，则dp[i][j]=dp[i][j-1]，因为要跳过t[j-2]的位置
 // 返回值是，末端dp[s.size][t.size]==s.size，即公共子串长度就是s长度
 bool isSubsequence1(string s, string t) {
   vector<vector<int>> dp(s.size() + 1, vector<int>(t.size() + 1, 0));

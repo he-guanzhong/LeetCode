@@ -37,8 +37,8 @@ int maxUncrossedLines(vector<int>& nums1, vector<int>& nums2) {
   return dp[n];
 }
 
-// 问题转化为，两个数组公共最长子序列问题
-// 求两个数组公共子序列的最大长度。dp[i][j]表示以nums[i-1]和nums[j-1]为结尾的最长子序列数
+// 问题转化为，求两个数组公共子序列的最大长度
+// dp[i][j]表示以nums[i-1]和nums[j-1]为结尾的最长子序列数
 // 末尾元素相等，则取dp[i-1][j-1]+1，若末尾元素不等，则延续上一元素最大值
 int maxUncrossedLines1(vector<int>& nums1, vector<int>& nums2) {
   vector<vector<int>> dp(nums1.size() + 1, vector<int>(nums2.size() + 1, 0));

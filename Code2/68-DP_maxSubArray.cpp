@@ -39,8 +39,10 @@ int maxSubArray1(vector<int>& nums) {
   return result;
 }
 
-// 贪心，返回结果，一定初始化为首元素值，不能为0。保存到i前最大子数组pre，如果其为负即舍弃，为正即相加。返回值根据pre实时更新
-// 动态规划。dp[i]表示以i结尾的连续子数组和最大值，不一定在最后一个元素。dp[i]基础为nums[i]，是否加dp[i-1]取决于其是否为正
+// 贪心，返回结果，一定初始化为首元素值，不能为0。
+// 保存到i前最大子数组pre，如果其为负即舍弃，为正即相加。返回值根据pre实时更新
+// 动态规划。dp[i]表示以i结尾的连续子数组和最大值，不一定在最后一个元素。
+// dp[i]基础为nums[i]，是否加dp[i-1]取决于其是否为正
 int maxSubArray2(vector<int>& nums) {
   int result = nums[0];
   int pre = 0;
