@@ -74,8 +74,8 @@ void join_wrong1(int u, int v) {
   father1[v] = u;
 }
 // join函数还可以按秩排序，将秩小的u，指向秩大的v。否则二者相反
-// 如果二者秩相等
-// 查询的时间复杂度O(n1)=logn,随着数据量越来越大，越趋近于O(n1)=1。因为最一开始时logN，经历过一次路径压缩后，得到1
+// 如果二者秩相等，查询的时间复杂度O(n1)=logn,随着数据量越来越大，越趋近于O(n1)=1。
+// 因为最一开始时logN，经历过一次路径压缩后，得到1
 vector<int> ranking(n1, 1);
 void join_rank1(int u, int v) {
   u = find1(u);

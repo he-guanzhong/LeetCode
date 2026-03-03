@@ -65,7 +65,7 @@ int largestRectangleArea1(vector<int>& heights) {
   return result;
 }
 
-// 双指针法。找该为支点左侧、右侧第一个小于该元素的点，注意保存的是左侧第一个小柱的下标，不是小柱的高度。
+// 双指针法。找该为支点左侧、右侧第一个小于该元素的点，注意保存的是左侧第一个小柱的下标，不是小柱的高度
 // 下标初始化，一定是左小元素为-1，右小元素为size，因为可以跳出while
 // 不能使用t--和t++，否则超时。一旦发现要跳跃，直接minLeftIndex[t]=t
 int largestRectangleArea2(vector<int>& heights) {

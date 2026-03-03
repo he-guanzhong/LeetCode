@@ -55,8 +55,10 @@ int numIslands(vector<vector<char>>& grid) {
   return ans;
 }
 
-// BFS核心在设置visited数组，二维遍历，先找到一个未访问过且‘1’岛屿，然后不断拓展求得面积。发现未访问的‘1’的次数就是岛屿数量。
-// 队列压入结点时，必须同步visited置为true。一定是先标记再压入。不能弹出的时候再标记，否则会重复
+// BFS核心在设置visited数组，二维遍历，先找到一个未访问过且‘1’岛屿，然后不断拓展求得面积。
+// 发现未访问的‘1’的次数就是岛屿数量。
+// 队列压入结点时，必须同步visited置为true。
+// 一定是先标记再压入。不能弹出的时候再标记，否则会重复
 int bfs1(vector<vector<char>>& grid,
          vector<vector<bool>>& visited,
          int i,

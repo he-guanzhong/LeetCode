@@ -38,8 +38,11 @@ vector<int> smallerNumbersThanCurrent(vector<int>& nums) {
   return ans;
 }
 
-// 新建临时数组，其从小到大排序后，每个元素的下标就是小于该元素的元素数量。假如一些元素值相等，则下标不同情况。此时要保留的最小下标
-// 利用哈希表，即从后向前遍历，记录元素值-元素下标。遍历正式数组，取得每个元素对应的哈希表下标值。时间复杂度O(nlogn)
+// 新建临时数组，其从小到大排序后，每个元素的下标就是小于该元素的元素数量
+// 假如一些元素值相等，则下标不同情况。此时要保留的最小下标
+// 利用哈希表，即从后向前遍历，记录元素值-元素下标。或者从前向后遍历，哈希表中不存在的元素才更新
+// 遍历正式数组，取得每个元素对应的哈希表下标值。已排序的临时数组已失去了意义，可直接复用为返回结果
+// 时间复杂度O(nlogn)
 vector<int> smallerNumbersThanCurrent1(vector<int>& nums) {
   vector<int> vec = nums;
   sort(vec.begin(), vec.end());
@@ -53,8 +56,10 @@ vector<int> smallerNumbersThanCurrent1(vector<int>& nums) {
   return vec;
 }
 
-// 计数排序。本题元素取值范围[0,100]，记录每个元素出现频次。从小到大遍历cnt，cnt[j]改意义为元素小于等于j的总数量cnt[j]+=cnt[j-1]
-// 小于nums[i]的元素数量，为小于等于nums[i]-1的元素数量，其为cnt[j]。注意nums[i]==0时不可能有元素更小，故直接赋值0
+// 计数排序。本题元素取值范围[0,100]，记录每个元素出现频次。
+// 从小到大遍历cnt，cnt[j]改意义为元素小于等于j的总数量cnt[j]+=cnt[j-1]
+// 小于nums[i]的元素数量，为小于等于nums[i]-1的元素数量，其为cnt[j]。
+// 注意nums[i]==0时不可能有元素更小，故直接赋值0
 // 时间复杂度O(n+k)，k为值域大小，即元素取值范围
 vector<int> smallerNumbersThanCurrent2(vector<int>& nums) {
   int n = nums.size();

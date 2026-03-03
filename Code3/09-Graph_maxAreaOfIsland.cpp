@@ -49,7 +49,8 @@ int maxAreaOfIsland(vector<vector<int>>& grid) {
 }
 
 // BFS注意：一、压结点和标识visited同步。二、四方拓展节点，要以curX,curY为基准，而不是x,y
-// DFS注意：一、可以主函数标记visited，dfs中以返回值为计算面积。二、dfs外部设置退出条件，通过后即标记，for循环计算面积
+// DFS注意：一、可以主函数标记visited，dfs中以返回值为计算面积。
+// 二、dfs外部设置退出条件，通过后即标记，for循环计算面积
 // 广度优先搜索BFS。注意，一旦满足条件，要立刻将计数置为1，本结点已访问，并使用bfs进行拓展cnt
 // bfs函数内部，也四个新方向结点，一旦满足条件，先修改visited，然后cnt++，最后再压入
 int dir1[4][2] = {1, 0, -1, 0, 0, 1, 0, -1};

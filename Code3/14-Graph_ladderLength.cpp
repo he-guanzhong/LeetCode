@@ -9,13 +9,13 @@ wordList 中。 sk == endWord
 endWord 的 最短转换序列 中的 单词数目 。如果不存在这样的转换序列，返回 0 。
 示例 1：
   输入：beginWord = "hit", endWord = "cog", wordList =
-    ["hot","dot","dog","lot","log","cog"]
+        ["hot","dot","dog","lot","log","cog"]
   输出：5
   解释：一个最短转换序列是 "hit" ->
-  "hot" -> "dot" -> "dog" -> "cog", 返回它的长度 5。
+      "hot" -> "dot" -> "dog" -> "cog", 返回它的长度 5。
 示例 2：
   输入：beginWord = "hit", endWord = "cog", wordList =
-    ["hot","dot","dog","lot","log"]
+        ["hot","dot","dog","lot","log"]
   输出：0
   解释：endWord "cog"不在字典中，所以无法进行转换。 */
 
@@ -48,8 +48,10 @@ int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
   return 0;
 }
 
-// uset记录新单词是否在字典中，umap记录每个单词的路径长度，便于回溯。广度优先搜索，队列首单词，记录其路径长。
-// 单词变每一位前，先生成临时单词，再分别替换26个字母。找到末尾单词即返回长度+1，找不到末尾单词，且在字典中，且未访问过，压入新结点
+// uset记录新单词是否在字典中，umap记录每个单词的路径长度，便于回溯。
+// 广度优先搜索，队列首单词，记录其路径长。
+// 单词变每一位前，先生成临时单词，再分别替换26个字母。
+// 找到末尾单词即返回长度+1，找不到末尾单词，且在字典中，且未访问过，压入新结点
 // 对每一个单词，每一个字母，分别替换，如果发现在wordlist找到，则广度优先搜索，压入队列中。
 // 使用unordered_set提高查找单词效率，使用unordered_map记录每一个单词的路径长度
 int ladderLength1(string beginWord, string endWord, vector<string>& wordList) {

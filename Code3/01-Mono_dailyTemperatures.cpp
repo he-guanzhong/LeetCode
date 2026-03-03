@@ -30,7 +30,6 @@ vector<int> dailyTemperatures(vector<int>& temperatures) {
 // 单调栈，求下一个最大元素，即保持栈底到栈顶，下标索引的元素从大到小排列，栈内存取下标。
 // 返回作为结果的容器，需全部初始化0。因为从大到小排列，返回结果全为0
 // 对栈非空且新元素值，大于栈顶下标索引的元素，即栈顶下标找到了下一个最大值的下标，赋值给结果，并弹出栈顶下标。
-
 // 单调栈，从栈底到栈头，必须从大到小的顺序排列，求出的才是第一个大于该元素的坐标
 // 时间复杂度O(n)，空间复杂度O(n)
 vector<int> dailyTemperatures1(vector<int>& temperatures) {
