@@ -54,6 +54,9 @@ void reorderList(ListNode* head) {
 }
 
 // 对半分割链表，重新排序
+// 本题由于cur1除去了首节点，故cur1长度必小于cur2长度。
+// 由于cur2为新生成，其末尾指向nullptr，故可以免去对末尾指向空的处理
+// 若任由cur1长度>=cur2，则需要提前对cur1->next提前截断，并在末尾处理cur->next=nullptr
 ListNode* reverseList1(ListNode* head) {
   ListNode *p = head, *pre = nullptr, *tmp = nullptr;
   while (p) {
@@ -72,8 +75,7 @@ void reorderList1(ListNode* head) {
     fast = fast->next->next;
     slow = slow->next;
   }
-  // 本题由于cur1除去了首节点，故cur1长度必小于cur2长度。由于cur2为新生成，其末尾指向nullptr，故可以免去对末尾指向空的处理
-  // 若任由cur1长度>=cur2，则需要提前对cur1->next提前截断，并在末尾处理cur->next=nullptr
+
   ListNode* cur1 = head->next;  // 前半队的待处理节点
   ListNode* cur2 = reverseList1(slow);
   ListNode* cur = head;

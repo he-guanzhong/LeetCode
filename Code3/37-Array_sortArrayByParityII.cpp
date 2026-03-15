@@ -1,8 +1,8 @@
 #include "head.h"
 /* 922. 按奇偶排序数组 II
 给定一个非负整数数组 nums，  nums 中一半整数是 奇数 ，一半整数是 偶数 。
-对数组进行排序，以便当 nums[i] 为奇数时，i 也是 奇数 ；当 nums[i] 为偶数时， i
-也是 偶数 。
+对数组进行排序，以便当 nums[i] 为奇数时，i 也是 奇数 ；当 nums[i] 为偶数时，
+ i 也是 偶数 。
 你可以返回 任何满足上述条件的数组作为答案 。
 示例 1：
   输入：nums = [4,2,5,7]
@@ -25,7 +25,8 @@ vector<int> sortArrayByParityII(vector<int>& nums) {
   return nums;
 }
 
-// 节省空间做法，双指针分别指向奇数位odd和偶数位even。偶数指针遍历，遇到奇数，则找到奇数位存偶数的地方，二者交换
+// 节省空间做法，双指针分别指向奇数位odd和偶数位even。
+// 偶数指针遍历，遇到奇数，则找到奇数位存偶数的地方，二者交换
 // 时间复杂度O(n)，因为奇数位和偶数位都只操作了一次
 vector<int> sortArrayByParityII1(vector<int>& nums) {
   int oddIndex = 1;
@@ -39,7 +40,8 @@ vector<int> sortArrayByParityII1(vector<int>& nums) {
   return nums;
 }
 
-// 传统做法，利用额外空间。初始化奇数位为1，偶数位为0。遍历nums[i]，遇到奇偶数就分别对奇偶数所指位置赋值
+// 传统做法，利用额外空间。初始化奇数位为1，偶数位为0。
+// 遍历nums[i]，遇到奇偶数就分别对奇偶数所指位置赋值
 vector<int> sortArrayByParityII2(vector<int>& nums) {
   vector<int> ans(nums.size(), 0);
   int oddIndex = 1, evenIndex = 0;

@@ -38,7 +38,8 @@ int pivotIndex(vector<int>& nums) {
   return -1;
 }
 
-// 前缀和。先求所有总和，然后从左向右对每一位i遍历，累加求包含i的左总和，于总和相减得到包含i的右总和，两和相等即为最左侧的数组中心下标
+// 前缀和。先求所有总和，然后从左向右对每一位i遍历，累加求包含i的左总和
+// 于总和相减得到包含i的右总和，两和相等即为最左侧的数组中心下标
 int pivotIndex1(vector<int>& nums) {
   int sum = 0;
   for (int i = 0; i < nums.size(); i++)

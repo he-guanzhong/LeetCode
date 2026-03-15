@@ -41,7 +41,8 @@ vector<int> smallerNumbersThanCurrent(vector<int>& nums) {
 // 新建临时数组，其从小到大排序后，每个元素的下标就是小于该元素的元素数量
 // 假如一些元素值相等，则下标不同情况。此时要保留的最小下标
 // 利用哈希表，即从后向前遍历，记录元素值-元素下标。或者从前向后遍历，哈希表中不存在的元素才更新
-// 遍历正式数组，取得每个元素对应的哈希表下标值。已排序的临时数组已失去了意义，可直接复用为返回结果
+// 遍历正式数组，取得每个元素对应的哈希表下标值。
+// 已排序的临时数组已失去了意义，可直接复用为返回结果
 // 时间复杂度O(nlogn)
 vector<int> smallerNumbersThanCurrent1(vector<int>& nums) {
   vector<int> vec = nums;

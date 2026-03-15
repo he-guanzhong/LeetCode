@@ -48,8 +48,10 @@ int sumNumbers(TreeNode* root) {
   return ans;
 }
 
-// 完全可以不用vector存储临时路径，深度优先搜索，保证无空结点进入递归。入参path表示当前结点前，总路径和
-// 鉴于进入递归的必不为空。故第一件事就是将path更新为至本层路径总和。如此发现是叶子结点，更新ans
+// 完全可以不用vector存储临时路径，深度优先搜索，保证无空结点进入递归。
+// 入参path表示当前结点前，总路径和
+// 鉴于进入递归的必不为空。故第一件事就是将path更新为至本层路径总和。
+// 如此发现是叶子结点，更新ans
 // 对左、右孩子存在的情况，依次进入下一层递归
 void dfs1(TreeNode* root, int path, int& ans) {
   path = path * 10 + root->val;
@@ -69,7 +71,8 @@ int sumNumbers1(TreeNode* root) {
   return ans;
 }
 
-// 回溯收集所有路径，遇到根节点就累加求和。使用vector保存临时路径，专门设vec转int的函数。一定是先保证有节点，压节点，再进入递归
+// 回溯收集所有路径，遇到根节点就累加求和。使用vector保存临时路径，专门设vec转int的函数。
+// 一定是先保证有节点，压节点，再进入递归
 int vector2Int2(const vector<int>& vec) {
   int sum = 0;
   for (int i = 0; i < vec.size(); i++)

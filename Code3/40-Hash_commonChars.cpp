@@ -37,9 +37,12 @@ vector<string> commonChars(vector<string>& words) {
 }
 
 // 本质上是一个二维哈希表，记录每一个单词中，每一个字符的出现次数。最终对每个字符出现的次数取小
-// 初始化两行哈希表。第一个单词的基准哈希表hash。然后对第2个及以后单词，维护滚动哈希表，不断更新基准哈希表
-// char转换string的四种方法：1.构造函数string(1,c)或string(c)，1代表后续字符串中要转换的数量
-// 2.相加一个空string，隐式转换string+=""+c。3.不得使用to_string(char)，因为其限定了只能是数值类型int/float
+// 初始化两行哈希表。第一个单词的基准哈希表hash。
+// 然后对第2个及以后单词，维护滚动哈希表，不断更新基准哈希表
+// char转换string的四种方法：1.构造函数string(1,c)或string(c)
+// 1代表后续字符串中要转换的数量
+// 2.相加一个空string，隐式转换string+=""+c。
+// 3.不得使用to_string(char)，因为其限定了只能是数值类型int/float
 // 使用对象stringstream ss，ss<<c; string= ss.str()
 vector<string> commonChars1(vector<string>& words) {
   int hash[26] = {0};
