@@ -61,6 +61,7 @@ vector<int> sortByBits2(vector<int>& arr) {
   return ans;
 }
 
+// GCC/Clang内置了函数__builtin_popcount()，注意开头连个下划线
 // 独立函数计算bitCount
 static int bitCount1(int n) {
   int cnt = 0;

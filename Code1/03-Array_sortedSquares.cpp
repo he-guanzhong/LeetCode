@@ -6,7 +6,7 @@
   输入：nums = [-4,-1,0,3,10]
   输出：[0,1,9,16,100]
   解释：平方后，数组变为
-    [16,1,0,9,100]，排序后，数组变为 [0,1,9,16,100]
+        [16,1,0,9,100]，排序后，数组变为 [0,1,9,16,100]
 示例 2：
   输入：nums = [-7,-3,2,3,11]
   输出：[4,9,9,49,121]
@@ -28,11 +28,11 @@ vector<int> sortedSquares(vector<int>& nums) {
 }
 
 // 双指针法，O(n) = n
+// 注意此处i <= j，因为两个元素相等时也要处理
 vector<int> sortedSquares2(vector<int>& nums) {
   int k = nums.size() - 1;
   vector<int> result(nums.size(), 0);
-  for (int i = 0, j = nums.size() - 1;
-       i <= j;) {  // 注意此处i <= j 因为要处理两个元素
+  for (int i = 0, j = nums.size() - 1; i <= j;) {
     if (nums[i] * nums[i] < nums[j] * nums[j]) {
       result[k--] = nums[j] * nums[j];
       j--;

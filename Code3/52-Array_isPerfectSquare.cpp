@@ -29,7 +29,8 @@ bool isPerfectSquare(int num) {
   return false;
 }
 
-// 二分查找。注意涉及中间值m*m，可能会超限，要使用long类型保存数据。右边界不可以初始化为num/2，考虑[1]特殊情况
+// 二分查找。注意涉及中间值m*m，可能会超限，要使用long类型保存数据。
+// 右边界不可以初始化为num/2，考虑[1]特殊情况
 // 时间复杂度O(logN)
 bool isPerfectSquare1(int num) {
   int l = 0, r = num;
