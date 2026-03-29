@@ -35,8 +35,10 @@ ListNode* getIntersectionNode(ListNode* headA, ListNode* headB) {
   return p;
 }
 
-// 判断链表相交，分三步：一、统计AB各自长度，二、保证A比B长，如否，则交换头结点。三、A先走差值步，AB一同走剩下步数，如相等即返回
-// 注意：一、结点相等判断，不是结点的值相等，而是p==q。二、交换头结点时，最好不要在原头结点上操作，而用临时结点
+// 判断链表相交，分三步：一、统计AB各自长度，二、保证A比B长，如否，则交换头结点。
+// 三、A先走差值步，AB一同走剩下步数，如相等即返回
+// 注意：一、结点相等判断，不是结点的值相等，而是p==q。
+// 二、交换头结点时，最好不要在原头结点上操作，而用临时结点
 // 先确定两个链表长度，计算差值，将长短链表尾部对齐，然后依次对比节点是否相同
 ListNode* getIntersectionNode2(ListNode* headA, ListNode* headB) {
   int lenA = 0, lenB = 0;
@@ -69,7 +71,8 @@ ListNode* getIntersectionNode2(ListNode* headA, ListNode* headB) {
 }
 
 // 方法二：两个临时结点p、q分别指向headA和headB，假设两链表相交点前长度分别a\b，相交点后长度c。
-// p走到A末端后指向B，q走到B末端后指向A。则走到相交点时，a+(b-c)==b+(a-c)，c!=0说明有相交，c==0说明无相交，直接返回点p即可
+// p走到A末端后指向B，q走到B末端后指向A。
+// 则走到相交点时，a+(b-c)==b+(a-c)，c!=0说明有相交，c==0说明无相交，直接返回点p即可
 ListNode* getIntersectionNode1(ListNode* headA, ListNode* headB) {
   ListNode *p = headA, *q = headB;
   while (p != q) {

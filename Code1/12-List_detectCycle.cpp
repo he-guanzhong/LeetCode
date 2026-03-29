@@ -60,7 +60,8 @@ ListNode* detectCycle2(ListNode* head) {
 
 // 快慢指针法，快走两步，慢走一步，相遇时确定位置。从相遇点和头部各出发指针，相遇记为入口
 // 写法一：dowhile语句，无需一开始错开指针，内置退出条件为快指针判空。循环条件是双指针不相遇
-// 写法二：普通while语句，循环条件是快指针的存在性。内置退出条件为快慢指针相遇。但要求外层判断fast是相遇还是异常退出
+// 写法二：普通while语句，循环条件是快指针的存在性。
+// 内置退出条件为快慢指针相遇。但要求外层判断fast是相遇还是异常退出
 ListNode* detectCycle1(ListNode* head) {
   ListNode* fast = head;
   ListNode* slow = head;
