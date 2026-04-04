@@ -21,7 +21,8 @@ string reverseStr(string s, int k) {
   return s;
 }
 
-// 每隔2k，就反转k，所以一遍遍历，i每次增长2k，自然将字符串划分为2k的区间。不必求划分2k区间的个数。
+// 每隔2k，就反转k，所以一遍遍历，i每次增长2k，自然将字符串划分为2k的区间。
+// 不必求划分2k区间的个数。
 // 至于队尾，判断i+k是否小于队尾，小于则反转i+k区间；大于则反转到end。
 string reverseStr1(string& s, int k) {
   for (int i = 0; i < s.length(); i += 2 * k) {

@@ -13,7 +13,7 @@
   输入: "abcabcabcabc"
   输出: True
   解释: 可由子字符串 "abc" 重复四次构成。 (或者子字符串 "abcabc"
-重复两次构成。) */
+        重复两次构成。) */
 
 void getNext(string s, int next[]) {
   int j = -1;
@@ -34,8 +34,10 @@ bool repeatedSubstringPattern(string s) {
   return pre != 0 && n % (n - pre) == 0;
 }
 
-// 优选移动匹配，如果存在重复子数组，则两个s组成的t内，必可以找到s，注意要掐头去尾，避免找到原来的s。
-// 移动匹配，若字符串s由多重复子串构成，则s+s后，掐头去尾，必能在中央找到s。对于string，找不到的位置为npos
+// 优选移动匹配，如果存在重复子数组，则两个s组成的t内，必可以找到s，
+// 注意要掐头去尾，避免找到原来的s。
+// 移动匹配，若字符串s由多重复子串构成，则s+s后，掐头去尾，必能在中央找到s。
+// 对于string，找不到的位置为npos
 bool repeatedSubstringPattern1(string s) {
   string t = s + s;
   t.erase(t.begin());

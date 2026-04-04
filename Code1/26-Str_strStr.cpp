@@ -11,8 +11,8 @@
   输出: -1
 说明:
   当 needle 是空字符串时，我们应当返回什么值呢？这是一个在面试中很好的问题。
-  对于本题而言，当 needle 是空字符串时我们应当返回 0 。这与C语言的 strstr() 以及
-  Java的 indexOf() 定义相符。*/
+  对于本题而言，当 needle 是空字符串时我们应当返回 0 。
+  这与C语言的 strstr() 以及  Java的 indexOf() 定义相符。*/
 
 void getNext(string s, int next[]) {
   int j = -1;
@@ -43,7 +43,8 @@ int strStr(string haystack, string needle) {
   return -1;
 }
 
-// 典型kmp算法。前缀表记录了相等前后缀的长度。next数组可以记录的是前缀长度-1。i记录后缀，从1开始遍历。j+1记录前缀长度
+// 典型kmp算法。前缀表记录了相等前后缀的长度。
+// next数组可以记录的是前缀长度-1。i记录后缀，从1开始遍历。j+1记录前缀长度
 // j初始化为-1.
 void getNext1(int* next, const string& s) {  // 求前缀表
   int j = -1;                                // 前缀末尾下标-1

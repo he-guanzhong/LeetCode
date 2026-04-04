@@ -26,7 +26,8 @@ bool canConstruct(string ransomNote, string magazine) {
   return true;
 }
 
-// 小写字母只有26个，且字符不能重复使用。故使用数组，而非哈希表map，记录每个字母在magazine上出现次数。节省资源。
+// 小写字母只有26个，且字符不能重复使用。故使用数组，而非哈希表map
+// 记录每个字母在magazine上出现次数。节省资源。
 // 为提高效率，注意可以先验字符串大小，ransomNote>magazine，直接判假
 bool canConstruct1(string ransomNote, string magazine) {
   if (ransomNote.length() > magazine.length())  // 特殊处理

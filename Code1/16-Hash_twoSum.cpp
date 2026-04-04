@@ -24,7 +24,8 @@ vector<int> twoSum(vector<int>& nums, int target) {
   return {};
 }
 
-// 遍历i，unordered_map记录该位置目标减当前值的差，作为key，下标为value。如果找到key值，说明二者之和为target
+// 遍历i，unordered_map记录该位置目标减当前值的差，作为key，下标为value。
+// 如果找到key值，说明二者之和为target
 // 返回数组，当前下标i和map记录的value
 vector<int> twoSum1(vector<int> nums, int target) {
   unordered_map<int, int> map;
