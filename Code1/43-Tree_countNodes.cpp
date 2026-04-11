@@ -100,7 +100,8 @@ int countNodes2(TreeNode* root) {
   return result;
 }
 
-// 完全二叉树的性质，满二叉树结点数为2^n-1，完全二叉树根据左右结点递归深度计算，若相等为满二叉树，若不等，则继续递归
+// 完全二叉树的性质，满二叉树结点数为2^n-1，完全二叉树根据左右结点递归深度计算
+// 若相等为满二叉树，若不等，则继续递归
 // 时间复杂度O(log(n)* log(n)), 空间复杂度O(log(n)）
 int countNodes3(TreeNode* root) {
   if (root == nullptr)

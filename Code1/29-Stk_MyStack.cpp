@@ -9,8 +9,8 @@
     boolean empty() 如果栈是空的，返回 true ；否则，返回 false 。
 注意：
     你只能使用队列的基本操作 —— 也就是 push to back、peek/pop from front、size
-和 is empty 这些操作。 你所使用的语言也许不支持队列。 你可以使用 list
-（列表）或者 deque（双端队列）来模拟一个队列 , 只要是标准的队列操作即可
+    和 is empty 这些操作。 你所使用的语言也许不支持队列。 你可以使用 list
+    （列表）或者 deque（双端队列）来模拟一个队列 , 只要是标准的队列操作即可
 提示：
     1 <= x <= 9
     最多调用100 次 push、pop、top 和 empty
@@ -41,7 +41,8 @@ class MyStack {
   bool empty() { return que.empty(); }
 };
 
-// 一个队列就够了，push正常压入，pop要求整体队列大小，依次弹出n-1个首元素，分别将其加入队尾，取出front()作为弹出的量
+// 一个队列就够了，push正常压入，pop要求整体队列大小，
+// 依次弹出n-1个首元素，分别将其加入队尾，取出front()作为弹出的量
 // top由于队列的特殊性质，可以同时访问队头队尾两个元素，故直接返回back()
 // 如果使用两个队列，则一个队列为主，第二个队列仅在pop时作为临时容纳前n-1的容器使用
 class MyStack1 {

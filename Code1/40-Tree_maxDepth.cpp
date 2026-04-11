@@ -45,7 +45,8 @@ int maxDepth2(TreeNode* root) {
   return getDepth2(root);
 }
 
-int res = 0;  // 递归，前序遍历，中左右顺序处理
+// 递归，前序遍历，中左右顺序处理
+int res = 0;
 void getDepth_pre(TreeNode* root, int depth) {
   if (!root)
     return;

@@ -56,10 +56,12 @@ int evalRPN(vector<string>& tokens) {
 }
 
 // 逆波兰表达式，利用栈，变量类型longlong，而非int因为题目限定了整型大小。
-// 碰到运算符，由于四种符号均需处理前两位数字，故双层if，并将结果压回栈内。碰到数字，就stoll转化为longlong，压入栈。
+// 碰到运算符，由于四种符号均需处理前两位数字，故双层if，并将结果压回栈内。
+// 碰到数字，就stoll转化为longlong，压入栈。
 // 最终的结果必是栈内唯一元素，由于返回值已经限定了int，故可以使用int
 // Reverse Polish Notation 逆波兰（后缀）表达式。利用栈，注意整形为long long,
-// 字符串转整形，C语言头文件stdlib.h后，可使用atoi,atol,atoll，仅接收一个参数char*。若为string类，则需转化为str.c_str()输入
+// 字符串转整形，C语言头文件stdlib.h后，可使用atoi,atol,atoll，
+// 仅接收一个参数char*。若为string类，则需转化为str.c_str()输入
 // 若使用strtoi,strtol,strtoll，包含三个参数char*,char* endptr, int base
 // endptr为第一个不能转化的位置endptr(不需要可以输入NULL)，base为允许指定的基数，如10、16等
 // C++语言包含头文件string.h后，使用stoi,stol,stoll，仅接收一个参数string，如果

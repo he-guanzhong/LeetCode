@@ -8,7 +8,8 @@
 示例 2:
   输入: nums = [1], k = 1
   输出: [1]
-提示：1 <= nums.length <= 105
+提示：
+    1 <= nums.length <= 105
     k 的取值范围是 [1, 数组中不相同的元素的个数]
     题目数据保证答案唯一，换句话说，数组中前 k 个高频元素的集合是唯一的
 进阶：你所设计算法的时间复杂度 必须 优于 O(n log n) ，其中 n 是数组大小。 */
@@ -35,7 +36,8 @@ vector<int> topKFrequent(vector<int>& nums, int k) {
   return ans;
 }
 
-// 传统方法：unordered_map统计各元素出现次数，转化为vector<pair>按照出现频率从大到小排序，最后result数组取前k个元素
+// 传统方法：unordered_map统计各元素出现次数，
+// 转化为vector<pair>按照出现频率从大到小排序，最后result数组取前k个元素
 // 时间复杂度在于排序，O(n)=nlogn，空间复杂度O(n)
 // 推荐方法：得到umap后，优先级队列，使用小顶堆，堆内只维护k个元素，如果size大于k就弹出小的元素。
 // 如此时间复杂度可优化为O(n)=nlog(k)
@@ -103,7 +105,8 @@ vector<int> topKFrequent1(vector<int>& nums, int k) {
   // return pri_que.top().first; //直接返回，就是第k的元素的值
 }
 
-// priority_queue练习。lamda表达式实现小顶堆函数。若使用static，则后方必须传入的是一个地址decltype(&cmp)
+// priority_queue练习。lamda表达式实现小顶堆函数。
+// 若使用static，则后方必须传入的是一个地址decltype(&cmp)
 static bool cmp(pair<int, int>& a, pair<int, int>& b) {
   return a.first > b.first;
 }
