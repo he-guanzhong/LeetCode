@@ -14,10 +14,12 @@ TreeNode* traversal(vector<int>& nums, int l, int r) {
   root->right = traversal(nums, m + 1, r);
   return root;
 }
-TreeNode* sortedArrayToBST(vector<int>& nums) {}
+TreeNode* sortedArrayToBST(vector<int>& nums) {
+  return traversal(nums, 0, nums.size() - 1);
+}
 
-// 递归法。传入左右下标，左闭右闭区间，中间生成新节点，左右分割区间递归。
-// 递归法，去中间值生成根节点，最好利用左右坐标，左闭右闭区间
+// 递归法。传入左右下标
+// 取中间值生成根节点，左闭右闭区间，分割区间递归。
 TreeNode* traversal1(vector<int>& nums, int left, int right) {
   if (left > right)
     return nullptr;

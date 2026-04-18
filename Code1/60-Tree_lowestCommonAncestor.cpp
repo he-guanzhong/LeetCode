@@ -17,7 +17,7 @@ TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
   return root;
 }
 
-// 二叉搜索树，递归法不必搜索全树。核心为若root值在pq之间即为公共祖先。
+// 二叉搜索树，递归法不必搜索全树。核心为若root值在pq之间，即为公共祖先。
 // 若root小于pq，则向右搜索，root大于pq则向左搜索，否则即为要返回的根节点
 // 二叉搜索树有序性，只搜索一条边，若pq均小，则搜索左子树，pq均大，则搜索右子树。
 // 其余情况即为一大一小，且为左闭右闭区间，则该结点必为所求公共祖先

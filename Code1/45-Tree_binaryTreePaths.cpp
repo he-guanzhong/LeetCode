@@ -35,11 +35,16 @@ vector<string> binaryTreePaths(TreeNode* root) {
   return result;
 }
 
-// 前序遍历，递归法。不加引用的string作为path，退出条件为空结点，进入递归先压值，若叶子结点，就收集result。->的压入和弹出，放在递归语句前后
-// 前序遍历，递归法。使用vector<int>作为path，所有值压入，遇到叶子结点，统一转化string，收集result。如此可不必考虑->。
-// 递归函数流程：1、先判空，压入本结点，判断是否合规，分别处理左右孩子。统一弹出本结点。如果传入path没有引用，可以不弹出
-// 细节：整型int，只能通过to_string，使用+=压入string。不得使用push_back，因为如果是两位数，不能转化位字符型char
-// 细节：同理，回溯时，也不得使用-=和pop_back，因为不知道要弹出多少位。核心方案在于传入的string不加引用，如此自动回溯了值
+// 前序遍历，递归法。不加引用的string作为path，退出条件为空结点
+// 进入递归先压值，若叶子结点，就收集result。->的压入和弹出，放在递归语句前后
+// 前序遍历，递归法。使用vector<int>作为path，所有值压入
+// 遇到叶子结点，统一转化string，收集result。如此可不必考虑->。
+// 递归函数流程：1、先判空，压入本结点，判断是否合规，分别处理左右孩子。
+// 统一弹出本结点。如果传入path没有引用，可以不弹出
+// 细节：整型int，只能通过to_string，使用+=压入string。不得使用push_back，
+// 因为如果是两位数，不能转化位字符型char
+// 细节：同理，回溯时，也不得使用-=和pop_back，因为不知道要弹出多少位。
+// 核心方案在于传入的string不加引用，如此自动回溯了值
 
 // 前序遍历，使用vector<int>作为暂存结果，因为pop_back时好处理，注意压入的量全部有值，才处理
 void traversal1(TreeNode* cur, vector<int>& path, vector<string>& result) {

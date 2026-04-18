@@ -30,8 +30,10 @@ int findBottomLeftValue(TreeNode* root) {
 }
 
 // 递归法和迭代法均可
-// 递归法，前、中、后序遍历均可，因为没有中间节点处理逻辑，一定保证先左后右。参数为根节点、当前层深度，无返回值。
-// 核心是求深度，额外设定最大深度maxDepth、result值两个变量。一旦发现深度超过了最大深度，更新深度和result保存的该结点值。
+// 递归法，前、中、后序遍历均可，因为没有中间节点处理逻辑，一定保证先左后右。
+// 参数为根节点、当前层深度，无返回值。
+// 核心是求深度，额外设定最大深度maxDepth、result值两个变量。
+// 一旦发现深度超过了最大深度，更新深度和result保存的该结点值。
 int result = 0;
 int maxDepth = INT_MIN;
 void traversal1(TreeNode* root, int depth) {

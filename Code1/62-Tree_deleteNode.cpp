@@ -90,7 +90,8 @@ TreeNode* deleteNode2(TreeNode* root, int key) {
 
 // 迭代法，单独设计删除结点函数，其右子树空，则返回左子树。
 // 右子树不空，找右子树最左结点，原左子树放置于最左结点之左，返回右子树
-// 主函数中，记录上一结点。cur确定相等结点，pre确定其上一结点。如只有一个结点直接删，如确定cur是左、右子结点，删除之
+// 主函数中，记录上一结点。cur确定相等结点，pre确定其上一结点。
+// 如只有一个结点直接删，如确定cur是左、右子结点，删除之
 TreeNode* deleteOneNode3(TreeNode* node) {
   if (!node)
     return node;

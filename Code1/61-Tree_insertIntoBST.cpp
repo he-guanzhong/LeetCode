@@ -66,7 +66,8 @@ TreeNode* insertIntoBST2(TreeNode* root, int val) {
 }
 
 // 迭代法，还是记录父节点的位置，一定要先更新，再移动当前结点坐标
-// 迭代法。先判空，新添结点。否则记录cur和pre两个结点，因为cur最终向左、右搜索停止于nullptr，需pre记录上一不为空结点，注意一定是进入while后先赋值
+// 迭代法。先判空，新添结点。否则记录cur和pre两个结点
+// 因为cur最终向左、右搜索停止于nullptr，需pre记录上一不为空结点，注意一定是进入while后先赋值
 TreeNode* insertIntoBST3(TreeNode* root, int val) {
   if (!root)
     return new TreeNode(val);

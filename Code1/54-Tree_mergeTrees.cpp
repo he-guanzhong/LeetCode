@@ -40,11 +40,9 @@ TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
   return root1;
 }
 
-// 递归法。无需判断二者均为空的情况，二者任一为空则返回另一。直接在t1上操作，省去新树操作，前中后序遍历均可
-// 迭代法。预处理，保证压入结点必不为空。最好使用层序遍历queue，如果用stack注意先弹出的是root2问题。
-// 一定只有在两个结点的左、右孩子都有值才压入，不得将空结点入队列，否则失去指向。
-// 如果node1左右无值，则将node2的左右孩子赋值过来。
-// 递归，注意退出条件，不必判断二者都为空的情况。此外，前中后序遍历顺序均可。可以直接在t1上操作，也可以生成新树。
+// 递归法。无需判断二者均为空的情况，二者任一为空则返回另一。
+// 直接在t1上操作，省去新树操作，也可以生成新树。前中后序遍历均可
+// 注意退出条件，不必判断二者都为空的情况。
 TreeNode* mergeTrees1(TreeNode* root1, TreeNode* root2) {
   if (!root1)
     return root2;
@@ -60,7 +58,10 @@ TreeNode* mergeTrees1(TreeNode* root1, TreeNode* root2) {
     return node; */
 }
 
-// 迭代法，队列模拟层序遍历，只有非空结点才能入队，以t1为返回结点，t2叠加到t1上
+// 迭代法。预处理，保证压入结点必不为空。最好使用层序遍历queue，如果用stack注意先弹出的是root2问题。
+// 一定只有在两个结点的左、右孩子都有值才压入，不得将空结点入队列，否则失去指向。
+// 如果node1左右无值，则将node2的左右孩子赋值过来。
+// 队列模拟层序遍历，只有非空结点才能入队，以t1为返回结点，t2叠加到t1上
 TreeNode* mergeTrees2(TreeNode* root1, TreeNode* root2) {
   if (!root1)
     return root2;

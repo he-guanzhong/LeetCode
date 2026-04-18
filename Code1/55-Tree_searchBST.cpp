@@ -31,7 +31,8 @@ TreeNode* searchBST1(TreeNode* root, int val) {
 }
 
 // 迭代法，无需利用栈和队列，无需回溯，无需搜索其他结点，因为搜索的朝向是确定的。
-// while循环内，直接移动root，直至找到val或者为空。当前节点值大于搜索值，左移。当前节点值小于搜索值，右移
+// while循环内，直接移动root，直至找到val或者为空。
+// 当前节点值大于搜索值，左移。当前节点值小于搜索值，右移
 TreeNode* searchBST2(TreeNode* root, int val) {
   while (root) {
     if (root->val > val)

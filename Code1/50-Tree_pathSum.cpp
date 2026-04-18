@@ -49,7 +49,8 @@ vector<vector<int>> pathSum1(TreeNode* root, int targetSum) {
   return result;
 }
 
-// 标准写法，path和result外置，只有有值的结点才递归，递归时已经减去了本层结点值，故判断count是否为0
+// 标准写法，path和result外置，只有有值的结点才递归
+// 递归时已经减去了本层结点值，故判断count是否为0
 vector<vector<int>> result;
 vector<int> path;
 void traversal_std(TreeNode* root, int count) {
