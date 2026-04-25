@@ -59,7 +59,7 @@ vector<vector<int>> subsetsWithDup1(vector<int>& nums) {
   return result1;
 }
 
-// 重复元素子集，先排序，然后求树上所有结点。深度遍历允许重复，传入下一层为i+1。
+// 重复元素子集，先排序，然后求树上所有结点。深度遍历允许重复，传入下一层为i+1
 // 广度方向不允许重复，如果与前一元素相等，直接跳过
 // 或使用vector<bool>记录重复元素。i有效，i-1==i，used[i-1]==false同层没用过为假
 void backtracking2(vector<int>& nums, int startIndex) {

@@ -7,9 +7,9 @@ candidates 中的每个数字在每个组合中只能使用一次。
 示例 1:
   输入: candidates = [10,1,2,7,6,1,5], target = 8,
   所求解集为: [[1,1,6],
-            [1,2,5],
-            [1,7],
-            [2,6]] */
+              [1,2,5],
+              [1,7],
+              [2,6]] */
 
 void traversal(vector<int>& candidates,
                int target,
@@ -39,7 +39,7 @@ vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
   return ans;
 }
 
-// 重复数字不重复选取，必须先排序，在于横向树层不得选取相同数字，纵向树深允许选取相同数字。
+// 重复数字不重复选取，必须先排序，在于横向树层不得选取相同数字，纵向树深允许选取相同数字
 // 可以采用used<bool>记录是否访问过，只有相邻两个candidates相等且前一个未被访问，才跳过
 // 或采用只有从startIndex开始重复才跳过。
 // 剪支思路，总和大于target直接跳过，不递归。
@@ -77,7 +77,8 @@ vector<vector<int>> combinationSum21(vector<int>& candidates, int target) {
   return result1;
 }
 
-// 每个元素只用一次，故递归传入start位i+1，退出条件位总和等于target。剪支要求先排序，总和大于target不进入递归
+// 每个元素只用一次，故递归传入start位i+1，退出条件位总和等于target。
+// 剪支要求先排序，总和大于target不进入递归
 // 元素值允许深度重复，下标是不重复的，依然传入i+1。但广度方向不重复。
 // 去重方法一：该层循环内两个条件按，i从大于start起始，i==i-1则跳过。不能i+1==i
 // 去重方法二：利用<bool>used，该层循环内三个条件，i有效，且i-1==i，且i-1位置为false未访问过，则跳过

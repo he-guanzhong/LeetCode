@@ -57,15 +57,10 @@ void solveSudoku(vector<vector<char>>& board) {
   backtracking(board);
 }
 
-// 要填入的数字类型是char，不是int。只有一种解，树枝遍历，回溯函数带返回值。
-// 对矩阵每一个为'.'的位置，[row,col],依次填入'1'到'9'。
+// 二维数组的回溯，对矩阵每一个为'.'的位置，[row,col],依次填入'1'到'9'。要填入的数字类型是char，不是int。
 // 只要数据合规valid即填入，并进入下一轮递归，一旦到达终点true，则一路返回true。
 // 终止条件为，9个数字都试过了，仍不满足，返回false。如此即可回溯'.'赋值，并在横向遍历中，重新对此位置赋值。
-// 程序最终终止于，遍历了所有结点，所有空都被填满，即没有'.'。此时返回true。如此即可
-
-// 二维数组的回溯，对每一个有左右坐标的空，分别进行‘1’-‘9’的判断
-// 如果可行，即填入。如9个数字都不行，则返回false
-// 最终无false返回，说明可行有解，返回true。故一路true返回原点
+// 程序终止于，所有空都被填满，即没有'.'。可行有解，此时返回true。如此即可
 // 判断条件为输入行数、列数、值、矩阵。同行、同列出现相等值不行。对找到3*3矩阵起点内二维搜索找到等值不行
 // 时间复杂度O=9^m，m为‘.'的数目。空间复杂度n^2
 bool isValid1(int row, int col, char val, vector<vector<char>>& board) {
@@ -87,6 +82,7 @@ bool isValid1(int row, int col, char val, vector<vector<char>>& board) {
   }
   return true;
 }
+// 核心，本轮棋盘上某个空，9个数字都不符合，直接返回。而不是遍历完所有空再统一返回，因为填后续的空无意义
 bool backtracking1(vector<vector<char>>& board) {
   for (int row = 0; row < board.size(); row++) {
     for (int col = 0; col < board[0].size(); col++) {
@@ -99,7 +95,7 @@ bool backtracking1(vector<vector<char>>& board) {
             board[row][col] = '.';
           }
         }
-        return false;  // 核心，9个数字都不符合
+        return false;  // 核心
       }
     }
   }

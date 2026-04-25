@@ -38,7 +38,6 @@ void traversal1(int n, int k, int startIndex) {
     res1.push_back(path1);
     return;
   }
-  // for (int i = startIndex; i <= n; i++) {
   // 此处可以剪支，当剩余元素还剩 x = k-path1.size()时，可以横向搜索终止于n-x+1
   for (int i = startIndex; i <= n - (k - path1.size()) + 1; i++) {
     path1.push_back(i);

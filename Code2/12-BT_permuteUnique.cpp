@@ -71,8 +71,10 @@ vector<vector<int>> permuteUnique1(vector<int>& nums) {
   return result1;
 }
 
-// 重复元素全排列，设置used数组记录i位置上元素使用情况。双跳过：一、树枝上排列要求跳过已用过元素
-// 二、不重复，要求跳过同树层，相邻两个元素相等的情况。三个条件：i合法，i-1==i，used[i-1]==false
+// 重复元素全排列，设置used数组记录i位置上元素使用情况。
+// 双跳过：一、树枝上排列要求跳过已用过元素
+// 二、不重复，要求跳过同树层，相邻两个元素相等的情况。
+// 三个条件：i合法，i-1==i，used[i-1]==false
 // 本题实际使用used[i-1]==true条件也可，意为树枝去重。但如此树层不去重，复杂度更高
 // 使用set去重。由于排列问题，used必要，所以uset的横向去重显得无足轻重
 void backtracking2(vector<int>& nums, vector<bool>& used) {
