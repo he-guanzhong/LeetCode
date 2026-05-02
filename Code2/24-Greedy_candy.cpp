@@ -29,18 +29,18 @@ int candy(vector<int>& ratings) {
   return accumulate(dp.begin(), dp.end(), 0);
 }
 
-// 不能取中间最小向两边遍历。贪心策略为，分两遍遍历，找寻单边大的情况
-// 只能从左到右遍历，找所有右孩子比左孩子大的情况。从右到左遍历，找所有左孩子比有孩子大的情况，取二者最大值
-// 要保证相邻孩子的大小比较，要遍历两个方向：左孩子小于右孩子，从左向右遍历。
-// 左孩子大于右孩子，从右向左遍历。二者取最大值，即为糖果数
+// 要保证相邻孩子的大小比较，不能取中间最小向两边遍历。、
+// 贪心策略为，分两遍遍历，找寻单边大的情况
+// 第一步从左到右遍历，找所有右孩子比左孩子大的情况。
+// 第二步从右到左遍历，找所有左孩子比右孩子大的情况，取二者最大值，即为糖果数
 int candy1(vector<int>& ratings) {
   vector<int> candy(ratings.size(), 1);
   for (int i = 1; i < ratings.size(); i++) {  // 从左向右遍历遇到更大的就加一
     if (ratings[i] > ratings[i - 1])
       candy[i] = candy[i - 1] + 1;
   }
-  for (int i = ratings.size() - 2; i >= 0;
-       i--) {  // 从右向左遍历，遇到更大的就加一
+  // 从右向左遍历，遇到更大的就加一
+  for (int i = ratings.size() - 2; i >= 0; i--) {
     if (ratings[i] > ratings[i + 1])
       candy[i] = max(candy[i], candy[i + 1] + 1);
   }

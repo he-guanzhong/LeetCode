@@ -33,7 +33,7 @@ int largestSumAfterKNegations(vector<int>& nums, int k) {
 // 方法一：先排序，对小于0的负数取反，同时k--，情况一：如果k==0则直接返回结果。
 // 情况二：遍历后k仍不为0，再次排序，按照k为奇偶数，对首元素取反
 // 方法二：直接按照绝对值，从大到小排序，从前至后k次取反
-// 如果先用绝对值从大到小排序，如此即可不用两次排序，然后从前到后如遇到负数则求反。
+// 如果先用绝对值从大到小排序，如此即可不用两次排序，然后从前到后，如遇到负数则求反
 // 如之后还k>0，则置多一次，反转最小的那个数。偶数次是不用一次一次处理的
 int largestSumAfterKNegations1(vector<int>& nums, int k) {
   sort(nums.begin(), nums.end(), [](int a, int b) { return abs(a) > abs(b); });

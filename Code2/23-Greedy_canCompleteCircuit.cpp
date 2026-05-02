@@ -63,9 +63,10 @@ int canCompleteCircuit1(vector<int>& gas, vector<int>& cost) {
   return -1;
 }
 
-// 贪心，计算全局油量和当前油量。到达i时当前剩油小于0，说明[0,i]区间任意一结点出发，必到不了。当前剩油归零，并start设置为i+1。
-// 判断全局油量是否小于0，如小则不可行。如大于0，则返回start
-// 从0开始遍历，记录剩余油量当前总和，和全局总和，若当前总和<0，则start必从i+1开始。最后判断全局总和<0则不可行。
+// 贪心，从0开始遍历，计算全局油量和当前油量。
+// 到达i时当前剩油小于0，说明[0,i]区间任意一结点出发，必到不了。
+// 当前剩油归零，则start必从i+1开始。
+// 判断全局油量是否小于0，如小于0，则不可行。如大于0，则返回start
 int canCompleteCircuit2(vector<int>& gas, vector<int>& cost) {
   int start = 0;
   int curSum = 0, totalSum = 0;

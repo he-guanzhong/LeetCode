@@ -24,7 +24,8 @@ int maxSubArray(vector<int>& nums) {
   return ans;
 }
 
-// 先判空，pre记录此下标时，最长连续子数组和，如果此前pre有正增益，则pre+i，如果此前pre为负增益，则舍弃pre取i
+// 先判空，pre记录此下标时，最长连续子数组和
+// 如果此前pre有正增益，则pre+i，如果此前pre为负增益，则舍弃pre取i
 // 额外的result记录整个数组的最长连续子数组和，初始化不能为0，而为首元素，或者INT_MIN
 // 传统方法，动态规划。pre记录此前是否为负，产生负面影响。并时刻记录最大值
 int maxSubArray1(vector<int>& nums) {

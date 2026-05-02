@@ -24,10 +24,8 @@ bool canJump(vector<int>& nums) {
   return false;
 }
 
-// 覆盖范围cover代表最后一个可访问的下标，有前向后遍历
-// 不断拓展cover范围，一旦发现cover大于nums.size-1即返回真。
-// 注意遍历时，若cover过大，则i不应超过自身nums.size
-// 计算每一步能cover到的最大范围，如果能覆盖最后一个结点，就返回真。
+// 覆盖范围cover代表最后一个可访问的下标，由前向后遍历
+// 不断拓展cover范围，一旦发现cover大于nums.size-1，即返回真
 bool canJump1(vector<int>& nums) {
   int cover = 0;
   for (int i = 0; i <= cover; i++) {  // 这里是<=
