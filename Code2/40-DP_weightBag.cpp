@@ -16,7 +16,8 @@ int weightBag(vector<int>& weight, vector<int>& value, int bagweight) {
 
 // dp[i][j]代表，从0-i个物品中任选，在j重量背包下能取得的最大价值。
 // 递推公式为dp[i][j]=max(dp[i-1][j],dp[i-1][j-weight[i]]+value[i])。
-// 即i新价值为，不放物品i即i质量过大，dp[i-1][j]的值。和放物品i，刨去weight[i]的总价值加i的价值value[i]。取二者的最大值
+// 即i新价值为一下取二者的最大值：1. 不放物品i，即i质量过大，dp[i-1][j]的值。
+// 2.放物品i，刨去weight[i]的总价值加i的价值value[i]。
 // 初始化时，首行即物品0放与不放的价值。
 // 背包j<weight[0]时放不进去，价值必为0。否则可以放进去，等于价值value[0]
 // 遍历方向为先遍历物品，再遍历背包大小。

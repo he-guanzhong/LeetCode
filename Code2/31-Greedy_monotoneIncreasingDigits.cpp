@@ -32,8 +32,8 @@ int monotoneIncreasingDigits(int n) {
 // 时间复杂度n，空间复杂度n，因为转化了字符串，n均为字符串长度
 int monotoneIncreasingDigits1(int n) {
   string strNum = to_string(n);
-  int flag =
-      strNum.size();  // 标记赋值9开始的地方，初始化为此值，防止进入第二个for
+  // 标记赋值9开始的地方，初始化为此值，防止进入第二个for
+  int flag = strNum.size();
   for (int i = strNum.size() - 1; i > 0; i--) {
     if (strNum[i - 1] > strNum[i]) {
       flag = i;

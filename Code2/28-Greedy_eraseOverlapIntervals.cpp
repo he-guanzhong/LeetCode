@@ -48,8 +48,8 @@ int eraseOverlapIntervals1(vector<vector<int>>& intervals) {
   return intervals.size() - count;
 }
 
-// 起点从小到大排序，相邻两两比较，若i起点在i-1范围内，重复区间加一，更新i终点为i和i-1最小值
 // 若按左边界排序，从左向右遍历，记录的是重叠区间数
+// 起点从小到大排序，相邻两两比较，若i起点在i-1范围内，重复区间加一，更新i终点为i和i-1最小值
 int eraseOverlapIntervals2(vector<vector<int>>& intervals) {
   sort(intervals.begin(), intervals.end(),
        [](vector<int>& a, vector<int>& b) { return a[0] < b[0]; });
