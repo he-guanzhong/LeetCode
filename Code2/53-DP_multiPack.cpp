@@ -21,7 +21,7 @@ int multiPack(vector<int>& weight,
 
 // 多重背包，已经每个物品的存在个数，价值、重量，
 // 求整体总重bagWeight的背包，最大能乘早的价值是多少
-// 讲物品存在的个数展开，转化为01背包问题求解。先遍历物品，再从后向前遍历背包
+// 将物品存在的个数展开，转化为01背包问题求解。先遍历物品，再从后向前遍历背包
 // 时间复杂度，m*n*k。
 int multiPack1(vector<int>& weight,
                vector<int>& value,

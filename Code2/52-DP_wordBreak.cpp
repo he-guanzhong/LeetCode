@@ -39,8 +39,8 @@ bool wordBreak(string s, vector<string>& wordDict) {
 
 // dp[i]表示长度为i的字符串，是否可以被拼出。
 // 初始化时全部设置为false，但是dp[0]表示长度为0字符串必可以拼出，置为true
-// 递推公式为，如果j<i,dp[j]为真，且i-j这部分字符串也可以再字典中找到，就dp[i]为真。
-// 遍历顺序。求本体字符有先后顺序，属于求排列，必须先遍历背包，再遍历物品。
+// 递推公式为，如果j<i,dp[j]为真，且i-j这部分字符串也可以再字典中找到，就dp[i]为真
+// 遍历顺序。求本体字符有先后顺序，属于求排列，必须先遍历背包，再遍历物品
 // 物品是否是否存在可以使用unordered_set.find来判断
 // 时间复杂度n^3，空间复杂度n
 bool wordBreak3(string s, vector<string>& wordDict) {
